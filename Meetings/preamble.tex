@@ -1,0 +1,144 @@
+%page setup (page size, text size, page layout, chapters start on a new page).
+%memoir is a form of book class that supports any kind of document.
+\documentclass[fleqn,a4paper,12pt,twoside,openany]{memoir}
+
+%setting the header and footer in that order:
+\setheadfoot{28pt}{28pt} %if any problems are encountered, try changing the latter 28pt with 1cm.
+
+%general package syntax: \usepackage[options]{package}
+
+%setting language:
+\RequirePackage[danish, english]{babel}
+
+\usepackage{siunitx}
+
+%this package makes it possible to treat any element as a float,
+%figures and tables are by default treated as floats.
+%read http://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions to specify your float.
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{placeins}
+
+%this package makes it possible to make theorems and examples:
+\usepackage{amsthm}
+%setting the style of examples (parameters: plain, definition, remark):
+%(definition is usually used for examples)
+\theoremstyle{definition}
+%the frist parameter is the syntax used in the document, the second is that which is printed in LaTex.
+\newtheorem{example}{Eksempel}
+
+%making it possible to use æ, ø and å:
+\usepackage[utf8]{inputenc}
+%helps with word division when using æ, ø and å, and makes it ps-font rather than bmp:
+\usepackage[T1]{fontenc}
+
+%package for implementation of graphic files:
+\usepackage{graphicx}
+
+%package for captions
+\usepackage[nooneline]{caption}
+
+%%package for implementation of math:
+\usepackage{amsmath , amsfonts , amssymb, float}
+
+%allowing use of color:
+\usepackage{color}
+%allowing use of more colors also in tables (see: http://en.wikibooks.org/wiki/LaTeX/Colors):
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+%hyperlinks in the tabel of contents - comment this out before the report is printed.
+\usepackage{hyperref}
+\hypersetup{
+	bookmarks = true,  % Show 'bookmark'-frame in pdf.
+	colorlinks = true, % True = colored links, False = framed links.
+	citecolor = blue,  % Link color for references.
+	linkcolor = blue,  % Link color in table of contents.
+	urlcolor = blue,   % Link color for extern URLs.
+}
+
+%makes it possible to refer to the name of a chapter rather than just the number.
+\usepackage{nameref}
+
+%package for writing program code in latex
+\usepackage{listings}
+
+\lstset{ 
+language=C,               	 	% choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           		% adds a frame around the code
+tabsize=2,          			% sets default tabsize to 2 spaces
+captionpos=b,           		% sets the caption-position to bottom
+breaklines=true,       			% sets automatic line breaking
+breakatwhitespace=false,    	% sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+%setting references (using numbers) and supporting i.a. Chicargo-style:
+\usepackage{etex}
+\usepackage{etoolbox}
+\usepackage{keyval}
+\usepackage{ifthen}
+\usepackage{url}
+\usepackage{csquotes}
+\usepackage[backend=biber,url=true,doi=true,style=numeric,sorting=none]{biblatex}
+\bibliography{myBib.bib}
+
+%this package makes it possible include pdf pages in fx appendix;
+%using  following syntax: \includepdf[pages={1}]{myfile.pdf}
+\usepackage{pdfpages}
+
+%%%MARGINER%%%
+\setlrmarginsandblock{2cm}{2cm}{*}	% \setlrmarginsandblock{inner margin}{outer margin}{ratio}
+\setulmarginsandblock{2cm}{2cm}{*}	% \setulmarginsandblock{top}{bottom}{ratio}
+\checkandfixthelayout 			            % fixes stuff.
+
+%Enables the use FiXme refferences. Syntax: \fixme{...}
+%With "final" in stead of "draft" an error will ocure for every FiXme
+%under compilation.
+\usepackage[footnote,draft,english,silent,nomargin]{fixme}
+
+%%%CHAPTERLAYOUT%%%
+%setting the color of the chapter number
+\definecolor{numbercolor}{gray}{0.7}
+%Downloaded chapter-setup:
+\newif\ifchapternonum
+\makechapterstyle{jenor}{
+  \renewcommand\printchaptername{}
+  \renewcommand\printchapternum{}
+  \renewcommand\printchapternonum{\chapternonumtrue}
+  \renewcommand\chaptitlefont{\fontfamily{pbk}\fontseries{db}\fontshape{n}\fontsize{25}{35}\selectfont\raggedleft}
+  \renewcommand\chapnumfont{\fontfamily{pbk}\fontseries{m}\fontshape{n}\fontsize{1in}{0in}\selectfont\color{numbercolor}}
+  \renewcommand\printchaptertitle[1]{%
+    \noindent
+    \ifchapternonum
+    \begin{tabularx}{\textwidth}{X}
+    {\let\\\newline\chaptitlefont ##1\par} 
+    \end{tabularx}
+    \par\vskip-2.5mm\hrule
+    \else
+    \begin{tabularx}{\textwidth}{Xl}
+    {\parbox[b]{\linewidth}{\chaptitlefont ##1}} & \raisebox{-15pt}{\chapnumfont \thechapter}
+    \end{tabularx}
+    \par\vskip2mm\hrule
+    \fi
+  }
+}
+%setting chapter style:
+\chapterstyle{jenor}
+
+%depth of numbered headlines (part/chapter/section/subsection):
+\setsecnumdepth{none}
+\maxsecnumdepth{none}
+%depth of the table of contents:
+\settocdepth{section}
+
+% Makes sure LaTeX does not stretch the text at page break:
+\raggedbottom
