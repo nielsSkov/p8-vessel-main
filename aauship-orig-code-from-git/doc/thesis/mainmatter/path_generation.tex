@@ -1,0 +1,87 @@
+\chapter{Path Generation}
+\label{ch:pathgen}
+\head{A guidance system usually consist of a subsystem to generate
+	paths for the trajectory which is desired to have the object follow.
+	There exists multiple methodologies for this, also depending on the
+mission purpose. A description of these methods are described in this
+chapter with focus on pre-mission defined paths.}
+
+\noindent For these kinds of guidance systems, they are usually generated via some
+form of human interface -- some more intelligent than others. For the
+purpose of this thesis, the interest lies in the use of surveying
+purposes, such that a path should be generated from some waypoints
+that are generated from some polygonal areas of interest.
+
+The concept of this is to make run lines (lawnmover or plough fure pattern) with
+straight line segments, and the corners can be handled in a specific
+way such that the physical constraints of the ship manoeuvring ability
+is considered to generate feasible paths.
+
+There are basically two ways to consider a lawnmover pattern. The
+one is to have the area of interest to be covered only by straight line
+segments and then end the run lines connected with a turning manoeuvre outside the
+area of interest as show on figure~\vref{fig:lawn-straight-inside}. The other way is to cover the area with all manoeuvres constrained inside the area of interest, where the turns are also included in the area of interest, as illustrated on figure~\vref{fig:lawn-all-inside}.
+
+\begin{figure}[htbp]
+	\centering
+	\subfloat[Only straight lines\label{fig:lawn-straight-inside}]{\includesvg{lawn_straight_inside}}
+	\qquad
+	\subfloat[All paths constrained\label{fig:lawn-all-inside}]{\includesvg{lawn_all_inside}}
+	\caption{Comparison of two ways to cover an area with a lawn mower
+	pattern.}
+\end{figure}
+
+\section{Dubins Path}
+Dubins path is one way to define paths which can be used in the
+context of the AAUSHIP project. The Dubins paths are created by line
+segments and circle arcs. These arcs can be created in different ways,
+and the usage of this can be applied when generating lawnmover
+patterns. The circle arcs can be created from points (waypoints) with
+line segments between, like it is intended to do within the AAUSHIP
+lawnmover patterns. Different discrete ways to handle Dubin paths can
+be found in a summary and discussion with \citep{dubin}. The way the
+Dubins path are used in the AAUSHIP is based on the waypoint
+terminology, where the vessel needs to go from waypoint to waypoint
+connected with a line segment to track onto. This is also one of the
+ways that the Dubin paths can be utilized. In the AAUSHIP is the
+circle arc defined From a determined distance from between the longer
+line segments in the lawnmover patterns. This radius cannot be too
+small such that the dynamics of the AAUSHIP does not allow it to go
+all around the circle arc without diverge from the determined
+waypoints in the arc.
+\begin{figure}[htbp]
+	\centering
+	\includesvg{lawnmoverturn}
+	\caption{The figure shows that the spacing between the lines sets the turning radius for the AAUSHIP. This is constrained by the dynamics of the AAUSHIP.}
+	\label{fig:lawnmoverturn}
+\end{figure}
+
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.8\textwidth]{normal_dubin_path}
+	\caption{An example of a Dubin path generated with straight lines and
+		inscribed circles, where the path corner arc radius is determined
+	with a minimum radius and dependent on the angle between the two
+segments connecting one waypoint to others.}
+\label{fig:normal_dubin_path}
+\end{figure}
+
+
+\section{Guidance System}
+The guidance system is a system that takes the wishes from the
+operator and converts those to some trajectory via a path generating
+algorithm. This path generating algorithm will be used to generate the lawnmover patterns for the AAUSHIP to follow. These patterns have been discussed within this chapter. After the waypoints from the operator have been translated into a lawnmover pattern it is up for a tracking algorithm to keep the AAUSHIP at the correct course for the next coming waypoint.
+
+This algorithm can have various purposes and in this project it will be a \ac{LOS} guidance algorithm. This will control the heading of the AAUSHIP such that the vessel will converge to the line segments between the waypoints and afterwards keep the heading at the straight line segment. The guidance system can be one block that keeps the generated track from the waypoints updated, to have the references that the AAUSHIP needs to converge after. This reference is passed on to the control system, which can be seen on figure \ref{fig:losguide}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg{guidance-overview}
+	\caption{Overview of guidance system where a mission static waypoint
+	database is used as the input to a \ac{LOS} algorithm, which sets
+the reference for the ships control system, which is usually
+implemented as some form of heading autopilot.}
+	\label{fig:losguide}
+\end{figure}
+
+Tesselation with quadrilaterals (polygons with four edges and four vertices) is a way to help divide a given polygonal shape into some shape where it is useful to apply a plough fure motion. The shapes of these are equal to how the AAUSHIP needs to move when navigating in a specific area to map the seabed.

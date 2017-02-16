@@ -1,0 +1,190 @@
+\chapter{Formation Control Overview}
+\label{ch:formcontrol}
+\head{This section will give a short introduction to formation control in general, by discussing existing formation control paradigms and relating them to the motivation of the AAUSHIP as a survey platform concept. Some of these concepts will be analysed further in chapter~\vref{ch:selformctrl}.}
+
+%\head{Formation control in general is concerned with simultaneous control of dynamic systems. These systems is often referred to as agents where the objective of these is to maintain a static reference to a specified object. This object could be another agent witch then would be referred to as the leader. The other agents objective will then be to stay in the relative position to the leader within a static formation.}
+
+\noindent The theory of formation control in general is widely applied. It is usually applied in assignments regarding control of robots which needs to be placed relative to each other. Depending on the given task of the robots, and which type of robots are in focus, the formation can be utilized in different ways \citep{muv-survey1}.
+
+The robots can also be of various types: Driving vehicles, helicopters, aeroplanes, ships etc. which can be both manned or unmanned. The tasks that these robots needs to fulfil can vary greatly. Robots in groups in general have many purposes such as vacuum cleaning robots, who needs to clean a rather large area or flying swarm robots like quadcoptors who can make different kinds of assignments. When quadcoptors work as a combined group they could lift a certain amount of payload to achieve their goal as a group, or they could work individually in a network to do several smaller tasks. An example of how quadcoptors are working together can be examined at \citep{ethswarm}.
+
+All the robots in the terminology of \cite{muv-survey} are called \textit{agents}. These agents move either individually or in formation. This formation can be rigid or be flexible. If the agents move in rigid formation they will keep their relative positions to each other and must not diverge from the formation. The formation could also be flexible which sometimes is preferable. If the distances between three agents on line are large, and an obstacle needs to be avoided, only one of the agents needs to move from this obstacle if the formation is flexible \citep{muv-survey}. This can be seen on figure~\vref{fig:form_avoid_right}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.5\textwidth]{form_avoid_right}
+	\caption{A flexible formation where the right agent avoids an obstacle.}
+	\label{fig:form_avoid_right}
+\end{figure}
+
+\section{State of the Art}
+When looking into formation control many different types of control can be taken into account. The main types of formation control are separated into six different types, all under the main topic \textit{multiple vehicles coordination strategies}. The overview for this can be found in the survey paper \citep{muv-survey} who explains the six main types and a few alternations of these.
+
+The theoretical views on control of \ac{MUV}'s behaviour are by \citep{muv-survey} divided into two classes; centralized and decentralized systems. If the system is centralized this means that all control of the formation is done on one agent, and the others receive information from the core agent. This form of system has the advantage that the core agent can optimize vehicle coordination, accommodate individual agent faults and monitor the accomplishment of the mission. The main disadvantage of this system is that if a fault should occur in the core agent this will affect and facilitate a failure of the whole system.
+
+The opposite way of controlling the system would be in a decentralized way. This way of controlling the formation is inspired by the aggregation of birds and fish. This makes each agent able to communicate and share information in between. This means that each agent is given its own part of the complete objective and thus can only complete a part of it, like moving around an object to get to end point of a trajectory. The advantage is that faults in a single agent can be overlooked, thus more robust to faults, but can result in a less efficient objective outcome. A decentralized system may be more appropriate to scale up such that more agents can be included and the computational load can, in difference from the centralized system, be split up onto more agents.
+
+The different types of coordination and control algorithms within centralized and decentralized systems include: \textit{behavioural-based}, \textit{virtual structure}, \textit{leader-follower}, \textit{graph-based} and \textit{potential field approaches}. Within these structures are the terms \textit{cooperation control} and \textit{formation control} used. Cooperative control focuses on the global task that the group of agents needs to fulfil, and the formation control is the actions performed by each agent which is shared with the other agents in the group. 
+\begin{description}[style=nextline]
+	\item [Virtual structure]
+	In a virtual structure is the entire formation treated as a single entity. The behaviour coordination for a group of agents in a virtual structure is uncomplicated compared to the coordination of many agents, due to the making of one structure e.g. based on fixed distances between the agents. The disadvantage falls on the centralization due to the structure treated as a single entity. If a failure in this structure happen results in a failure in the entire structure.
+	\item [Behaviour Based Methods]
+	The behavioural based method employs several behaviours for each of the agents and the final control used to control the formation is derived from a weighting of the relative importance of each of the behaviours. This could for instance be navigational behaviours to enable a navigation to be the main goal while avoiding hazards and stay in formation. If one agent needs to avoid a collision with an obstacle the rest of the group should not take this into account. Only that single ship needs to leave the formation and get back into formation again.
+	\item [Leader-Follower Approaches]
+	Applying leader-follower methods designates one agent as being the leader and the rest of the agents as followers. The following agents need to position themselves relative to the leader and maintain a desired relative position to the leader. This makes the simplicity to this method, but there is no feedback from the followers to the leader and thus makes that a disadvantage. Separation-separation and separation-bearing are two popular leader-follower formation controls, where the followers stay at specified separation and bearing from their designated leader. Within this method it is possible to split the group up into several smaller groups with their individual designated leaders.
+	\item [Potential Field Approach]
+	Potential field approaches assigns potentials to agents to make a weighting between them. This weighting could for instance determine the relative distances between the agents. This is usually used when following a virtual leader, such that this process is only made relative to the agents within the structure. This method can ensure a collision free formation when every agent has been assigned their potential weighting respectively. In this method can obstacles be included and have assigned potentials as well. This potential will become an avoidance parameter from the specific object.
+	\item [Graph Theory Approaches]
+	When applying the graph theory method one assign every agent as a node and assign connections between the nodes. In graph theory this is denoted vertices and edges. The study with graph theory is mainly concentrated of the formation itself and related to changes within the structure. This can be related to the structure within a tree-structure which is used when assigning the formations in graph theory manor. This can be applied as communication analysis for the agents and consensus analysis can be of benefit. The edges between the nodes symbolizes the possible connections thus communication between them. The nodes that are connected are denoted as neighbours and are capable of communicating through the edges.
+\end{description}
+
+\subsection{Approaches on Formation Control}
+Different formations of ships can be seen on figure~\vref{fig:diffforms}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.5\textwidth]{diffforms}
+	\caption{Different formations which the \ac{ASV}s can make.}
+	\label{fig:diffforms}
+\end{figure}
+
+The formation of the ships may not need to be strictly rigid. Situations could appear where it would be of benefit to change the ship's formation. If the formation need to avoid an obstacle and one or more ships needs to go faster or slower, which leads to a change in the formation, it might be of benefit to regroup the formation which is faster to reach. An example can be seen on figure~\vref{fig:avoid}.
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.5\textwidth]{form_avoid}
+	\caption{A formation needs to go around an obstacle where the inner most ship chooses the shortest path and the formation regroups to a new formation.}
+	\label{fig:avoid}
+\end{figure}
+
+When doing the formation control it is important to figure out what one
+want to achieve, and depending on the strategy and the formation type
+some things are to be considered as requirements regarding how the
+formation should work. In this discussion lawnmower patterns are considered. In this work up to four ships are considered for simplicity, but it should be extensible to n-number of ships. The lawnmower patterns will suit well for the mapping of a seabed where one or more ships are to sail from shore to shore in a fjord.
+
+\subsection{Initialisation}
+\label{sc:initialisation}
+When looking at the specific task several things needs to be taken into account. When starting the mission, the ships may start at positions that is not in the desired formation. It might be of importance that the ships are in
+formation when they start tracking the desired path. Therefore some
+attention must be given on how to make the ships initialize this
+formation. This is referred to as the group coordination task. An approach is to make the ships sail individually to the
+starting positions with a speed that makes them hit their respectively starting points at
+the same time. If one reaches its start point much earlier
+than the others it must stop, which is not wanted because it then has the risk to
+drift out of position again. This basically means that there exists an initialization
+phase and a tracking phase. The start heading should of
+course align with the path at the start point such that the path following can begin with zero error. The ships could also target their group formation before starting at time zero at the path. This will eventually make the initialization take longer time but ensure that the ships have made the group coordination task and are ready to start at the path.
+
+Another issue to be considered is to ensure that no ship at
+any point in time reaches a minimum speed that is necessary for the
+ship to not drift out of formation. This could be a problem in corners
+of the formation if a stiff construction, where the inner most ship
+has to move slower, to accommodate the shorter distance on an inner
+circle arc.
+
+Faults like blackout on a ship could also be considered in the control
+design. I.e. what happens with the formation when one ship fails into a
+blackout. Should the rest of the formation stop, should the formation
+still follow this drifting ship or should the mission simply terminate
+when it is discovered that a ship has blackout. This is under the assumption that the formation is decentralized and every ship has its own control and is not controlled from a mother ship.
+
+In the initialization phase it is also relevant to consider how the
+ships should avoid each other if they are on the wrong side of each
+other. If it is of benefit that a specific ship is at the most inner route, and is located at an outer position before the group coordination, this ship needs to cross the formation to get to the desired starting position. This initialization needs to be adjusted in the initialization phase to ensure that no ships collide.
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.4\textwidth]{cornoring}
+	\caption{Two ships initializing and following the path offset
+		equally on each side, ships are constrained to sailing parallel
+		and heading the same as path when projected onto the path. Blue
+	dot is start of path. Fully drawn splines is initializing phase.}
+	\label{fig:cornoring}
+\end{figure}
+
+On figure~\vref{fig:cornoring} is a simple path following performed
+with two ships in a stiff formation with an equal distance from the
+path. It illustrates four steps. In step \#0 the ships initializes a
+random position near the start of the path being the group coordination task. At \#1 it is tracking the
+path in formation, whilst still in formation. This is referred to as a formation coordination task. At \#2, the green
+(right) ship is in a tight inner curve where it is important to
+consider design of the path such that the capabilities of the ship is not
+exceeded to stay in formation. At \#3 it is back to straight line path
+following in formation.
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.6\textwidth]{form_rigid_90}
+	\caption{Three ships in formation needs to make a 90\textdegree turn and stays in their relative positions and keeps the rigid formation.}
+	\label{fig:form_rigid_90}
+\end{figure}
+
+When the ships needs to make a turn about something they can do it in many ways. On figure~\vref{fig:form_rigid_90} the ships keep their formation whilst turning about the object. When they reach the other side and have finished their turn, the ships have kept formation but the outer most ship has now become the inner most ship. The reason to turn like this could be that the inner most ship, the yellow ship, cannot turn as sharp as demanded to stay the inner most ship. Therefore, instead of turning the formation, they stay geometrically rigid.
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.6\textwidth]{form_change_90}
+	\caption{Three ships in formation needs to make a 90\textdegree turn and changes their relative positions.}
+	\label{fig:form_change_90}
+\end{figure}
+
+As seen on figure~\vref{fig:form_rigid_90} the ships could have benefit of turning like this. This way of turning could cause trouble in the top of the turn, where the ships eventually will collide due to errors and the relative close distance to each other. This way could be altered a little such that the ships will turn like on figure~\vref{fig:form_change_90}. There the ships adjust their positions and velocities to ensure that they will not collide, but they will therefore leave their formation shortly to return back into position again \citep{thorvaldsen}.
+
+\subsubsection{Degree of Actuation}
+The degree of actuation is a matter that sets some limitations on how
+the path following can be made, and thus the methods available to
+control the ships. Generally speaking when talking marine craft the movements
+that one is interested in controlling is usually their planar position in
+the \ac{NED} frame. Exceptions for this is when one needs to perform
+dynamic positioning operations where one needs the vessel to have a
+controlled heave.
+
+For controlling of ships there are different configurations which is described by \citep{fossen} as the following.
+\begin{description}[style=nextline]
+	\item [Three or more Controls]
+	When having three or more control parameters it is said that the vessel is fully actuated. This way of controlling is usually used in low-speed manoeuvring and station keeping mostly by offshore \ac{DP} vessels.
+	\item [Two Controls and Trajectory-Tracking Control]
+	Trajectory-Tracking is done in a three \ac{DOF} system, $e(t)\in\mathds{R}^2$ on the sphere. It is done with two control inputs, $u(t)\in\mathds{R}^2$. This means that the control problem is under actuated which cannot be solved by linear control theory. A vessel under these terms is able to manoeuvre along a path with constant sideslip angle using only surge and yaw. This is the classic approach for path following.
+	\item [Two Controls and Weather-Optimal Heading]
+	When the goal is station keeping with minimal fuel consumption and the heading is not important one could consider the weather conditions and in general the environmental disturbances to perform stable control in disturbing weather. A method of doing this is described by \citep{i2001nonlinear} and \citep[sec. 13.3.10]{fossen}. It is done by making the heading depend of the change in the mean of the environmental disturbances.
+	\item [Two Controls and Path-Following Control]
+	The standard way by having two controls, being surge and yaw, and achieving path-following, is to define a 2D workspace. This workspace is placed along the trajectory with along-track and cross-track vectors that are to represent the error to minimize. This is usually done by applying the \ac{LOS} path following controller that makes use of surge and yaw to accomplish the path following. This implies that a six \ac{DOF} system model needs to be internally stable such that only the two control inputs are used.
+	\item [One Control]
+	This is the simplest control for ships, where the yaw is controlled with some form of heading autopilot and is the only thing that is controlled.
+\end{description}
+
+
+For the AAUSHIP this means that it is not a fully actuated ship in the
+whole 3D space, but this is not needed since it is moving on a
+surface. To be fully actuated it must be able to have controls for
+surge, sway and yaw. AAUSHIP is only equipped with two main propellers and 
+one or two bow thrusters, which can only be used for slow speed manoeuvring.
+The bow thrusters can not be used in normal path following operations since the actuation of these are too low to make the vessel move.
+
+
+\subsection{Delimitations}
+Within the scope of the AAUSHIP project will the focus be to apply and extend a leader-follower approach at the ships. This will include several tasks. The two main tasks will be to make a group coordination task and a formation coordination task. The group coordination task will be, as described earlier, an objective to get the ships into the desired formation before or exactly at the starting point of the path following. The formation coordination task will be to make a leader, virtual or not, follow a predetermined path set by waypoints. The path should be generated from waypoints placed on a map due to that the ship needs to travel over larger distances. This will make a waypoint based follower where the path will be generated between the placed waypoints.
+
+The placement of the waypoints will be placed such that the ships need to surge along a lawnmower pattern, where the turns have a lower requirement of turn radius dependent on the surge velocity of the most inner ship. This is due to the drift if the inner ship looses too much velocity.
+
+When applying the leader-follower approach it needs to be determined how the formation precisely should be set up. In this project is only one leader considered at a time. The rest of the ships will act as followers to the leader. The idea can be seen on figure~\vref{fig:l_f} where only one leader is represented with one single or more followers.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.6\textwidth]{lead_follow}
+	\caption{A leader is always assigned and potential followers are following.}
+	\label{fig:l_f}
+\end{figure}
+When the followers are in formation with the leader it is only the leader who is following a specified trajectory. The other ships, the followers, only keeps their position relative to the leader. This makes the predetermined formation moving along the path relative to how the leader is following the path. The leader is autonomous as well as the followers, but the path following is only done at the leader and the followers maintains their relative positions to the leader.
+
+If the leader diverges from the path, drifting to the left, this will result in the whole formation drifting to the left. This problem can be dealt with in different ways, e.g. the control could react fast enough to make the formation get back on track within a specified time, or some fault tolerance could be done from the whole system. If the leader diverges from the path it could make the formation stay at their respective headings within a time slot before actuating towards the leader.
+
+The formation can take into account if it is of benefit to change leader. If some kind of obstacle makes the formation turn about it, it might come to benefit to change the leader which needs to be done on the fly. This entails a change in the group coordination and the ships needs to set their relative position and heading from another ship.
+
+The configuration of the formation will be set up, as a start, with one leader and a single follower. The follower can be offset from the leader with a distance of five metres. This can be seen on figure~\vref{fig:l_f1}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=0.4\textwidth]{lead_follow1}
+	\caption{The leader with a follower offset by 5 metres radius.}
+	\label{fig:l_f1}
+\end{figure}
+This will be a rigid formation that the ships needs to keep at all times. The change of leader will eventually be taken into account when the ships needs to turn. If the formation needs to turn clockwise about it might be of benefit to change the leader. 
+
+The location to test the implementation of the AAUSHIPs will be in the Limfjord. The optimum will be to make the formation go across the Limfjord and back in lawnmower pattern and make measurements of the seabed. Due to the location where it is presumed to have enough space, the formation is not of bigger importance to the mapping. The only important thing to include regarding the formation is that the ships needs to be able to turn around without loosing so much velocity such that they start drifting and offset the formation.

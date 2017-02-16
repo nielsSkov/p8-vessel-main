@@ -1,0 +1,7 @@
+TODO
+====
+*Make a nice illustration that illustrates sub-d connector connections and board to board connector
+*Make temperature sensor files, using ADC
+*Make updated revison of PCB
+*Make LLI able to send messages, i.e. with the odd sensor data
+*Maybe use uint8_t data[] and sizeof() in combinaiton for package() to avoid the length parameter

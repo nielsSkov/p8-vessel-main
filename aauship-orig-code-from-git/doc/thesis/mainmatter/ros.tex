@@ -1,0 +1,174 @@
+\chapter{\acs{ROS} Design}
+\head{This chapter describes the details of the implementation level,
+which is done on a \acl{ROS} platform. This should provide all the
+information needed to complete the implementation.}
+
+\noindent It was decided to use \ac{ROS} in the implementation. It is used as an
+other abstraction layer on top of the \ac{LLI}. In turn it makes AAUSHIP
+modular and make it easy for others to write parts of the control
+system without reimplementing basic components. This in turn makes it
+an extensible platform, that should be easy to extend. \ac{ROS} is a
+project available at \url{http://ros.org}, which describes itself in
+short as following:
+
+\begin{quote}
+\textit{\noindent
+	ROS (Robot Operating System) provides libraries and
+	tools to help software developers create robot applications. It
+	provides hardware abstraction, device drivers, libraries,
+	visualizers, message-passing, package management, and more. ROS is
+	licensed under an open source, BSD license.
+}
+		
+	\hfill ROS.org
+\end{quote}
+
+\section{\acs{ROS} Terminology}
+To start working with \ac{ROS} it is important to use the terminology
+used by \ac{ROS} to avoid confusion. Therefore these  will be stated
+in this section.  The idea of \ac{ROS} is to make it easy to build a
+system modularly, and this is achieved by using almost
+``self-contained'' code segments called \textit{nodes}, which is
+application parts that is run as its own process. A node should be
+designed to execute limited tasks such as image processing or similar
+atomic processes. These nodes can then communicate with other nodes by
+the means of two main communication forms called \textit{topics} and
+\textit{services}. A good introduction to the base components of \ac{ROS}
+and overview of how it works is also described by the
+\citep{rosoverview} conference paper.
+
+\begin{description}
+\item[The topic] is an asynchronous connection, that can \textit{publish}
+from many nodes and be \textit{subscribed} by many nodes. This means
+that it is a multicast form for providing data.
+\item[The service] is a synchronous connection that is used between one node
+to another node. This is only unicast.
+\end{description}
+
+An illustration of multiple nodes connected via topics and a service
+is on figure~\vref{fig:ros-node-simple-concept}. This concept can also
+be used across multiple machines. This is illustrated in
+figure~\vref{fig:ros-node-master-concept}. On this a new type of unique
+node is introduced, this is the \ac{ROS} master. This is a required
+component for a ROS system to run. The master's only purpose is to make
+the nodes connect together via the topics or services. There can only
+be one master per \ac{ROS} system. This also enables multiple machines
+to share topics, by connecting the masters that runs on the individual machines. In
+short the masters sole purpose is to make these connections. It is
+illustrated by the dashed arrows. Each node says that it want to i.e.
+publish or subscribe to a certain topic. To connect a node from one
+machine to another, the environment variable \texttt{ROS\_MASTER\_URI}
+has to be set to the host with the master running, and the
+\texttt{/etc/hosts} file has to be set on all machines with the other
+machine's hostnames.
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg{ros_node_simple_concept}
+	\caption{Basic principle of the node abstraction illustrating a
+	service and two topics. The topology chosen here is only to illustrate
+	the possibilities.}
+	\label{fig:ros-node-simple-concept}
+\end{figure}
+
+When that is said, that is not the whole picture of the topology. In a
+need to make this flexible \ac{ROS} has made it such that the nodes
+can be started and stopped kind of ``runtime''. That is such that it is
+possible to have different configurations of nodes to run in different
+scenarios, i.e. in development with debugging nodes and virtual sensor
+nodes versus in the real mission where no debugging nodes is used and
+real sensor nodes that use real sensor data is used.
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg{ros_node_master_concept}
+	\caption{Concept showing the ROS master together with the nodes,
+	also illustrating the masters role with multiple machines. Dashed
+	lines hows that the node will either subscribe or publish to the
+	topic. This only happens initially when connecting to a topic. Gray
+	area is two physical separate but networked machines.}
+	\label{fig:ros-node-master-concept}
+\end{figure}
+
+\section{ROS on AAUSHIP}
+
+\begin{description}
+	\item[\texttt{/lli\_node}]\hfill \\
+		This is responsible for communicating with the \ac{LLI}. It
+		publishes sensor data from the \ac{LLI} and receives various input
+		commands and forwards them to the \ac{LLI}.
+	\item[\texttt{/sensor\_decode\_node}]\hfill \\
+		This decodes the samples from the \ac{LLI} and publishes this to
+		the relevant topics. 
+	\item[\texttt{/joy}]\hfill \\
+		This is a node from \ac{ROS} that is a generic interface to
+		various joystick inputs. Here it is used to get data from a PS3
+		controller.
+	\item[\texttt{/joy\_teleop\_node}]\hfill \\
+		This is node parses some data from the PlayStation 3 controller, and formats
+		those as messages that is to be sent to the \ac{LLI}.
+	\item[\texttt{/kf\_node}]\hfill \\
+		This node is the running the \ac{KF} iteration with the attitude estimate and
+		the decoded \ac{IMU} samples.
+	\item[\texttt{/gnc\_node}]\hfill \\
+		This node runs the \ac{GNC} algorithm, basically the controller.
+	\item[\texttt{/rqt\_mission\_planner\_node}]\hfill \\
+		This node is an rqt plugin used to specify the mission.
+	\item[\texttt{/ahrs\_mahony}]\hfill \\
+		This node is the attitude observer described in
+		section~\vref{sc:ahrs}.
+\end{description}
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg{ros_aauship_teleop}
+	\caption{ROS configuration on AAUSHIP for manual tele operation.
+	AAUSHIP and GRS are connected via a Wi-Fi connection.}
+	\label{fig:ros-aauship-teleop}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	{\footnotesize
+	\includesvg{ros_aauship_closed_loop_single}}
+	\caption{Closed loop ROS system on one ship. The blob representing
+		the \texttt{/simulation\_node} is what where the simulation fits
+		in, that is it replaces the \texttt{/lli\_node} and the
+		\texttt{/sensor\_decode\_node}.}
+	\label{fig:ros-aauship-closed-loop-single}
+\end{figure}
+
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg{ros_aauship_multi}
+	\caption{ROS configuration on AAUSHIP for with multiple ships. It
+	show that there is only one master, for example the lader, but not
+	limited to the leader ship.}
+	\label{fig:ros-aauship-multi}
+\end{figure}
+%\missingfigure{ROS system used for multiple ships, when doing autonomous formation control}
+
+\section{Multiple AAUSHIP's}
+All of the above design only describes the ROS layout on one ship.
+Given that this project is about formation control, that implicitly
+means that multiple ships has to operate at the same time, which in
+the case of cooperative formation some information has to be shared
+between ships. AAUSHIP is equipped with Wi-Fi, which in turn means that
+it uses an \ac{IP} based networking scheme. This means that one can
+easily add up to 255 ships on one subnet with \ac{IPv4}. If the
+formation needs to scale to more than that, some networking design is
+needed maybe using \ac{IPv6}.
+
+The degree of information of the information that needs to be share
+depends on the formation method chosen. The \ac{ROS} system should
+accommodate some arbitrarily defined schemes in a way that is defined
+by the control node of the ship. Since every boat is connected with a
+via Wi-Fi it is assuming that all ships can reach everyone. This
+simplification is used for the testing implementations for now. A more
+advanced system, that should take into account that not every ship can
+communicate with each other can be developed for large formations or
+scalability, but in this project the implementation assumes small
+formations with small distance, that is that all ships are reachable
+on the whole network. In practice the networks consists of an access
+point on any random ship where the others connects to.

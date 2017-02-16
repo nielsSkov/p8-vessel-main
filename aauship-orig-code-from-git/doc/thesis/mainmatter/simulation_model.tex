@@ -1,0 +1,302 @@
+\chapter{Simulation Model}
+\label{ch:simulation-model}
+\head{This chapter will describe the model
+that is used for simulation of the system, as a replacement for
+testing on the real ship.}
+
+\noindent To make a model as simulation model, it is needed to emulate the real
+sensor outputs with noise imposed onto the signals. Using a \ac{LTI}
+state space model based on the unified model \vref{eq:totmodel} is
+constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
+
+\begin{subequations}
+\begin{align}
+	\dot x &=  A x + B u + E w \\
+	y &= H x + v \\
+	A &=
+	\begin{bmatrix}
+		0 & I\\ -M^{-1}G & -M^{-1}D
+	\end{bmatrix}, \quad
+	B = 
+	\begin{bmatrix}
+		0 \\ M^{-1}
+	\end{bmatrix}, \quad
+	E =
+	\begin{bmatrix}
+		0 \\ M^{-1}
+	\end{bmatrix}
+\end{align}
+\label{eq:ss}
+\end{subequations}
+
+The matrix $E$ describes the sea state and vector $w$ the process noise, and vector $v$ the sensor (measurement) noise. Both noise
+vectors are assumed zero-mean Gaussian white noise processes.
+
+\nomenclature{$x_n, y_n$}{Position in the \acs{NED}-frame, usually
+computed from a \acs{GPS}}
+\nomenclature{$a_x, a_y, a_z$}{Linear accelerations from accelerometer}
+\nomenclature{$m_x, m_y, m_z$}{Magnetic field from magnetometer}
+\nomenclature{$\omega_x, \omega_y, \omega_z$}{Angular velocity from rate gyro}
+\nomenclature{$\psi$}{Heading angle (yaw)}
+\nomenclature{$\mathbf{p}^n _{b/n}$}{Linear position of $o_b$ with respect to ${n}$ expressed in ${n}$}
+\nomenclature{$\boldsymbol{\Theta}_{nb}$}{Euler angles between ${n}$ and ${b}$}
+
+
+\section{Position Trajectory in \acs{NED}}
+The position trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with numerical euler integration of the velocities \vref{eq:NEDvel}.
+\begin{subequations}
+\begin{align}
+\dot{\mathbf{p}}^n _{b/n} &= \mathbf{R}^n _b (\boldsymbol{\Theta}_{nb}) \boldsymbol{\nu}^b _{b/n} \label{eq:NEDvel}\\
+\mathbf{p}^n _{b/n}(k+1) &= \mathbf{p}^n _{b/n}(k) + h \dot{\mathbf{p}}^n _{b/n} \label{eq:NEDtrajectory} \\
+&= \mathbf{p}^n _{b/n}(k) + h \mathbf{R}^n _b
+(\boldsymbol{\Theta}_{nb}(k+1)) \boldsymbol{\nu}^b _{b/n}(k+1) 
+\end{align}
+\end{subequations}
+The generalised position, velocity, acceleration and force vectors, in that order, is:
+\begin{align}
+\boldsymbol{\eta}^n =
+\begin{bmatrix}
+\mathbf{p}^n _{b/n}\\\boldsymbol{\Theta}_{nb}
+\end{bmatrix},\qquad
+\boldsymbol{\nu}^b =
+\begin{bmatrix}
+\boldsymbol{\nu}^b _{b/n}\\\boldsymbol{\omega}^b _{nb}
+\end{bmatrix},\qquad
+\dot{\boldsymbol{\nu}}^b =
+\begin{bmatrix}
+\dot{\boldsymbol{\nu}}^b _{b/n}\\\dot{\boldsymbol{\omega}}^b _{n/b}
+\end{bmatrix},\qquad
+\boldsymbol{\tau}^b =
+\begin{bmatrix}
+\mathbf{f}^b _b\\\mathbf{m}^b _b
+\end{bmatrix}
+\end{align}
+
+From this it can be seen that the velocities, the derivative of $\eta$, can be given as:
+\begin{align}
+\dot \eta &= J_{\boldsymbol{\Theta}}(\eta)\nu\\
+\begin{bmatrix}
+\dot{\mathbf{p}}^n _{b/n}\\\dot{\boldsymbol{\Theta}}_{nb}
+\end{bmatrix}
+&=
+\begin{bmatrix}
+\boldsymbol{R}^n_b(\boldsymbol{\Theta}_{nb}) & 0_{3x3} \\
+0_{3x3} & \boldsymbol{T}_{\boldsymbol{\Theta}}(\boldsymbol{\Theta}_{nb})
+\end{bmatrix}
+\begin{bmatrix}
+\boldsymbol{\nu}^b_{b/n}\\\boldsymbol{\omega}^b_{b/n}
+\end{bmatrix}
+\end{align}
+These are the basis of the model that are to be developed and used within the AAUSHIP project.
+
+\section{Sensor Measurements to State Vector}
+For the control system it is needed to convert the sensor measurements
+to the system state vector, such that the control system can be
+designed. Figure~\vref{fig:intermediate-calc} shows the computation
+flow to determine this. It shall be noted that the \ac{GPS} and
+\ac{IMU} blocks has the sensor noise integrated in them.
+
+Now that the state vector is present, a state observer can be used
+in i.e. a \ac{KF} to filter and reduce the noise.
+
+\begin{figure}
+	\centering
+	\includesvg{intermediate-sensor-calculations-block}
+	\caption{Block diagram over the computation of system states from
+	raw sensor measurements.}
+	\label{fig:intermediate-calc}
+\end{figure}
+
+Since the simulation is performed by iterating over the state space
+model, it is somehow needed to get the variances from the sensors
+modelled in the state space model. Because of the intermediate
+computations described in the figure~\vref{fig:intermediate-calc} it
+is not straight forward to add the sensor noise to the model, because
+this noise is specified at the raw sensor measurements. So some way
+has to be made to calculate the noise.
+
+A method is to set the sensor measurements to no movement values, and
+only add the noise on the measurements. If all sensors were zero in
+stagnation, then it would be enough to simulate this with only noise and
+get the corresponding variance out. This is not the case, as the
+magnetometer has a bias, just because it is situated in a constant
+magnetic field and this is dependent on the attitude of the ship. So
+to compute the variances on the state vector it is needed to make
+multiple simulations where this bias is different also. A normalized
+normal distribution of this should suffice.
+
+\section{\acs{SOG} to Body Frame Velocities}
+The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS}, denoted as the magnitude $U$ and the course angle relative to true north, denoted the course angle $\chi$, which is the sum of the heading $\psi$ and sideslip $\beta$ angles:
+\nomenclature{$\chi$}{Course angle}
+\nomenclature{$\beta$}{Sideslip angle}
+\nomenclature{$U$}{Course speed}
+\begin{align}
+\chi = \psi + \beta \quad \Rightarrow  \quad \beta = \chi - \psi
+\label{eq:angles}
+\end{align}
+
+To calculate the body frame velocities the rotation matrix around $z$ is used. It is enough to use this one basic rotation, because this is on the 2D system ($x,y$) in the \ac{NED} frame.
+
+\begin{align}
+R_{z} (\psi) =
+\begin{bmatrix}
+\cos(\psi) & -\sin(\psi)\\
+\sin(\psi) & \cos(\psi)
+\end{bmatrix}
+\label{eq:Rz}
+\end{align}
+First the course speed magnitude $U$ can be calculated in \ac{NED} by the following computation, where we describe the course speed as a vector $[U\quad 0]^\top$, such that the 
+\begin{align}
+U_n = R_{z} (\chi)
+\begin{bmatrix}
+U \\ 0 
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos(\chi) \\
+\sin(\chi)
+\end{bmatrix}
+U
+\end{align}
+Now this can be rotated into \ac{BODY}, using the same rotation matrix \vref{eq:Rz}, but with the sideslip angle instead of the course angle. Such that:
+\begin{align}
+U_b = \begin{bmatrix}
+u \\ v
+\end{bmatrix}
+= R_z (\beta) U_n
+\end{align}
+Assuming the course speed vector in relation to the \ac{BODY} (as opposed to \ac{NED} initially suggested) it is enough to use the sideslip for rotation directly.
+\begin{align}
+U_b = R_{z} (\beta)
+\begin{bmatrix}
+U \\ 0 
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos(\beta) \\
+\sin(\beta)
+\end{bmatrix}
+U
+\end{align}
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg{nautical_angles}
+	\caption{Plot showing the different angles used. The in
+		equation~\vref{eq:angles}. $\chi$ is the course angle, $\psi$ is
+	the heading angle, $\beta$ is the sideslip angle, $U$ is the
+velocity vector, and $N$ and $E$ is the northing and easting in NED,
+respectively.}
+	\label{fig:natical_angles}
+\end{figure}
+
+
+\section{Magnetic and Acceleration Vectors from State Attitude}
+The simulation model state vector do not contain magnetic field
+strength directly. Therefore it has to be calculated from the
+attitude, which is the pitch, roll and yaw values.
+
+First the magnetic field direction has to be known for the area where the system operates. There exists models of the magnetic field on the earth, accessible from \citep{geomag}. Using the ``WMM 2010'' model, the declination and inclination has been determined to be $2.167 \arcdeg$ (east), and $70.883 \arcdeg$ (down) respectively. Additionally the field strength is about $50432$ nT.
+
+This defines the magnetic field in the earth frame as:
+\begin{align}
+m_n = \begin{bmatrix}0 & \text{inclination} & \text{declination}\end{bmatrix}^\top
+\end{align}
+
+The magnetic field in the body frame $m_b$ is:
+\begin{align}
+m_b = R_b^n(\Theta_{nb}) m_n 
+\end{align}
+where the rotation matrix $R_b^n(\Theta_{nb})$ \vref{eq:Rfromntob}.
+\begin{align}
+R_b^n (\Theta_{nb}) &=
+\begin{bmatrix}
+c\psi c\theta & -s\psi c\theta + c\psi s\theta s\phi & s\psi s\phi + c\psi c\phi s\theta \\
+s\psi c\theta & c\psi c\phi + s\phi s\theta s\psi & -c\psi s\phi + s\theta s\psi c\phi \\
+-s\theta & c\theta s\phi & c\theta s\phi
+\end{bmatrix}
+\label{eq:Rfrombton} \\
+R_n^b (\Theta_{nb}) &= R_b^n (\Theta_{nb})^{-1}
+\label{eq:Rfromntob}
+\end{align}
+where $s \cdot = \sin(\cdot)$ and $c \cdot = \cos(\cdot)$. $\Theta_{nb}$ is the Euler angles of the {b} in {n}.
+
+The acceleration is made in a similar way as the magnetic body vector is made, except it adds the bodyframe accelerations caused by the ship itself.
+\begin{align}
+a_\text{IMU} = [a_{bx}, a_{by}, 0]^T + R_n^b (\Theta_{nb}) [0,0,g]^\top
+\label{eq:accl_IMU_construction}
+\end{align}
+where $g$ is the gravity, defined as 9.82 m/s$^2$
+
+\section{Reconstruction of Body Accelerations}
+The ship is equipped with an accelerometer, but this does not mean
+that the accelerations measured is in the body frame, $a_b$, because
+it also measure the the added gravity vector. This gravity vector has
+to be subtracted before the body acceleration is know. This is
+calculated by defining the gravity vector in the NED frame $a_g$, then
+rotate that to the body frame and subtract it from the {IMU}
+measurement $a_\text{IMU}$.
+\begin{align}
+a_g = [0, 0, g]^\top \quad, \quad 
+a_\text{IMU} = [a_x, a_y, a_z]^\top \quad, \quad 
+a_b = [a_{bx}, a_{by}, a_{bz}]^\top
+\end{align}
+Where $g$ is the gravitational acceleration, and the computation is \vref{eq:accl_body_calc}, which is basically the opposite of~\vref{eq:accl_IMU_construction}.
+\begin{align}
+a_b = a_\text{IMU} - R_n^b (\Theta_{nb}) a_g
+\label{eq:accl_body_calc}
+\end{align}
+
+
+\section{\acl{AHRS}}
+\label{sc:ahrs}
+On figure~\vref{fig:intermediate-calc} a block is representing an
+attitude observer. This part of the system is an observer that is used
+together with the on-board \ac{IMU}. Its input is raw linear
+acceleration, gyration rate and magnetic field strength to determine
+the attitude and heading of the ship.
+
+As described on figure~\vref{fig:blockkf} and attitude observer is
+needed, this is realised by implementing the \ac{AHRS} described
+here.
+
+\subsection{Mahony Filter}
+An \ac{AHRS} filter described in the \citep{mahony} is widely used on
+mini aerial vehicles worldwide according to the conclusion of the
+paper. Other papers of the same authors discuss different aspects of
+this filter in \citep{mahony2} and \citep{mahony3}.
+
+The paper demonstrates two filter approaches, termed the
+\textit{direct complementary filter} and the \textit{explicit
+complementary filter}, where the first needs all outputs typically
+found in \ac{IMU}'s measurements (accelerometer, gyrometer and magnetometer)
+whilst the second does not need the magnetometer measurements.
+
+In its simplest form a complementary filter is a filter, which takes
+advantage of the difference between two types of measurements, in this
+case the gyrations and accelerations. In a stationary case the
+accelerations are enough to determine the attitude when exposed to the
+gravitational field, which should point ``down''. For the case of a
+actuated body, not only the gravitation is affecting the measured
+accelerations, but also the forces from the actuators (or disturbances
+for that matter) is imposed on the measurements.
+
+This means that it is not enough to use only the accelerometer to
+calculate the attitude, so an option is to use the gyrometer, which
+measures the angular rate, which again can be integrated to give an
+angular position. This position from the gyrometer, will drift over time,
+but will be fairly accurate in a short lookahead time.
+
+The complementary filter uses these properties and fuses the
+measurements to an estimate of the attitude. This can be done by
+interpreting the accelerations over longer time and add those to
+the attitude from the gyrometer, hence the result is an estimate that is
+composed of the most recent gyrations and the average acceleration.
+
+
+
+
+%\section{Madgwick Filter}
+%The Madgwick filter is similar to the Mahony filter, but is a little
+%bit less computationally intensive. \todo{The mathematical differences
+%and characteristics is to be described}

@@ -1,0 +1,263 @@
+\section{Summary of papers, notes}
+
+\subsection{Vijay Kumar}
+\paragraph{A Potential Field Based Approach to Multi-Robot Manipulation}
+	Decentralized apporact to planning and control. Hieracial potential
+	fields are used to acomplish an objectiv of transporting an object
+	in the plane. No absolute positioning is available here. Focus in
+	this paper is the automatic formation to surround an object. This
+	paper can be used to summarize what potential field based
+	approaches is. \citep{pfmrm}
+
+{\vskip0pt\color{gray}
+\paragraph{Trajectory design for formations of robots by kinetic energy shaping}
+	Rigid formation when doing obstacle avoidance using kinetic energy
+	equation. Not really that interresting for us.}
+
+\paragraph{Cooperative Control of Robot Formations}
+	Is a book chapter collecting information from multiple papers from
+	Kumar. Does some stability analysis with Lyapunov functions, Talks
+	about the coordination strategy, which is about changing formation.
+	Mentions a strategy where rovers are alloved to collide with each
+	other and obstables. \citep{RF:PS:AD:02}
+
+{\vskip0pt\color{gray}
+\paragraph{A framework and architecture for multirobot coordination}
+	Talks about the CHARON language, not entirely interresting.}
+
+\paragraph{Formation Control with Configuration Space Constraints}
+	Using  modified leader follower approach using potential field
+	controllers, highly interesting to our goal. This achieves a method
+	where it is not only a leader, but a cooperative leader-following.
+	This is advantageous if for example some rover cannot keep up with
+	the formation. \citep{fccsc}
+
+\paragraph{A Paradigm for Dynamic Coordination of Multiple Robots}
+	Using hybrid control to do role coordination of robots, this is a
+	formalised approach using a high-level modelling language. It
+	enables hierarchies. Still interested in moving objects. It could be
+	relevant to look into this, if we are interested in hybrid
+	control.  \citep{LC:FC:04}
+	
+\paragraph{Leader-to-Formation Stability}
+	Analysis of formation stability, using graph theory. Could be highly
+	interesting for us to determine these properties of a given
+	strategy. \citep{TKP04}
+
+{\vskip0pt\color{gray}
+\paragraph{Multi-Robot Cooperation}
+	Hard to find, not much effort done.}
+
+{\vskip0pt\color{gray}
+\paragraph{Cooperative control of UAVs for Search and Coverage}
+	Quite interesting, but focuses on motion planning with different
+	types of agents, with different sensor systems. This is used for
+	surveillance. It considers different constraints for this, these
+	are: number of heterogeneous agents, boundary conditions, coverage
+	area, keepout zones, sensor footprint mapping and a time budget.}
+
+{\vskip0pt\color{gray}
+\paragraph{Critical Cooperative Surveillance and Coverage with Unmanned Aerial Vehicles}
+	Cannot be found anywhere, does not exist in the "Experimental
+	Robotics: The 10th International Symposium on Experimental Robotics"
+	\url{http://link.springer.com/book/10.1007/978-3-540-77457-0}}
+
+{\vskip0pt\color{gray}
+\paragraph{Architecture, Abstractions, and Algorithms for Controlling Large Teams of Robots: Experimental Testbed and Results}
+	This is a testbed used for testing a decentralized and anonymous way
+	for controlling a large team of bonholenomis ground robots. Not
+		really what we want.}
+
+{\vskip0pt\color{gray}
+\paragraph{Decentralized feedback controllers for Multi-Agent teams in environments with obstacles}
+	This is about using decentralized feedback controllers that can
+	avoid obstables and collisions. This is not about formation control.}
+
+{\vskip0pt\color{gray}
+\paragraph{Cooperative Control of Autonomous Surface Vehicles for Oil Skimming and Cleanup}
+	Modelling of the skimmer rope between two boats when towed by two
+	boats. This paper describes a method of controlling the shape of the
+	rope and tries to maximize skimming efficiency. Not related to our
+	form of formation control as such. Could be relevant to describe uses for
+    formation control.}
+
+{\vskip0pt\color{gray}
+\paragraph{Robust Control of Mobility and Communications in Autonomous Robot Teams}
+	About comminication aware control of robot treams with an ad-hoc
+	netowrk. This is more like an exploration}
+
+\paragraph{Distributed Multi-Robot Task Assignment and Formation Control}
+They focus on the task allocation part of the distribution of assignments for a multi-robot network. They do this in a very specific way which can be interesting to look into, but first after the tasks have been decided. \citep{MicZavKum0805}
+
+\paragraph{Abstractions and Controllers for Groups of Robots in Environments with Obstacles}
+This paper addresses the problem of planning and control of single group with homogeneous robots, which is what we have. They focus on obstacle avoidance, but the principle could be used in other methods and might be very useful. \citep{ayanian2010abstractions}
+
+\paragraph{Multi-agent Path Planning with Multiple Tasks and Distance Constraints}
+In this paper they deal with a DPC algorithm, which is a Distance something Constraint algorithm. It is made to make timeparameterized constraints on the distances between pairs of robots. They expand this to a multi robot task space, such that the individual robots can, before reaching the final destination, can make a certain amount of tasks defined previously to the mission.
+It can be interesting to look into, but maybe only the part about the DPC algorithm. \citep{Planning:ICRA:10}
+
+\paragraph{Distributed Path Consensus Algorithm}
+This is an explanation of the DPC algorithm made by Vijay Kumar. It has relevance if we implement graphs to handle the structure of the formation. \citep{bhattacharya2010distributed}
+
+\subsection{Thor I. Fossen}
+
+\paragraph{Formation Control of Underactuated Surface Vessels using the Null-Space-Based Behavioral Control}
+This paper concerns a behavioral approach proposed by Thor Fossen. They mainly use the null-space-based approach as an obstacle avoidance, but it can also be used to keep formation. If it is chosen to look at some NSB approach this is indeed of interest. It is a centralized control method. This could be interesting, but maybe only as reference to something else that is possible to implement. \citep{arrichiello2006formation}
+
+\subsection{Steven LaValle}
+
+\paragraph{Time-optimal paths for a Dubins air plane}
+This paper considers the dubins path with respect to a modification to the dubins car. This is to generate time optimal trajectories for an air plane, with small radius in turns, straight line segments and pieces of planer elastica.
+This is relevant when time comes to look into path generation, so not necessary for us at the moment.
+
+{\vskip0pt\color{gray}
+\paragraph{Using randomization to find and optimize feasible trajectories for nonlinear systems}
+This focuses on trajectory generation and optimization algorithms for nonlinear systems that have significant state-space constraints.
+This is also for path generation, which is not in focus at the moment.}
+
+\paragraph{Algorithms for computing numerical optimal feedback motion strategies}
+They compute a navigation function which serves as a feedback motion strategy when looking at the specific constraints, nonconvex collision constraints and optimization of the constraints. They look at the expansion of the state space representation which expands during the expansion of the constraints. The algorithm brings both down in order.
+This is also more in focus when we have a strategy to implement by ourselves.
+
+{\vskip0pt\color{gray}
+\paragraph{A framework for planning feedback motion strategies based on a random neighborhood graph}
+This is, like the others, more a focus on the path planning and how changes in these can be recorrected fast in the navigation function.}
+
+
+\subsection{Brian Gerkey}
+
+{\vskip0pt\color{gray}
+\paragraph{A Framework for Studying Multi-Robot Task Allocation}
+Trying to make a framework to the question of “which robot should execute which task?”. They derive a model that helps describe multi-robot systems to provide the common framework in which to study them.
+This seems more like a review of how the framework of task allocatin can be generalized and analysed. This it not directly something we need at the moment.}
+
+{\vskip0pt\color{gray}
+\paragraph{A formal analysis and taxonomy of task allocation in multi-robot systems}
+Making a ontop build of the previously and analyses and making "greater understanding" of existing approaches to task allocation.
+Goes the same for this as the last - We do not have that much focus on the task allocation at the moment as such.}
+
+{\vskip0pt\color{gray}
+\paragraph{ROS: An Open-Source Robot Operating System}
+They discuss how ROS relates to existing robot software frameworks, and briefly overview some of the available application software which uses ROS.
+So this was not as I expected and something we already know. \citep{rosoverview}}
+
+{\vskip0pt\color{gray}
+\paragraph{Long term autonomy in office environments}
+This is from willow garage and they explore options for improving the robustness of robotic systems by identifying failures and executing recovery behaviours, including asking for help from a human operator.
+This is not quite what we are looking for, but maybe the robustness of the system and identification of failures can be used maybe for Kevin.}
+
+{\vskip0pt\color{gray}
+\paragraph{And all the robots merely Players}
+This is also from willow garage. The Player is a middleware for robots, quite similar to ROS, but on a little bit lower level -- sort of. But the Player is a piece of software that are used with some of willow garages hardware and the paper is a history of development of the Player. ROS extends the concept of Player. Not relevant at all.}
+
+
+\subsection{Raffaello D'Andrea}
+
+\paragraph{Theory and implementation of path planning by negotiation for decentralized agents}
+This paper regards path planning algorithms that ensure collision free trajectories in real time. It is robust to delays in the wireless which could be something we need to implement in the connection of the ships where we probably also will experience delay. They have made a hand shaking procedure to ensure recent information states between the agents, which also could be of interest.
+The connection as such is not the biggest concern right now where we need to find some formation control strategies.
+
+{\vskip0pt\color{gray}
+\paragraph{Coordinating hundreds of cooperative, autonomous vehicles in warehouses}
+This "paper" concerns the history and development of machines to the warehouses and stuff like that.
+Not relevant at all.}
+
+{\vskip0pt\color{gray}
+\paragraph{A decomposition approach to multi-vehicle cooperative control}
+This paper focuses on the task allocation problems and has the point of view from a game theory in respective. They make a branch and bound solver which finds near optimal assignments for the robots.
+This is still a lot of task allocation and not needed.}
+
+{\vskip0pt\color{gray}
+\paragraph{Distributed control of heterogeneous systems}
+This paper concerns control design for distributed systems where the controller preserves the distributed spatial structure of the nominal system. Thus this focuses more on the individual system.
+This is not that relevant at the moment.}
+
+{\vskip0pt\color{gray}
+\paragraph{Distributed control of heterogeneous systems interconnected over an arbitrary graph}
+Deals with output feedback controller with H infinite performance for systems composed of different sub units where the underlying graph structure is arbitrary.
+This can be relevant when we look at the structure of how the formation needs to shape, but not as much in the formation control aspect.}
+
+\paragraph{Near-optimal dynamic trajectory generation and control of an omnidirectional vehicle}
+This paper has also highly focus on the trajectory generation algorithms. This has focus of this with respect to omnidirectional vehicles.
+Like the other trajectory generating papers, this has not so much influence at the moment.
+
+
+\subsection{Howie Choset}
+
+{\vskip0pt\color{gray}
+\paragraph{A Complete Multirobot Path Planning Algorithm with Performance Bounds}
+The paper deals with multirobot path planning where they decrease the configuration space by couple the relevant robots to each other. In our case we have already done this, because the two or three ships all are in the configuration space.
+Therefore this paper is not that useful when we do not have more ships.}
+
+\paragraph{Development and Deployment of a Line of Sight Virtual Sensor for Heterogeneous Teams }
+In this paper they develop a 'virtual sensor' that holds information to verify if the LOS is available. It contains more references on first page to some formation control that can be interesting. But it makes the basis of the communication between the robots and how they should exchange information.
+This can be useful for us, since it both have references to formation control and has focus on the communication aspects.
+
+{\vskip0pt\color{gray}
+\paragraph{Multi-Agent Deterministic Graph Mapping via Robot Rendezvous }
+This paper builds on top of SLAM which is not in the scope of the project at all.
+Not relevant at all.}
+
+
+\subsection{Lynne E. Parker}
+
+\paragraph{Multi-Robot Task Scheduling}
+This paper contains scheduling problems regarding single robot tasks and multi robot tasks. As I see it, this is mainly based on individual different tasks, but the scheduling part can be used. It considers how the robots should choose assignments, which might be based on how the individual states of the ships are in the current steps.
+
+\paragraph{A decentralized architecture for multi-robot systems based on the Null-Space-Behavioural control with application to multi-robot border patrolling}
+This is a cut from Springer and takes into account a lot of aspects regarding both requirements, assumption and control architecture. This seems like a good place to read all. Their focus point is the architecture of the tasks performed by the robots that are separated into three layers; lower layer with the single robot performing its mission, middle layer with definitions of elements of behaviours, which are combined with the Null Space based Behavioural method, the upper later is a Supervisor level selecting the proper action to be executed. It is on 22 pages, so a lot of information.
+
+\paragraph{Behavioral Control for Multi-Robot Perimeter Patrol: A Finite State Automata Approach}
+This paper makes a more practical implementation of the Null Space based Behavioural approach that that above mentioned section from Springer explains about. They develop a fully decentralized algorithm for multi robot bovrder patrolling in the framework of the NSB.
+This might be good after looking in the 'paper' from Springer, the above mentioned.
+
+{\vskip0pt\color{gray}
+\paragraph{Distributed Intelligence: Overview of the Field and its Application in Multi-Robot Systems}
+Looking at distributed intelligence and the importance of choosing the right paradigm for this. Dependent on which paradigm chosen, there are use of different task allocations. The paper describes the importance of this, based on the requirements from the system.
+The last mentioned is the most important, but nothing that we already knew.}
+
+\paragraph{Current Research in Multirobot Systems}
+This paper is a short survey with 8 different topics implemented in physical robots. The interesting topics for us are communication and architecture.
+But these seem to be described in other papers also and with a more in depth analysis.
+
+\paragraph{Techniques for Learning in Multi-Robot Teams}
+This are some chapters from a book where L E Parker is co author. It describes the adaptive learning in multi-robot systems and the research of time. It focuses on several aspects, but three more that the others. One of them are the learning of inherently co-operative tasks, tasks that cannot be broken into distinct subtasks. The summary tells about the the aspects in assembly robots but then expands and deal with the multi-robot systems.
+This is somewhat relevant for us, but not related to the formation control aspect as such for now.
+
+\paragraph{A Distributed and Optimal Motion Planning Approach for Multiple Mobile Robots}
+The paper looks at the path planning and velocity planning to a trajectory. They use a search method called D* based on either geometric formulation or schedule formulation. They try to implement this in a distributed manor regarding centralized and exhaustive computation and distributed implementation without optimization concerns.
+This is also more relevant after the formation has been determined.
+
+\paragraph{Cooperative Leader Following in a Distributed Multi-Robot System}
+This paper is very relevant and deals with the leader follower approach. They both describe design and implementation of a distributed technique to coordinate team level and robot level behaviours. They set up different tasks both for the individual robots and the team as such to describe the tasks.
+This seems as a good paper that deals with some of the aspects that we also need to consider.
+
+
+\subsection{Sebastian Thrun}
+
+{\vskip0pt\color{gray}
+\paragraph{Collaborative multi-robot exploration}
+The paper has the focus on coordinating robots that need to explore a certain area. There are not in formation, so it optimizes based on time used and other stuff. But this does not seem so interesting because it is not a formation that are used, at least not a very rigid one.}
+
+{\vskip0pt\color{gray}
+\paragraph{Integrating grid-based and topological maps for mobile robot navigation}
+In here is described two "major" paradigms for mapping indoor environments, gridbased and topoligical. This seems at the moment not relevant.}
+
+{\vskip0pt\color{gray}
+\paragraph{Planning with an adaptive world model}
+This paper is about obstacle avoidance and is not so relevant. There are also many black boxes in the paper, so not all information is there.}
+
+
+\subsection{Roland Siegward}
+
+\paragraph{Path Planning, Replanning, and Execution for Autonomous Driving in Urban and Offroad Environments}
+The work of this paper is about a single robot, a car, that needs to drive by itself. The focus is on the path planning and following the path. This can be relevant for us to look at, but at the moment not relevant regarding the formation control aspect.
+
+\subsection{Suggested by AAUROB reviewer}
+
+\paragraph{Robust adaptive formation control of underactuated
+autonomous surface vehicles with uncertain dynamics}
+\citep{peng}
+
+\paragraph{Formation control of multiple underactuated surface vessels}
+\citep{dong}

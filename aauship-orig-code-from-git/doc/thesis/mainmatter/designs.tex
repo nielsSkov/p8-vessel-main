@@ -1,0 +1,90 @@
+\chapter{Different Control Strategies}
+
+\head{"A control system, that forces the system output $y(t)$ to track a desired output $y_d(t)$ solves a trajectory tracking problem" \citep{fossen}}.
+
+\todo{Should this be included under the selecteed formation control strageties?}
+
+\section{Trajectory Tracking Control}
+When applying control to a vessel that needs to track a specified trajectory, then the type control will be classified according to the number of available actuators.This is usually split between surge, sway and yaw, which corresponds to forward motion, sideslip and turning.
+
+A time varying reference trajectory for a vessel to track will be given as:
+\begin{align}
+\eta_d=
+\begin{bmatrix}
+N_d(t)\\
+E_d(t)\\
+\psi_d(t)
+\end{bmatrix}
+\end{align}
+To achieve tracking and convergence to such a trajectory is minimization of the error the main objective, $e(t):=\eta(t)-\eta_d(t)$. Or given by the previous notation:
+\begin{align}
+e(t):=
+\begin{bmatrix}
+N(t)-N_d(t)\\
+E(t)-E_d(t)\\
+\psi(t)-\psi_d(t)
+\end{bmatrix}
+\end{align}
+
+When designing a motion control system with this type of objective it is important to distinguish between the following three important control objectives:
+\begin{description}[style=nextline]
+	\item [Setpoint Regulation]
+	This is the most basic way of regulating. In this method it is usually a human operator that controls the setpoint or reference to the vessel. The controller will then be a regulator that usually brings the error of the control signal and the real value to zero.
+	\item [Path-Following Control]
+	The path-following control makes the vessel follow a path independent of time with no temporal constraints. The method is usually used on underwater vessels or vessels in transit between continents.
+	\item [Trajectory-Tracking Control]
+	When applying trajectory-tracking control, position and velocity of vessels should track the position and velocity of some time varying path reference signal. The feedback is a trajectory tracking controller to make the vessel converge to the trajectory. This is used when having course changing manoeuvres and speed changing along the trajectory. This could for instance be a change of speed in a turn of the vessel.
+\end{description}
+
+\subsection{Manoeuvring the Vessel Using the LOS Method}
+Path-following problems for vessels are often solved by implementing \ac{LOS} algorithms. Opposite to other position control algorithms, where the vessel may be driven both in longitudinal and transversal directions to converge to a path, the \ac{LOS} algorithm gives a more natural motion towards the desired path. This is done by giving a more natural reference to the heading of the vessel. One of the advantages of this is that it can be applied both to fully actuated and under actuated vessels.
+
+Since it is only the leader, and not any of the followers, who need to follow a path, this is only applied on one vessel. This can also be extended to a leader in a virtual structure. To apply the \ac{LOS} algorithm a setup is needed. To get an overview of the functionality of the \ac{LOS} algorithm see figure~\vref{fig:allinallframes}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=\textwidth]{allinallframes}
+	\caption{A vessel placed beside the path and uses the \ac{LOS} algorithm to get back on track.}
+	\label{fig:allinallframes}
+\end{figure}
+On the figure is a green vessel that needs to get onto the blue path. The red points at the path is way point positions $\theta$, $\textbf{p}_d(\theta)$. From this point a tangent to the path is made, which crosses the vessels heading and is along the path. The angle from north to the tangents slope (the path) is the \textit{desired heading}, $\psi_d$, for the vessel. This will make it converge to the reference path over time. $s$ along the tangent is the \textit{along track error}(tangential to path) and $e$ from the vessel to the path is the \textit{cross track error}(normal to path), which are two distances that needs to be minimized to make the vessel converge to the path. The along track error is not of great interest when applying a \textit{lookahead-based steering} where only the cross track error is of importance. The lookahead distance along the track is denoted $\Delta$ and is the distance from the normal at the path to the point of \ac{LOS} at the path.
+
+\subsubsection{The \ac{LOS} Algorithm}
+The vessel has a generalized position in the ${n}$-frame given as
+\begin{align}
+\eta = (\textbf{p},\psi)^\top\quad , \quad \textbf{p} = (x,y)^\top
+\end{align}
+with dynamics given by
+\begin{align}
+\dot{\eta} = \textbf{R}(\psi)\boldsymbol{\nu}
+\end{align}
+where $\boldsymbol{\nu} = (u,v,r)^\top$.\\
+The path can be parametrized by a set of points with
+\begin{align}
+\mathcal{P} = {\textbf{x}}\in\mathds{R}^2 : \quad \exists \theta \in \mathds{R} \quad s.t. \quad \textbf{x} = \textbf{p}_d(\theta)
+\end{align}
+where $\textbf{p}_d(\theta) := (x_d(\theta),y_d(\theta))^\top$ is a smooth function. The path needs to be smooth such that the \ac{LOS} algorithm makes the vessel converge to the path. When applying the \ac{LOS} algorithm it makes the setup immune to sideslip error. This is due to the minimization of $e$ when the vessel approaches towards the path.
+
+For a given value of $\theta$, being a specific point on the path, is the tangent to the path introduced with origin located in $\textbf{p}_d(\theta)$. The orientation of the reference frame, being the desired heading, is given by
+\begin{align}
+\psi_d(\theta) = \arctan2\left(\frac{y_d^\theta(\theta)}{x_d^\theta(\theta)}\right)
+\end{align}
+which then will be
+\begin{align}
+\psi_d = \arctan2\left(\frac{E}{N}\right)
+\end{align}
+The position of the vessel from the orthogonal position on the path is given in path-tangential coordinates according to
+\begin{align}
+\epsilon(\textbf{p},\theta) = (s(\textbf{p},\theta),e(\textbf{p},\theta))^\top
+\end{align}
+where $s(\textbf{p},\theta)$ is the along track error and $e(\textbf{p},\theta)$ is the cross track error. These are given on figure~\vref{fig:allinallframes}, and is the errors from the vessel to the desired point on the path. This position can also be expressed using the rotation of the $\epsilon$-vector by
+\begin{align}
+\epsilon(\textbf{p},\theta) = \textbf{R}_{2D}(\psi_d(\theta))^T(\textbf{p}-\textbf{p}_d(\theta))
+\end{align}
+where
+\begin{align}
+\textbf{R}_{2D}(\psi_d(\theta)) = 
+\begin{bmatrix}
+\cos(\psi_d(\theta) & -\sin(\psi_d(\theta)\\
+\sin(\psi_d(\theta) & \cos(\psi_d(\theta)
+\end{bmatrix}
+\end{align}

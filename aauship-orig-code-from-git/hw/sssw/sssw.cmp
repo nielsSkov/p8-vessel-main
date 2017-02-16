@@ -1,0 +1,59 @@
+Cmp-Mod V01 Created by Cvpcb (2014-10-18 BZR 5203)-kicad   date = Sun 19 Oct 2014 20:30:35 CEST
+
+BeginCmp
+TimeStamp = /52F7A220;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = LEDs:LED-0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /52F7A037;
+Reference = P1;
+ValeurCmp = INPUT;
+IdModule  = sssw:G3.5_Bullet_Edge_Short;
+EndCmp
+
+BeginCmp
+TimeStamp = /52F7A13E;
+Reference = P2;
+ValeurCmp = ACTIVATE;
+IdModule  = Pin_Headers:Pin_Header_Angled_1x02;
+EndCmp
+
+BeginCmp
+TimeStamp = /52F7A049;
+Reference = P3;
+ValeurCmp = OUTPUT;
+IdModule  = sssw:G3.5_Bullet_Edge_Short;
+EndCmp
+
+BeginCmp
+TimeStamp = /52F79D2B;
+Reference = Q1;
+ValeurCmp = SUP85;
+IdModule  = Transistors_TO-220:TO-220_FET-GDS_Horizontal_LargePads;
+EndCmp
+
+BeginCmp
+TimeStamp = /52F7A096;
+Reference = R1;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:Resistor_SMD0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /52F7A0A8;
+Reference = R2;
+ValeurCmp = 1K;
+IdModule  = Resistors_SMD:Resistor_SMD0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /52F7A23C;
+Reference = R3;
+ValeurCmp = 330;
+IdModule  = Resistors_SMD:Resistor_SMD0805_HandSoldering;
+EndCmp
+
+EndListe

@@ -1,0 +1,7 @@
+<launch>
+  <node cwd="node" name="rosbag_node" pkg="rosbag" type="record" output="screen" args="-o $(find aauship)/bags/aauship /imu	/gps1 /bm /samples /attitude /lli_input /kf_statesnew"/>
+  <node cwd="node" name="lli_node" pkg="aauship" type="lli-node.py" output="screen"/>
+  <node cwd="node" name="sensor_decode_node" pkg="aauship" type="sensor-decode-node.py" output="screen"/>
+  <node cwd="node" name="ahrs_mahony_node" pkg="aauship" type="ahrs-mahony-node" output="screen"/>
+  <node cwd="node" name="mb100_node" pkg="aauship" type="mb100-node.py" output="screen"/>
+</launch>

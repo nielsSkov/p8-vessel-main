@@ -1,0 +1,62 @@
+\chapter{Conclusions}
+\label{sc:FW}
+\head{This section contains the discussion, conclusion and future work. The discussion and conclusion evaluates what have been done and the future work states where to start a further investigation and additional work.}
+
+\section{Summary of the Project}
+Within the work of the AAUSHIP project several aspects has been worked on. A summary and further work on the platform will be a discussed in the following,
+
+\subsection{Path Generation}
+For the AAUSHIP to follow a given path this needs to be described and carried out to the use case. The vessel is intended for surveying purposes in the Limfjord, where the path for the vessel to track have been designed as a lawnmover pattern. This have been described in chapter \ref{ch:pathgen} after the previous analysis.
+
+\subsection{Hardware Upgrades}
+For the AAUSHIP to be fully operational some hardware upgrades have been implemented. Among others is a new computer mounted at the vessel, for the implementation of the \ac{ROS}, and for the need to process more data. Previously an Raspberry Pi was used. The mounting of a \ac{RTK}\ac{GPS} is also completed but has not been used on a verification sea trial. A new Wi-FI module have been implemented, since the older one used seemingly could not handle the warm weather and dropped out.
+
+\subsection{Design}
+In this work a 5 \ac{DOF} model has been made established from measurements of the ship. It does not include the heave, since this is not in focus to control. To make this model have the needed model parameters been estimated based on measurements and tests of the AAUSHIP. This includes Bollard Pull tests and Start/Stop tests to determine the damping coefficients. The restoring forces acting on the vessel have also been estimated from tests of rolling and pitching tests.
+
+A simulation environment have been set up in \ac{ROS} to verify this model and test how controlling will act on the vessel. This gives the project group a chance to implement different types of controlling at the single vessel before testing, to have an idea of how the AAUSHIP will perform. The \ac{ROS} environment has also been tested with multiple instances of AAUSHIPs in one simulation, and a fast simulation of a Duckling formation have been performed. This was done to give the project group the verification that the \ac{ROS} environment was ready to implement a fleet of vessels.
+
+The model is tested with a working \ac{KF} both in the simulation environment but also in real life, where observations shows positive results for the model to converge to a given path.
+
+The inner loop control, the \ac{LOS} controller for each ship is a PID heading controller, which have been implemented to track the line segments between the given waypoints from the path generation. This is a rather simple heading controller which have been evaluated sufficient to the purpose.
+
+Lastly a design phase of formation strategies has been carried out. The first part of the design phase is an analysis of which type of formation control is needed from a set of different types. Afterwards is one of those chosen, the potential field strategy, and worked on further. This strategy have first been simulated with a single ship, which needs to track a reference calculated by the potential field. After is this simulation expanded to include four vessels, potentially more. The work in this field have caused problems in the implementation phase, but as seen on figure \ref{fig:potform} have the simulation proven results. The dynamics of the AAUSHIP is included in the simulation, but further work within this field is needed. The potential field strategy is the acting controller to the fleet of AAUSHIPs, and the benefit of the potential field algorithm is that it includes object avoidance to ensure a collision free trajectory.
+
+
+\section{Future Work}
+The future work will state the natural expansion of the project, where a perspective to the future work is commented. Areas where future work are needed is:
+
+\subsection{Sea Trials}
+There have been performed trials both in the Klingenberg Lake, but also in the fjord. Due to technical errors have the tests from the fjord not been documented, which are still to come. The tests from the smaller lake shows the potential of the implemented system to be working, and the observations from the fjord trials does the same.
+
+More tuning is needed of the heading controller and more investigation to the minimum velocity at the vessel is needed. This can be done with more trials in the fjord and should be possible with the system as it works now without any technical issues. The observations from the trials of the fjord showed that the vessel was able to converge to the determined path and maintain until the next waypoint and continue on the path.
+
+Although was the program loaded onto the AAUSHIP of older date thus not working as intended when performing the trials. It is in the believe that with the updated program the AAUSHIP is capable to fulfil the trajectory tracking on the level of acceptance that is wanted in the scope of the project.
+
+\subsection{Model}
+As for now is the model a five \ac{DOF} model, that does not include any disturbances, and is linearised to low speed manoeuvring. A natural improvement will be to expand the model parameters to perform at higher speeds such that the model becomes more non linear, thus also will be in need of an updated \ac{KF} to estimate the states of the vessel. The model does not track the correct pitch angle while surging, which have caused trouble to the project group. This problem has not yet been solved which is also a model parameter that needs the correct update.
+
+\subsection{ROS Integration}
+The intermediate results of having more AAUSHIPs in one simulation in \ac{ROS} was promising. It showed that it was possible to implement several ships in to one environment, which have been a problem in the beginning of the project. As a part to work on with the \ac{ROS} is to investigate the network stability while having the communication layer up and running with the vessels. In all the simulations performed until now it is assumed that there are full network communication which in reality might not be as ideal as assumed.
+
+\subsection{Formation with Potential Field}
+The formation control strategy implemented with the potential field algorithm has for a start not reached the level where any conclusions can be made. To make the formation control more complete a first step is to perform more intermediate results where the formation is tested in different situations.
+
+It can be seen from the result for now that the four vessels can stay in formation, and that the virtual leader can track a path given, such that vessels keep formation and generates trajectories that seem viable. The result for now was deduced late in the process and therefore have further work with the error checking not been performed.
+
+Although the initial formation strategy is included to show that it is possible now to apply the single ship potential field control to a formation and make several vessels converge into formation and keep the desired formation. Further work could be to investigate different cases of how the formation should move during turns, i.e. implement the different situations analysed in the introduction in chapter \ref{ch:formcontrol}.
+
+For now is the formation fixed around the virtual leader, where the orientation of the formation does not change. This is done by giving the formation an offset from the position of the virtual leader. Instead this might be done by applying a rotational matrix to generate the relative position of the vessels in the formation, to make the formation turn about the leader, instead of keeping the relative position fixed.
+
+Other things to test is the obstacle avoidance which have been shown with the single AAUSHIP in a potential field. The theory behind this can also be applied to the formation, such that if an obstacle is on the path of the lawnmover pattern, the formation will diverge from their reference to avoid the obstacle, and then afterwards get into formation again. Error analysis of the included dynamics is also of interest and so is situations where the algorithm requires the vessels to be fully actuated, which they are not.
+
+\subsection{Building the Fleet}
+Since a formation strategy implies more than one vessel will a natural expansion to the project be to duplicate the AAUSHIP. This will have the benefit of knowing the errors at the working AAUSHIP since this version has several quick fixes. This means that the next versions can be more complete and probably working more stable than this version. The expansion of one AAUSHIP into several will make the fleet of AAUSHIPs that are needed to perform the formation control strategies analysed in this project.
+
+The shortcoming of the project is mainly two aspects, the sea trials in the fjord and verification of the formation control with potential field implementation.
+
+It was a goal to get the fully functional AAUSHIP tested on the fjord and make a survey of the seabed in a lawnmover pattern. This is yet to come with the final AAUSHIP up and running, but observations from the initial testing of the AAUSHIP shows promising intermediate results.
+
+The formation control strategy by applying a potential field algorithm has not been tested enough to conclude if an implementation is applicable. The result shown on figure \ref{fig:potform} was generated too late in the working process to be able to verify anything concluding about this. A goal was to have a fully working simulation running with the AAUSHIPs in formation, but have only been verified for a single vessel, and the short result for formation of four vessels.
+
+The benefit of the research with the AAUSHIP have improved the basis of the project. The AAUSHIP platform has been upgraded both with a newer model with five \ac{DOF}, integrated in a \ac{ROS} environment for the purpose of future work and the hardware of the ship has been upgraded. The hardware upgrades have been done to improve the performance of the ship during the warm days in Denmark where the communication module had problems with dropouts. Before was a Raspberry Pi integrated with the ship but this has been upgraded to a ieee PC to enhance processing power. This was needed to both run the new \ac{ROS} implementation but also to handle the local data sampling on the vessel. The second part of the project was to investigate formation control strategies for further expansion of the single AAUSHIP to an AAUSHIP fleet. The benefit of having a fleet of vessels have been investigated with focus on the case set up with Port of Aalborg, thus making the focus of expansion to a fleet and to draw industrial attention.
