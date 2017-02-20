@@ -1,0 +1,70 @@
+\input{preamble}
+\include{frontmatter/hypersetup}
+
+% This can be used to reduce the number of chapters to be formatted
+%\includeonly{ros}
+
+\begin{document}
+\frontmatter
+\include{frontmatter/frontpage}
+%\chapterstyle{nickoe}
+\cleardoublepage
+\include{frontmatter/titlepage}
+\cleardoublepage
+\include{frontmatter/titlepagedk}
+\include{frontmatter/preface}
+
+\cleardoublepage
+\tableofcontents
+\printnomenclature[2cm]
+\input{../manual/acronyms}
+
+\mainmatter
+\descpart{Problem Analysis}{%
+This part contains an analysis about the project background and its goal, leading to designing a system that can reflect the analysis.}
+\include{mainmatter/introduction} % Talk specifically about the data from havnen?
+\include{mainmatter/formation_control_overview}
+\include{mainmatter/path_generation}
+%\include{mainmatter/summary_of_papers} % should only be included as is in the draft
+
+
+\descpart{System Design}{%
+This part includes the design and testing of the different subsystems used at the AAUSHIP.}
+%\include{mainmatter/designs}
+\include{mainmatter/selected_formation_control_strategies}
+\include{mainmatter/modelling}
+\input{mainmatter/simulation_model}
+\input{mainmatter/thrust_allocation}
+\input{mainmatter/model_verification}
+\input{mainmatter/simulation_model_kf}
+\include{mainmatter/control}
+\include{mainmatter/ros}
+
+\descpart{Conclusion}{%
+The end of the project is the discussion, conclusion and future work.}
+%\input{mainmatter/simulation_of_strategies}
+\input{mainmatter/disconfutu}
+% Acceptance test
+% Conclusion
+% Perspectives
+
+\cleardoublepage\descpart{Appendix}{%
+The appendix includes chapters which are important for the project, but not necessarily interesting to the reader of the report.}
+\appendix
+\include{appendix/identification_of_hydrodynamic_derivatives}
+\include{appendix/bollard_pull}
+\include{appendix/verification-of-attitude-with-a-camera}
+\include{appendix/variance}
+\include{appendix/manual}
+\include{appendix/bm}
+%\include{appendix/paper}
+
+\backmatter
+\bibliographystyle{apalike}
+\bibliography{../manual/bib}
+\label{ch:litt}
+
+%\settocdepth{section}
+%\listoftodos
+\end{document}
+

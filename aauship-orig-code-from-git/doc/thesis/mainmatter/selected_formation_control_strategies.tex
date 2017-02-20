@@ -1,0 +1,214 @@
+\chapter{Selection of Formation Control Strategy}
+\label{ch:selformctrl}
+%\head{This chapter investigates the previously mentioned formation control aspects from section \ref{ch:formcontrol} with focus in three different types of formation control. These three types are analysed with focus on the specific task applied at the Port of Aalborg, afterwards simulated to be able to conclude which of these are the most beneficial to implement at the AAUSHIP fleet.}
+\head{This chapter firstly introduces the understanding of trajectory tracking and how the a \ac{LOS} algorithm can be used for this purpose. Next in this chapter will the previously mentioned formation control aspects from section \ref{ch:formcontrol} be investigated with overview of three different types of formation control. These three types are shortly analysed with focus on the specific task applied at the Port of Aalborg, afterwards one is chosen and simulated to be able to conclude how beneficial it is to implement in the AAUSHIP fleet.}
+
+\head{"A control system that forces the system output $y(t)$ to track a desired output $y_d(t)$ solves a trajectory tracking problem" \citep{fossen}}.
+
+\section{Trajectory Tracking Control}
+When applying control to a vessel that needs to track a specified trajectory, then the type of control will be classified according to the number of available actuators. This is usually split between surge, sway and yaw, which corresponds to forward motion, sideslip and turning.
+
+A time varying reference trajectory for a vessel to track can be given as:
+\begin{align}
+\eta_d=
+\begin{bmatrix}
+N_d(t)\\
+E_d(t)\\
+\psi_d(t)
+\end{bmatrix}
+\end{align}
+To achieve tracking and convergence to such a trajectory is minimization of the error the main objective, $e(t):=\eta(t)-\eta_d(t)$. Or given by the previous notation:
+\begin{align}
+e(t):=
+\begin{bmatrix}
+N(t)-N_d(t)\\
+E(t)-E_d(t)\\
+\psi(t)-\psi_d(t)
+\end{bmatrix}
+\end{align}
+
+When designing a motion control system with this type of objective it is important to distinguish between the following three important control objectives:
+\begin{description}[style=nextline]
+	\item [Setpoint Regulation]
+	This is the most basic way of regulating. In this method it is usually a human operator that controls the setpoint or reference to the vessel. The controller will then be a regulator that usually brings the error of the control signal and the real value to zero.
+	\item [Path-Following Control]
+	The path-following control makes the vessel follow a path independent of time with no temporal constraints. The method is usually used on underwater vessels or vessels in transit between continents.
+	\item [Trajectory-Tracking Control]
+	When applying trajectory-tracking control, position and velocity of vessels should track the position and velocity of some time varying path reference signal. The feedback is a trajectory tracking controller to make the vessel converge to the trajectory. This is used when having course changing manoeuvres and speed changing along the trajectory. This could for instance be a change of speed in a turn of the vessel.
+\end{description}
+
+\subsection{Manoeuvring the Vessel Using the LOS Method}
+Path-following problems for vessels are often solved by implementing \ac{LOS} guidance algorithms. Opposite to other position control algorithms, where the vessel may be driven both in longitudinal and transversal directions to converge to a path, the \ac{LOS} guidance algorithm gives a more natural motion towards the desired path. This is done by giving a more natural reference to the heading of the vessel. One of the advantages of this is that it can be applied both to fully actuated and under actuated vessels.
+
+Since it is only the leader, and not any of the followers, who need to follow the path, this is only applied on one vessel. This can also be extended to a leader in a virtual structure. To apply the \ac{LOS} guidance algorithm a setup is needed. To get an overview of the functionality of the \ac{LOS} guidance algorithm see figure~\vref{fig:allinallframes}.
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=\textwidth]{allinallframes}
+	\caption{A vessel placed beside the path and uses the \ac{LOS} guidance algorithm to get back on track.}
+	\label{fig:allinallframes}
+\end{figure}
+On the figure is a green vessel that needs to get onto the blue path. The red points at the path is waypoint positions $\theta$, $\textbf{p}_d(\theta)$. From this point a tangent to the path is made, which crosses the vessels heading and is along the path. The angle from north to the tangents slope (the path) is the \textit{desired heading}, $\psi_d$, for the vessel. This will make it converge to the reference path over time. $s$ along the tangent is the \textit{along track error}(tangential to path) and $e$ from the vessel to the path is the \textit{cross track error}(normal to path), which are two distances that needs to be minimized to make the vessel converge to the path. The along track error is not of great interest when applying a \textit{lookahead-based steering} where only the cross track error is of importance. The lookahead distance along the track is denoted $\Delta$ and is the distance from the normal at the path to the point of \ac{LOS} at the path.
+
+\subsubsection{The \ac{LOS} Algorithm}
+The vessel has a generalized position in the ${n}$-frame given as
+\begin{align}
+\eta = (\textbf{p},\psi)^\top\quad , \quad \textbf{p} = (x,y)^\top
+\end{align}
+with dynamics given by
+\begin{align}
+\dot{\eta} = \textbf{R}(\psi)\boldsymbol{\nu}
+\end{align}
+where $\boldsymbol{\nu} = (u,v,r)^\top$.\\
+The path can be parametrized by a set of points with
+\begin{align}
+\mathcal{P} = {\textbf{x}}\in\mathds{R}^2 : \quad \exists \theta \in \mathds{R} \quad s.t. \quad \textbf{x} = \textbf{p}_d(\theta)
+\end{align}
+where $\textbf{p}_d(\theta) := (x_d(\theta),y_d(\theta))^\top$ is a smooth function. The path needs to be smooth such that the \ac{LOS} algorithm makes the vessel converge to the path. When applying the \ac{LOS} algorithm it makes the setup immune to sideslip error. This is due to the minimization of $e$ when the vessel approaches towards the path.
+
+For a given value of $\theta$, being a specific point on the path, is the tangent to the path introduced with origin located in $\textbf{p}_d(\theta)$. The orientation of the reference frame, being the desired heading, is given by
+\begin{align}
+\psi_d(\theta) = \arctan2\left(\frac{y_d^\theta(\theta)}{x_d^\theta(\theta)}\right)
+\end{align}
+which then will be
+\begin{align}
+\psi_d = \arctan2\left(\frac{E}{N}\right)
+\end{align}
+The position of the vessel from the orthogonal position on the path is given in path-tangential coordinates according to
+\begin{align}
+\epsilon(\textbf{p},\theta) = (s(\textbf{p},\theta),e(\textbf{p},\theta))^\top
+\end{align}
+where $s(\textbf{p},\theta)$ is the along track error and $e(\textbf{p},\theta)$ is the cross track error. These are given on figure~\vref{fig:allinallframes}, and is the errors from the vessel to the desired point on the path. This position can also be expressed using the rotation of the $\epsilon$-vector by
+\begin{align}
+\epsilon(\textbf{p},\theta) = \textbf{R}_{2D}(\psi_d(\theta))^T(\textbf{p}-\textbf{p}_d(\theta))
+\end{align}
+where
+\begin{align}
+\textbf{R}_{2D}(\psi_d(\theta)) = 
+\begin{bmatrix}
+\cos(\psi_d(\theta) & -\sin(\psi_d(\theta)\\
+\sin(\psi_d(\theta) & \cos(\psi_d(\theta)
+\end{bmatrix}
+\end{align}
+
+\section{Relevant Characteristics for the Strategy}
+To have a tool to determine what strategy is the best suited for the
+problem described in \vref{sc:mission}, some parameters that describes
+different characteristics of a strategy is needed. Listed here is a
+description of each key parameter, also mentioning what is desired for
+the mission at hand. The characteristics are weighted on a scale from $-3$ to $3$ to be able to pick out the relevant formation as a conclusion.
+
+\begin{description}
+\item[Communication] The communication requirements should be a measure of how much bandwidth is used. If the communication bandwidth usage is low it should be rated as a good thing, since the low bandwidth implies that the communication can be performed more easy and the scalability will become less complicated. It is not of importance if the communication breaks a link of the agents, this will be discussed in the individual formation control categories. If the communication has a score of $3$, this implies that the bandwidth usage is low and if the score is $-3$ means that the bandwidth usage is high. If only one way communication exists this will probably also lead to lower communication, thus also making a higher score.
+
+\item[Control Architecture] The control architecture is a weighting of the complexity of the control structure. A high weighting will mean that the complexity is low and thus less complicated to implement. It will also be combined with a relation to the type of controller, where a more simple controller can be better if the overall objective can be accomplished. If the control can be done with a less complicated controller, i.e. a \ac{LOS} controller instead of some a more complex controller like \ac{MPC}, this can be preferred. The amount of needed inputs to the controller will also be a weighting, thus if the numbers of inputs are high this will be weighted low. The weighting of the control structure is a combination of the above mentioned, where a complex controller with high number of inputs will be weighted as $-3$ and a simple controller with low input will be weighted $3$.
+
+\item[Obstacle Avoidance] The obstacle avoidance does not have a specific rating in the use case of the AAUSHIP due to the assumption of a open water manoeuvring. This means that the weighting of this should be taken as neutral and the implementation will be further work. Yet it is described in the specific control strategies because the implementation of this can be useful in the further work of the AAUSHIP projects. The obstacles can be known pre mission or they can be detected during mission and avoided and the task of the avoidance will take different shapes dependent of the specific task. The weighting will be made such that if the obstacle avoidance is easy to implement, it will be weighted $3$, and if it is not present it will be weighted $0$. The reason why no obstacle avoidance is weighted as $0$ is because the criteria does not include obstacle avoidance, but the further work has a weighting to implement it.
+
+\item[Transients] The transients will be a weighting of how well the formation can make a turn and meanwhile keep the formation relative to the path. If the formation are unable to track the path during a turn it will be weighted low ($-3$) and will be the primary weighting. If the formation are able to track the path, but the formation will deviate a little, this will also be a down rating but not as much as if it is unable to track the path. This will i.e. get a weighting of $1$. If the formation tracks the path perfectly and the formation is kept rigid through the transient the weighting will be $3$. Some formation problems during transients can be solved by the generation of the path but this will result as a limitation to the path generation. 
+
+\item[Scalability] The weighting of the scaling is done on two criteria. It is a combination of the structure of the complete formation and the control architecture and an estimate of the bandwidth usage from the higher need of communication. This weighting will be a summed weighting, thus both bandwidth and formation complexity is weighted equally. A rather simple expansion of the formation structure will be preferable, and a relative low bandwidth usage is good. If only communication from a single leader to one respective follower is required, this will be a good thing because it leads to half the bandwidth usage. If the bandwidth usage is high and the control architecture is complex this will lead to harder scalability, which in that case will be weighted $-3$. If the control architecture is low and the input to the controller is low, the bandwidth is low and the communication layer is simple this leads to simple scalability which will be weighted $3$.
+
+\item[Failure] The failure criteria in these topics are only related to the outcome of the failure. It is not of relevance if the failure arises in sensors, in actuators or in the control structure, but only what will happen to the mission if one agents fails out. The degree of what will happen will choose the weighting such that if one agent fails and every other agent also fails the mission, this will be weighted as $-3$. If a single agent fails and nothing else happens will lead to a weighting as $3$, because if an agent will fail and the mission still can be completed it is preferable.
+\end{description}
+
+There are some parameters that are hard to differentiate by the principle
+of the method, which are listed below. These can be used to compare the
+strategies after implementation.
+\begin{description}
+\item[Preparation Time] This is related to the mission setup time. How
+	much manual labour is needed to prepare the agents for a mission?
+	This could for instance be trajectory generation and how the
+	specific pattern needs to be generated. If the formation control strategy is chosen such that the agents needs to be close to the specific formation this will also take preparation time to place them relative to the desired formation.
+\item[Time] The mission time for covering the area in a boustrophedon
+	pattern. This will be from the start of the mission to a complete mission.
+\item[Energy Efficiency] This is a theoretical measure of the
+	formation efficiency. The energy efficiency of any autonomous systems is relevant because it limits how long the autonomous system can operate autonomously, given that it cannot easily recharge or is fatal for the mission. This means that optimising the energy efficiency is desirable.
+\item[Wear and Tear] Is the controller aggressive? Aggressive
+	controllers is known to make more wear and tear on the actuators. So
+	if the strategy can be chosen to minimize the wear and tear this
+	could be of benefit to the hardware.
+\end{description}
+
+%% Oversigt af control stats
+
+\section{Methods}
+
+\subsection{Direct LOS Guidance}
+The \ac{LOS} guidance makes the basis for a formation where one leader has a follower connected and this follower has another follower connected and so on. By having this form of guidance the leader will always control the formation and how the development of the formation should be. The leader does not need to be a specific agent but can be a virtual leader, a point which is seen as leader to all the respective followers. The reference is to the leader can be a guidance reference where the leader needs to track a determined path. The reference to the followers can then either be given as a position offset, a distance and angle offset or only a distance to maintain and then make a direct pursuit of the leader.
+\subsubsection{Duckling Formation}
+\label{sc:duckling}
+This strategy takes the rise in a duckling or snake formation. In principle is this a leader that has a follower that has a follower and so on. Thereby will the formation take shape as a snake, when the leader takes off and the followers keep the line of sight to their respective leaders. The communication needed in the case of followers only follow one leader, and the communication only works in one direction, then the bandwidth usage is minimal. This implies that the communication it low and simple which is preferable. Similar to the communication will the control architecture become of the simple type where each agent only need to have a \ac{LOS} controller, such that they track their respective leaders. As such is obstacle avoidance not a native implementation of the formation, but can be implemented for the main leader of the formation. By doing this arises a problem of transients where the followers will 'cut corners'. They will directly pursuit their respective leaders, such that the formation will take sharper corners than the main leader. Adding to that if one agent fails during mission every agent after this in the chain fails. Although the formation does not perform well it has the advantage that the scalability is simple. When linking the formation in the duckling formation a new follower can be attached at the last agent and a new follower to this agent and so on. This implies that, in theory, an infinite tail of followers can be attached.
+
+\subsubsection{Echelon Formation}
+The echelon formation is a branch from the duckling formation. In this formation the followers to the leader is not in a tail of the leader, but is offset into a echelon formation. The principle being the simple \ac{LOS} controller and the communication as followers to their respective leaders still apply in this branch, but the reference is given to the followers as a offset with an angle and a degree. This implies that the problem statements from section \ref{sc:duckling} also applies to the echelon formation, and the main difference is the shape of the formation and how the reference is passed on.
+
+\subsubsection{\ac{FRP} with Path}
+This method only makes use of one path for the whole formation. The agents in the setup will be defined with relative positions to a \ac{FRP} at each time step, such that the formation stays rigid and the arms from the \ac{FRP} to the agents are constants. This setup will in principle work as the followers working in a rigid formation where only the point on the path (the \ac{FRP}) determines where the agents need to go. The reference given to the agents will be a position in the \ac{FRF}, and the formation will have the origo (turning point) in the \ac{FRP}. The individual agents will not be able to communicate, due to the rigid formation, but only keep the position relative to the \ac{FRP}. If the formation stays rigid during transients there will be no problem with collision. If one single agent in the \ac{FRF} fails it will just fall out of the formation and the rest will continue the mission.
+
+\subsection{Precomputed Individual Paths}
+\subsubsection{Full Communication}
+The implementation of this strategy needs to know for each time step for each agent when the goal at the trajectory is. By doing this it is possible to make the agents be in formation at all times because they have individual positions at their respective paths to specific times. If one of the agents does not reach its position in time, the rest of the agents should stop, or slow down, such that the missing agent has the possibility to catch up. This will change the 'time goals' for the rest of the agents, but the agents will keep the formation. The other option is that the slower agent speeds up, if the agents are not already working at full speed. In this formation principle every agent needs formation about where the others are, which might not be preferable when looking at the bandwidth usage and the scalability of this principle. The same problem will arise when looking at the control architecture, which will only expand more and more when adding more agents. If every agent needs to know information for the others, and act dependent on every single other agent, then the decision and the task allocation will become more complex. When looking into the problem of transients and 'cutting corners', the strategies with individual paths does not have any problems with this. If the formation does cut corners and fail in transients, it is mainly a design error of the path, such that the paths intersect each other. If one of the agents fail during mission then rest will keep close to that agent, unless some kind of exception handling has been made, such that the rest can continue the mission.
+
+\subsubsection{Limited Communication}
+The overall principle of this implementation is the same as when full communication, the one mentioned above. The difference is that the communication will be greatly decreased when looking at the bandwidth usage and how many agents that needs to know of each other. In this formation strategy agent $i$ only knows information about the neighbour agents, $i_{-1}$ and $i_{1}$. By doing this the information about a slower, or even failed, agent needs to propagate through the formation. If the formation is relatively small, it will not make any remarkable change in the formation structure. If the formation is of a larger size, then the formation will not be as rigid as the one with full communication. If the outer most agent for some reason slows down, then the neighbour needs to act according to that, and the the neighbour of the neighbour needs to act according to that and so on. This will make the formation, in this situation, become skewed, but will go into formation again over time. This is a downside when looking at the transients of the formation and how rigid it is. If the given agent completely fails the mission and breaks down, then the same applies as if there were full communication. An exception needs to be programmed such that the formation will leave the failed agent. The advantage of this strategy is that the control architecture and the communication level will become less complicated, and the scalability to in theory infinitely many agents becomes possible.
+
+\subsubsection{No Communication}
+Again is the main principle the same for this strategy, only that no information is shared between the agents. If no information is shared between the agents it is assumed that they do not experience any faults. If one of the agents has a fault, that it changes course, slows down or fails in the mission, it will make the formation to fail. The individual agents will still follow their respective paths, and therefore reach their end goals, but not at the same time. If the agent has failed the mission the others does not take this into account, but instead continues their individual mission. The communication in this strategy is very low, since the agents does not exchange information at all. The control architecture also becomes less complex while this strategy only controls the individual agents i.e. with a simple \ac{LOS} controller to track their individual paths. If the individual paths have been generated properly there should not be any problems relating the transients, if assumed that every agent follows its path with acceptance. If it does not, and deviate a little, the formation is not rigid. If one agent fails in the mission, it will also lead to formation deviation, but the rest of the agents will keep their respective goals. Though when working as individual agents, this also implies that the scalability becomes less complex because the control is applied at the individual agent that follows its own path.
+
+\subsection{Potential Field}
+\subsubsection{Full Communication}
+In the strategy with potential fields the level of communication can also vary. If the communication can be shared by all the agents within the potential field, the communication is said to be full. When this is the case, every agent has the information about every other agents position and potential field. This makes the formation, made by the potential field, able to correct if any agent starts to fall behind. This concept is the same as with the precomputed paths, where the communication also could be full. In this case the bandwidth usage is also larger when having full communication than with lower communication. Therefore is the communication level also more complex then every agent needs to exchange information with each other. When every single agent need to be dependent on all the other agents, the constraint level gets higher and the complexity of the needed control architecture also becomes higher. When every agent knows the potential fields of the others there should not become any collision problems in transients. But the formation in general is not as rigid when working with potential fields, because of the principle of attraction and repelling. If one single agent fails, breaks down, the others should still know of its appearance such that they can use the potential field to manoeuvre away from the agent. This is mainly to avoid collision. When the communication and the control architecture becomes more complex under full communication, the scalability also becomes more complex. It is not impossible to scale, but a scaling in theory to infinity will become very complex.
+
+\subsubsection{Limited Communication}
+When the communication is said to be limited it means that not all agents can communicate with each other. The communication range of the agents are reduced, such that i.e. agent $i$ only can communicate with agent $i_{-1}$ and $i_{1}$, but the range can also be large, $i_{-r}$ and $i_{r}$, where $r$ is the communication radius. When doing this the same thing will happen as in the case of limited communication with the individual paths. If one agent starts falling behind then the nearby agents starts to reach first, which then leads to that all agents will reach on the slower agent. Dependent on the formation this will make different hurdles. The formation can try to manoeuvre dependent on the slower agent, but they meanwhile have to follow the potential field map, the given trajectory. In the case of limited communication the same things apply to transients as when full communication, but the formation might diverge more from the determined due to the passing of information between the agents. If one agent breaks down the same goes as with full information, because only the closest agents needs the information about the breakdown to avoid collision. The rest can still continue the mission afterwards. The scaling of the formation becomes a little less complicated than if the agents needed to know information from every agent. Though the potential field mapping will still be complex, and the trajectory generation can be hard.
+
+\subsubsection{No Communication}
+In the case where no communication are to find in the system the agents will act like no potential field exists from the other agents, and try to follow the potential field trajectory. This will make every agent, independent of the others, try to follow the trajectory and thereby be in the same point. This will over time make the agents collide, if not on the way to the mission goal then at the mission goal. This means that in this case they need a individual potential field trajectory. When making individual potential field trajectories will the scenario be as in the case of individual paths, where the agents will be controlled individually but with respect of a potential field trajectory. This may also lead to colliding agents but it is not necessary as it will be if they followed the same trajectory. If they follow the same reference trajectory a failed agent will result in all the others following behind that will collide resulting in a complete mission failure. Though if the agents instead have their own respective reference trajectory one failing will not fail the mission. If the formation are unlucky, they can collide, but not necessarily.
+
+\begin{sidewaystable}
+\begin{tabular}{l|lll|l}
+\toprule
+\textbf{Approach} & \textbf{Communication} & \textbf{Control architecture} & \textbf{Obstacle avoidance} & ---\\
+\hline
+\textbf{Leader follower:}&&&& \\
+Duckling & Simple, 3 & Simple LOS, 3 & None, 0 & \\
+Echelon & Simple, 3 & Simple LOS, 3 & None, 0 & \\
+\ac{FRP} with path& Low communication, 0 & Simple, 2 & None, 0 & \\
+\textbf{Precomputed individual paths:}&&&& \\
+Full communication& High bw, 0 & Multi agent info, 0 & None, 0 & \\
+Limited communication& Middle bw, 1 & Local agent info, 1 & None, 0 & \\
+No communication& Low bw, 2 & Single agent info, 2 & None, 0 & \\
+\textbf{Potential field:}&&&& \\
+Full communication& High bw, 0 & Multi agent info, 0 & Natural, 3 & \\
+Limited communication& Middle bw, 1 & Local agent info, 1 & Natural, 3 & \\
+No communication& Low bw, 2 & Single agent info, 2 & Natural, 2& \\
+\bottomrule
+ & \textbf{Transients} & \textbf{Scalability} & \textbf{Failure}& \textbf{Sum}\\
+\hline
+\textbf{Leader follower:}&&&& \\
+Duckling  & improper path, -1 & Easy duplicate, 3 & Formation continue, 2 & 10\\
+Echelon  & Improper path, 0 & Easy duplicate, 3 & Formation continue, 2 & 11\\
+\ac{FRP} with path   & Improper path, 0 & Duplicable, 2 & Collapse, -2 & 2\\
+\textbf{Precomputed individual paths:}&&&& \\
+Full communication   & No risk, 3 & More bandwidth, -1 & Low failure, 2 & 4\\
+Limited communication  & Risk, 2 & Possible, 1 & Can occur, 0 & 5\\
+No communication   & Risk, 1 & Individual paths, 3 & High risk, -2 & 6\\
+\textbf{Potential field:}&&&& \\
+Full communication  & No risk, 3 & More bandwidth, 0 & Low failure, 2 & 8\\
+Limited communication  & Risk, 1 & Possible, 1 & Low failure, 2 & 9\\
+No communication  & High risk, -2 & Single fields, 3 & Risk, -1 & 6\\
+\bottomrule
+\end{tabular}
+\caption{Decision matrix for the formation strategies. The strategy row from the upper half of the table continues on the lower half, with the points summed in the last column in the lower half.}
+\label{tab:decision-matrix}
+\end{sidewaystable}
+
+\subsubsection{Summation}
+The sum is based on the above mentioned categories and is a weighting from $-3$ to $3$ including $0$. The focus will be placed on the three strategies that scores the highest rating. These can be seen in table \ref{tab:decision-matrix} to be \textbf{Duckling formation}, \textbf{Echelon formation} and \textbf{Potential field formation}. The duckling- and echelon formations have achieved the high rating due to their simplicity and their relatively easy implementation possibilities, while the potential field formation is of higher complexity but still fulfils the criteria from the analysis. When analysing these three strategies it becomes clear that the difference between duckling formation and echelon formation regarding implementation is not very different. The duckling formation will become a direct intercept from follower to leader, where in theory an infinite number of agents can be attached. These all need to fulfil a distance reference in between to avoid colliding, and a trajectory will need to take wide turns to ensure that the absolute speed of every agent stays above a threshold. If the speed decreases it will lead to the agent over steering thus needs to over actuate in the opposite direction. This will lead to oscillations in the trajectory tracking and a risk of colliding becomes relevant. The echelon formation is an offset between a follower to the leader, where the same applies as for the duckling formation. It is also possible to expand this to an infinite number of agents that couples the formation together. There the agents also need to fulfil a distance reference to withhold the determined distances in between and thus also a speed reference. The last formation is the potential field, which becomes more abstract to interpret. The theory of setting control structures for the potential field is designed of attracting and repulsing forces and be using those also implements obstacle avoidance. The formation strategies are explained in more detain in the following.
+
+%% Approaches
+\input{mainmatter/potentialfield}
+
+\input{mainmatter/leaderfollower}
+
+\input{mainmatter/multi_path_following}

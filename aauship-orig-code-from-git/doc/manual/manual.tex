@@ -1,0 +1,87 @@
+\documentclass[a4paper,11pt,oneside,fleqn]{article}
+% Pakker
+\usepackage[utf8]{inputenc} % Så må vi bruge æ, ø og å
+%\usepackage(ansinew){inputenc}
+%\usepackage(danish){babel} % Dansk opsætning
+\usepackage[T1]{fontenc} % Hjælper med orddeling ved æ, ø og å. Sætter fontene til at være ps-fonte i stedet for bmp.
+\usepackage[english,final]{varioref} % Vi kan anvende \vref
+\usepackage{array,booktabs} % Til gode tabeller
+\usepackage[printonlyused,withpage]{acronym} % Smart akronymhåndtering
+\usepackage{minitoc} % Vi kan lave del inholdsfortegnelser forhåbentlig
+\usepackage{graphicx} % We can now use \includegraphics and stuff
+\usepackage[svgnames]{xcolor} % Colored stuff i.e. \colorbox
+\usepackage{pdfpages} % Inkludere en pdf side som en side  
+\usepackage{amsmath,amsfonts,amssymb} % God matematik
+\usepackage{wasysym}% smileys
+\usepackage{textcomp} % More text stuff, such as numero
+\usepackage{mathtools} % We can now use \xRightarrow{hello world}
+\usepackage{booktabs} % Rulers for tables
+\usepackage[thinspace,amssymb]{SIunits} % Using macros for typesetting SI units
+\usepackage{natbib} % Use proper citation
+\usepackage{tocbibind} % Includes toc and bib in toc
+\usepackage{listingsutf8} % Code listings
+\usepackage{tabularx,booktabs} % Tables with fixed width
+\usepackage{todonotes} % Todonotes
+\usepackage{tcolorbox} % Colored boxes!
+\lstset{extendedchars=\true, inputencoding=utf8/latin1} % This and listingsutf8 makes us able to use utf8 and latin1 as inputfiles
+\lstset{language=matlab,frame=single,basicstyle=\footnotesize\ttfamily}
+\usepackage[pdftex]{hyperref} % Hyperlinks
+\usepackage[svgpath=fig/]{svg}
+\hypersetup{backref,
+bookmarks=true,
+bookmarksnumbered=true,
+colorlinks=true,
+linkcolor=Navy,
+citecolor=Green} % Setting some fancy colors
+\DeclareUnicodeCharacter{00A0}{~} % Fix odd OSX/textwrangler no break space charater
+\newcommand{\head}[1]{\vspace{3mm}{\noindent \hspace{-0.5em} \fcolorbox{gray}{GhostWhite}{\parbox[c]{\textwidth}{\slshape{#1}}}\vspace{2mm}}} % Header
+
+\let\oldhat\hat
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\renewcommand{\hat}[1]{\oldhat{\mathbf{#1}}}
+
+\newcommand{\MATLAB}{M{\footnotesize ATLAB}}
+
+\begin{document}
+% Frontpage
+\author{Nick Østergaard and Jeppe Dam}
+\title{Users Manual\\
+	for\\
+\emph{ASV Formation Control for Surveying Purposes}}
+\date{\today}
+\maketitle
+\thispagestyle{empty}
+\begin{center}
+	\includegraphics[width=13cm]{fig/aauship}
+\end{center}
+\vfill
+\begin{center}
+	\includegraphics[width=5cm]{AAU_LOGO_CMYK_UK}\\
+	Department of Electronic Systems
+\end{center}
+\clearpage
+
+% Abstract
+\include{abstract}
+
+% Table of contents
+\tableofcontents
+%\listoftables
+%\listoffigures
+\newpage
+
+% Inclusion of body text here
+\input{introduction}
+\input{objective}
+\input{notation}
+\input{preliminaries}
+\input{parts}
+\input{power-system}
+\appendix
+\input{acronyms}
+
+% Bibliography
+\bibliographystyle{apalike}
+\bibliography{bib}\label{sec:bibliography}
+
+\end{document}

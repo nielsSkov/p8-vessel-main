@@ -1,0 +1,7 @@
+SUBSYSTEMS=="usb" ATTRS{idVendor}=="2341" ATTRS{idProduct}=="0010" MODE:="0666" SYMLINK+="lli"
+SUBSYSTEMS=="usb" ATTRS{idVendor}=="067b" ATTRS{idProduct}=="2303" MODE:="0666" SYMLINK+="echosounder"
+SUBSYSTEMS=="usb" ATTRS{idVendor}=="1546" ATTRS{idProduct}=="01a4" MODE:="0666" SYMLINK+="gps2"
+SUBSYSTEMS=="usb" ATTRS{idVendor}=="10c4" ATTRS{idProduct}=="ea60" MODE:="0666" SYMLINK+="radio"
+SUBSYSTEMS=="usb" ATTRS{idVendor}=="03eb" ATTRS{idProduct}=="6125" MODE:="0666" SYMLINK+="mb100base"
+SUBSYSTEMS=="usb" ATTRS{idVendor}=="1d6b" ATTRS{idProduct}=="0002" MODE:="0666" SYMLINK+="mb100rover"
+SUBSYSTEMS=="usb" ATTRS{idVendor}=="2001" ATTRS{idProduct}=="3c1b" MODE:="0666" ACTION=="add" RUN+="/home/pi/aauship-formation/code/hli/ros/network_ad_hoc.sh"

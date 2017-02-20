@@ -1,0 +1,346 @@
+\documentclass[a4paper,11pt,twoside,fleqn,openright]{memoir}
+% Pakker
+\usepackage[utf8]{inputenc} % Så må vi bruge æ, ø og å
+%\usepackage[ansinew]{inputenc}
+%\usepackage[danish]{babel} % Dansk opsætning
+\usepackage[T1]{fontenc} % Hjælper med ordeling ved æ, ø og å. Sætter fontene til at være ps-fonte i stedet for bmp.
+%\usepackage[scaled]{beramono} % Bedre monospace font
+\usepackage{amsmath} % God matematik
+\usepackage{dsfont} % Til at lave flotte R'er osv i matematik: \mathds{...}
+\usepackage{sistyle} % Enheder til fysik
+\usepackage{array,booktabs} % Til gode tabeller
+\usepackage{ragged2e} % For at kunnu lave tabeller med fast kolonnebredde, bruges sammen med 'array'
+\usepackage{hhline} % Sum linie i tabel
+\usepackage{multirow} % Fletning af rækker
+\usepackage{multicol} % Fletning af kolonner
+\usepackage{xcolor} % Vi kan bruge \color osv
+\usepackage{colortbl} % Muligøre farver i tabeller
+%\usepackage[danish=quotes]{csquotes} % Danske anførselstegn, brug enquote{}
+\usepackage[english=british]{csquotes} 
+\usepackage{graphicx} % Inkludere ekstern grafik
+\usepackage[english,final]{varioref} % Vi kan anvende \vref
+\usepackage{natbib} % Bedre litteratur henvisninger
+\usepackage{pdfpages} % Inkludere en pdf side som en side  
+\usepackage[printonlyused]{acronym} % Smart akronymhåndtering
+\usepackage{suffix} % Krævet af acronym
+\usepackage{listings} % Til at inkludere kildekode direkte
+\usepackage{lipsum} % Lorem ipsum dolar sit amet
+\usepackage{lscape} % Bruges til at lave landscape på specifikke sider. /begin{landscape} .... \end{landscape}
+\usepackage{caption} % Vi kan bruge \captionof
+\usepackage{subfig} % Vi kan nu bruge \subfloat
+\usepackage{calc} % Vi kan regne med tællere
+\usepackage{changepage} % Vi kan ændre sidelayoutet lokalt
+\usepackage{layout} % Vi kan se dimensionecne på vores layout med \layout
+\usepackage[footnote,final,english,silent,nomargin]{fixme}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[pdftex,bookmarks=true,bookmarksnumbered=true]{hyperref} % Links i dokumentet use hidelinks to hide the box around links
+\usepackage{textcomp} % HVAD FANDEN GØR DENNE PAKKE?
+\usepackage{threeparttable} % Så vi kan lave tablenotes (se latexbogen)
+\usepackage{fixltx2e} % HVAD FANDEN GØR DENNE PAKKE?
+\usepackage{float} % Vi må nu bruge H som placering til floats (skal være efter fixltx2e)
+\usepackage{minitoc} % Vi kan lave del inholdsfortegnelser forhåbentlig
+\usepackage{enumitem} % Better lists
+\usepackage{geometry} % Setting margins
+\usepackage[svgpath=fig/]{svg} % Smart inclusion of SVG figures with \includesvg
+%\usepackage{showlabels} % Shows labels in the margin
+\usepackage[intoc]{nomencl} % Nomenclature
+\usepackage{rotating}
+\usepackage[boxed,linesnumbered]{algorithm2e}
+\usepackage{tcolorbox} % Colored boxes!
+\makenomenclature
+
+%% Font alternatives
+%\usepackage{palatino}
+\usepackage{charter}
+\usepackage[bitstream-charter]{mathdesign}
+%\usepackage{libertine}
+%\usepackage[libertine]{newtxmath}
+
+% For sjov pakker
+\usepackage{marvosym}
+\usepackage{wasysym}
+%\usepackage{fourier}
+
+\captionsetup{font={small,sf},labelfont=bf}
+
+% Writing equation references with parenthesis
+\labelformat{equation}{(#1)} 
+
+% Sets max coloum in bmatrix
+\setcounter{MaxMatrixCols}{20}
+
+% Så man kan ref til subsubsections
+\setsecnumdepth{subsubsection}
+
+\pagestyle{companion}
+
+% Andre egensakber for komandoer
+\newcommand\Cpp{C\raisebox{\height / 2}[\height][\depth]{\tiny ++}} % Pænere C++
+\newcommand{\mimg}[4]{\marginpar{\small \centering{\includegraphics[width=#1]{#2}\captionof{figure}{\newline #3}\label{#4}}}} % Margin billede
+\newcommand{\lmimg}[4]{\marginpar{\small\centering{% Latex margin billede
+  \def\svgwidth{#1}
+  \graphicspath{{illustrations/}}
+  \input{illustrations/#2.pdf_tex}
+  \captionof{figure}{\newline #3}
+  \label{#4}}}
+}
+\newcommand{\mnote}[1]{\marginpar{\small \textsf{\textbf{Note}\\{#1}}}} % Margin note
+\newcommand{\mcd}[1]{\marginpar{\textsf{\textbf{\includegraphics[height=11pt]{frontmatter/media-optical}}\\\url{#1}}}} % CD-rom henvisning i margin
+\newcommand{\cd}[1]{\includegraphics[height=9pt]{frontmatter/media-optical}\url{#1}} % CD-rom henvisning i tekst
+\newcommand{\limg}[5]{\begin{figure}[#1]
+  \centering
+  \def\svgwidth{#2}
+  \graphicspath{{illustrations/}}
+  \input{illustrations/#3.pdf_tex}
+  \caption{#4}
+	\label{#5}
+\end{figure}}
+\newcommand{\head}[1]{{\slshape{#1}}\vspace{5mm}} % Header
+\newcommand{\tail}{\vspace{3mm}\fancybreak{$*\quad*\quad*$}\vspace{3mm}} % Røvhul
+\newcommand{\enhed}[1]{\hfill\hbox{[#1]}\qquad} % At indsatte heb enheder i firkantparentes i "equation"
+\newcommand{\dB}[0]{\hbox{dB}} % At skrive dB oprejst
+%\addto\captionsdanish{
+%\renewcommand\appendixname{Appendiks}
+%\renewcommand\contentsname{Indholdsfortegnelse}
+
+% Make vectors bold instead of a arrow
+\let\oldhat\hat
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\hat}[1]{\oldhat{\mathbf{#1}}}
+\newcommand{\diag}[1]{\mathrm{diag}\left(#1\right)}
+
+\makechapterstyle{box}{
+  \renewcommand*{\printchaptername}{}
+  \renewcommand*{\chapnumfont}{\normalfont\sffamily\huge\bfseries}
+  \renewcommand*{\printchapternum}{
+    \flushleft
+    \begin{tikzpicture}[line width=4pt]
+      \draw (0,1) -- (0,0) -- (1,0);
+      \draw (2,1) -- (2,2) -- (1,2);
+      \draw[color=gray] (1cm,1cm) node { \chapnumfont\thechapter };
+    \end{tikzpicture}
+  }
+  \renewcommand*{\chaptitlefont}{\normalfont\sffamily\Huge\bfseries}
+  \renewcommand*{\printchaptertitle}[1]{\flushleft\chaptitlefont##1}
+  \setlength\beforechapskip{-100pt}
+}
+
+\newif\ifchapternonum
+\makechapterstyle{nickoe}{
+\renewcommand\printchapternonum{\chapternonumtrue}
+  \renewcommand*{\printchaptername}{} % Removes the 'Chapter' text
+  \renewcommand*{\chapnumfont}{\fontfamily{pbk}\fontseries{m} \fontshape{n}\fontsize{80}{35}\selectfont } % Does some magic
+  \renewcommand*{\printchapternum}{}
+  %\hfill 
+  %\fontfamily{pbk}\fontseries{m} \fontshape{n}\fontsize{80}{35}\selectfont % Makes a gigantic number
+  %\chapnumfont\thechapter} % Removes the 'Chapter's number
+  \renewcommand*{\printchaptertitle}[1]{%
+  \noindent%
+  \ifchapternonum%
+  \begin{tabularx}{\textwidth}{X}%
+  {\parbox[b]{\linewidth}{\raggedright \hskip -0.6em \chaptitlefont ##1}%
+    \vphantom{\raisebox{0pt}{\chapnumfont 1}}}
+  \end{tabularx}%
+  \else
+
+  \begin{tabularx}{\textwidth}{Xl}
+  {\parbox[b]{\linewidth}{\raggedright \hskip -0.6em \chaptitlefont ##1} }
+  & \raisebox{0pt}{\raggedleft \chapnumfont \hskip -0.5cm \thechapter \hskip -0.5cm}%
+  \end{tabularx}%
+  \fi
+  \hrule
+  }
+
+  %\flushleft\chaptitlefont##1} % Prints the chaptertitle
+  %\renewcommand{\afterchaptertitle}{\par\nobreak\medskip\hrule\vskip\afterchapskip}
+  \setlength\beforechapskip{-100pt} % Makes the chapter go up on the page
+
+}
+
+\newenvironment{ffk}[0]% formel forklaring
+{\vspace{-0.5cm}\begin{list}{}%
+         {\setlength{\leftmargin}{\mathindent}}%
+         \item[]%
+}
+{\end{list}}
+
+% Akronyms formatering
+\renewcommand*{\acsfont}[1]{#1}
+\renewcommand*{\acffont}[1]{#1}
+\renewcommand*{\acfsfont}[1]{#1}
+
+% Farve definitioner
+\definecolor{shadecolor}{gray}{.95}
+
+\lstloadlanguages{C,VHDL,Java}
+% Kodeformatering [C]
+\lstnewenvironment{ccode}[2][]{
+  \def\lstlistingname{Source code}
+  \lstset{
+    language=C,
+    escapeinside={(*@}{@*)},  % a line can set with: (*@\label{c:labelname}@*)
+    keywordstyle=\bfseries,
+    commentstyle=\color{blue}, 
+    basicstyle=\ttfamily\selectfont\footnotesize,
+    numbers=left,
+    numberstyle=\tiny,
+    tabsize=2,
+    showstringspaces=false,
+    backgroundcolor=\color{shadecolor},
+    frame=lines,
+    captionpos=b,
+    caption={#1},
+    label={#2}
+  }
+}{}
+
+% Kodeformatering [VHDL]
+\lstnewenvironment{VHDL}[2][]{
+  \def\lstlistingname{Source code}
+  \lstset{
+    language=VHDL,
+    keywordstyle=\bfseries,
+    commentstyle=\color{blue}, 
+    basicstyle=\ttfamily\selectfont\small,
+    numbers=left,
+    numberstyle=\tiny,
+    tabsize=2,
+    showstringspaces=false,
+    backgroundcolor=\color{shadecolor},
+    frame=lines,
+    captionpos=b,
+    caption={#1},
+    label={#2}
+  }
+}{}
+
+% Kodeformatering [Assembler]
+\lstnewenvironment{asmcode}[2][]{
+  \def\lstlistingname{Source code}
+  \lstset{
+    language=[x86masm]Assembler,
+    keywordstyle=\bfseries,
+    commentstyle=\color{blue}, 
+    basicstyle=\ttfamily\selectfont\small,
+    numbers=left,
+    numberstyle=\tiny,
+    tabsize=2,
+    showstringspaces=false,
+    breaklines=true,
+    backgroundcolor=\color{shadecolor},
+    frame=lines,
+    captionpos=b,
+    caption={#1},
+    label={#2}
+  }
+}{}
+
+% Kodeformatering [Java]
+\lstnewenvironment{javacode}[2][]{
+  \def\lstlistingname{Source code}
+  \lstset{
+    language=Java,
+    keywordstyle=\bfseries,
+    commentstyle=\color{blue}, 
+    basicstyle=\ttfamily\selectfont\small,
+    numbers=left,
+    numberstyle=\tiny,
+    tabsize=2,
+    showstringspaces=false,
+    breaklines=true,
+    backgroundcolor=\color{shadecolor},
+    frame=lines,
+    captionpos=b,
+    caption={#1},
+    label={#2}
+  }
+}{}
+
+% Kodeformatering [XML]
+\lstnewenvironment{xmlcode}[2][]{
+  \def\lstlistingname{Source code}
+  \lstset{
+    language=XML,
+    keywordstyle=\bfseries,
+    commentstyle=\color{blue},
+    basicstyle=\ttfamily\selectfont\small,
+    numbers=left,
+    numberstyle=\tiny,
+    showstringspaces=false,
+    backgroundcolor=\color{shadecolor},
+    frame=lines,
+    morekeywords={msgid, repeat, mmsi, navstat, rot, sog, posaccu, lon, lat, cog, truehead, timestamp, manoeuvre, raim, commstate, utc_year, utc_month, utc_day, utc_hour, utc_min, utc_sec, txbcast, name, aisver, imo, call, cargo, a, b, c, d, fixdev, eta_mon, eta_day, eta,hour, eta_min, draught, dest, dte, spare},
+    captionpos=b,
+    breaklines=true,
+    caption={#1},
+    label={#2}
+  }
+}{}
+
+% \part omdefinering, nu med beskrivende tekst
+\def\descpart#1#2{
+  \par\newpage\clearpage % Page break 
+  \vspace*{5cm} % Vertical shift 
+  \refstepcounter{part}% Next part
+  %\addcontentsline{toc}{part}{\texorpdfstring{\rlap{\thepart}\hspace{1.2em}#1}{\thepart\ #1}} % Adds entry to TOC 
+  \addcontentsline{toc}{part}{\texorpdfstring{\rlap{\thepart}\hspace{2em}#1}{\thepart\ #1}} % Adds entry to TOC 
+  {\centering \textbf{\Huge Part \thepart}\par}
+  \vspace{1cm} % Vertical shift
+  \thispagestyle{chapter} % Gives the pagestile an the memoir chapterpagestyle
+  {\centering \textbf{\fontsize{1.6cm}{10em}\selectfont #1}\par}
+  \begin{center}
+  {\parbox{9cm}{
+  \vspace{2cm} % Vertical shift
+  \noindent \slshape{#2} % Some text
+  }}
+  \end{center}
+  \vfill\pagebreak % Fill the end of page and page break
+}
+
+%------------
+\def\appendixpart#1#2{
+  \par\newpage\clearpage % Page break 
+  \vspace*{5cm} % Vertical shift 
+  \addcontentsline{toc}{part}{\texorpdfstring{\rlap{\thepart}\hspace{2em}#1}{\thepart\ #1}} % Adds entry to TOC 
+  \thispagestyle{chapter} % Gives the pagestile an the memoir chapterpagestyle
+  {\centering \textbf{\Huge #1}\par}
+  \begin{center}
+  {\parbox{9cm}{
+  \vspace{2cm} % Vertical shift
+  \noindent \slshape{#2} % Some text
+  }}
+  \end{center}
+  \vfill\pagebreak % Fill the end of page and page break
+}
+
+
+%------------
+
+% At bruge figurer der fylder mere end brødteksten
+% Der defineres nogle ekstra længder
+\newlength{\fullwidth}
+\setlength{\fullwidth}{\textwidth}
+\addtolength{\fullwidth}{\marginparsep}
+\addtolength{\fullwidth}{\marginparwidth}
+\newlength{\fullmargin}
+\setlength{\fullmargin}{\marginparwidth}
+\addtolength{\fullmargin}{\marginparsep}
+% For at bruge det, skal man f.eks. gøre således:
+%\begin{figure}[h]
+%\begin{adjustwidth*}{-\fullmargin}{}
+%\includegraphics[width=\fullwidth]{./sti}
+%\end{adjustwidth*}
+%\caption{Beskrivelse her}
+%\laber{fig:label}
+%\end{figure}
+
+% \degC for grader C
+% \arcdeg for gradtegn
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\MATLAB}{M{\footnotesize ATLAB}}
+\newcommand{\euler}{\mathrm{e}}
+\parindent 8pt
+
+% Orddeling
+% Ord der deles forkert kan skrives her, men bindestreg ved stavelser og mellemrum mellem ordene
+\hyphenation{ar-bejds-in-ten-si-ve an-grebs-vink-ler ind-gangs-im-pe-dans ro-ta-ti-ons-en-ko-der deres clock-fre-kvens sys-tem-et na-vi-gate} 

@@ -1,0 +1,17 @@
+<library path="src">
+  <class name="My Plugin" type="rqt_log_annotate.my_module.MyPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Enables the user to add notes with timestamps to a log file.
+    </description>
+    <qtgui>
+      <group>
+        <label>AAUSHIP</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to AAUSHIP.</statustip>
+      </group>
+      <label>Log annotate</label>
+      <icon type="theme">appointment-soon</icon>
+      <statustip>Used for testing</statustip>
+    </qtgui>
+  </class>
+</library>

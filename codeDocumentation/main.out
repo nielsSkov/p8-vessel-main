@@ -1,0 +1,8 @@
+\BOOKMARK [0][-]{chapter.1}{1 Code Base}{}% 1
+\BOOKMARK [1][-]{section.1.1}{1.1 Structure}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{1.2 [style=pythoninline, basicstyle=]gpsfunctions.py}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.3}{1.3 [style=pythoninline, basicstyle=]lliserial.py}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.4}{1.4 [style=pythoninline, basicstyle=]lli-tester.py}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.5}{1.5 [style=pythoninline, basicstyle=]lli-tester-no-trash.py}{chapter.1}% 6
+\BOOKMARK [1][-]{section.1.6}{1.6 [style=pythoninline, basicstyle=]packetHandler.py}{chapter.1}% 7
+\BOOKMARK [1][-]{section.1.7}{1.7 [style=pythoninline, basicstyle=]packetparser.py}{chapter.1}% 8

@@ -1,0 +1,35 @@
+\section{Strategy 1: Potential Field Formation}
+\label{sc:potential-fields}
+% Papers of interrest to this topic
+% A Potential Field Based Approach to Multi-Robot Manipulation \citep{pfmrm}\\
+% Formation Control with Configuration Space Constraints, \citep{fccsc}\\
+% UAV Formation Flight using 3D Potential Field, \citep{UAVff3dpf}\\
+
+
+\subsection{Potentialfield}
+In potential fields it is commonly used that a multi-robot group should move in an environment, either with or without obstacles. Papers related to this i.e. are \citep{pfmrm}, \citep{fccsc} and \citep{UAVff3dpf}. Within the environment there need to be specified some relative measurements, or states, such that the robots are capable to manoeuvre relative to something. This reference, that the robots should manoeuvre with, is in this case the potential fields. When looking at robots that should keep distance from each other (in a formation), or should move to a desired position (trajectory tracking), the implementation of potential fields come in handy.
+
+The potential field approach can be utilised or implemented in
+different ways when taking about formation control. Potential fields
+is often used for cooperative control where the formation between
+agents is not as important, but rather have the goal of moving agents into formation and then make groups of
+agents move from one point to another \citep{5504176}. Therefore to
+use the potential field mindset it is important to define how these
+fields works together to achieve some form of formation that can be
+moved after a predefined path. 
+
+Some ideas are to use an individual potential field seen from each
+agent and combine this with the other agent's local potential field.
+Here the potential field has local minima defining the desired
+formation. In addition to this there is also a need to define how this
+formation can be moved in a predefined path.
+
+Another idea is to use the same potential field, that is a global and
+common time varying potential field, to define the formation, but this
+will require that the agents are already near their formation, such
+that every agent will approach their separate local minimum. This can
+be used as a leader follower concept where the leader is defining this
+global potential field.
+
+The potential fields can be defined from attraction- and repulsion forces, dependent on if the robots need to move toward or away from a target, described in \citep{pfmrm}, where potential fields are utilized with a virtual structure. When applying a virtual structure the group of robots follow a virtual leader and not another robot relative to the formation. The potential functions can now be used as forces between the agents to repel them, such that they do not collide, which can be called inter-vehicle forces. The potential functions are also used as forces around the virtual leader such that the agents gets as close as possible to the virtual leader without ever reaching it, which can be called virtual leader forces. This will make a defined formation around the virtual leader \citep{1655803}. The repelling forces can be utilized in different ways and with advantage used with obstacle avoidance, where these need to contribute with a repelling force to the potential field, making agents diverge from these objects. A great advantage to the virtual leader is that the potential forces can be used to keep the formation and then only generate the trajectory for the virtual leader and not for every individual agent \citep{1655803}. The virtual leader can also be an agent as the reference point in the formation but is mostly thought of as the reference point for all agents in the formation.
+

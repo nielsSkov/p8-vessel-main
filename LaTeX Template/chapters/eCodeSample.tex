@@ -1,0 +1,62 @@
+\section{Code Sample}
+
+\begin{lstlisting}[ style=cstyle,
+                    caption={C Code}, 
+                    label=lst:cExample ]
+#include "functions.h"
+
+// Constant matrices
+const float L[3] = { -11.0, -12.0, -13.0 };
+const float B1[4] = { 0.0, -0.2396, 0.0, 0.2396 };
+const float B2[4] = { 0.2396, 0.0, -0.2396, 0.0 };
+const float B3[4] = { 0.0377, -0.0377, 0.0377, -0.0377 };
+\end{lstlisting}
+
+In \autoref{lst:cExample} is some C-code, and here is some in-line C-code: \inlinec{xTaskCreate();}.
+
+\begin{lstlisting}[ style=pythonstyle,
+                    caption={Python Code}, 
+                    label=lst:pythonExample ]
+# This parses the packets to identify messages and decodes them for the logs
+class packetParser():
+    def __init__(self,accelfile,gpsfile,measstate,fulllog,plog):
+        self.GPS = {0: 'Latitude',
+                    1: 'Longtitude',
+                    2: 'Velocity'}
+        self.IMU = {0: 'AccelerationX',
+                    1: 'AccelerationY',
+                    2: 'AccelerationZ',
+                    3: 'GyroscopeX',
+                    4: 'GyroscopeY',
+                    5: 'GyroscopeZ',
+                    6: 'MagnetometerX',
+                    7: 'MagnetometerY',
+                    8: 'MagnetometerZ',
+                    9: 'Temperature'}
+        self.MsgID = {0: self.GPS, 1: self.IMU}
+        self.DevID = {0: 'GPS', 1: 'IMU'}
+        self.accelburst = [0,0,0,0,0,0,0]
+        self.accellog = accelfile
+        self.fulllog = fulllog
+\end{lstlisting}
+
+In \autoref{lst:pythonExample} is some Python-code, and here is some in-line Python-code:\\ \inlinepython{self.plog.write(str(msgnr))}
+
+\begin{lstlisting}[ style=matlabstyle,
+                    caption={Matlab Code}, 
+                    label=lst:matlabExample ]
+  close all
+  clear
+  clc
+  
+  % Parameters
+  mx=200;     % [kg] mass + added mass in xb direction
+  my=250;     % [kg] mass + added mass in yb direction
+  Iz=700;     % [kgm2]
+  
+  dx=70;      % [kg/s] 
+  dy=100;     % [kg/s]
+  dyaw=50;    % [kgm2/s]
+\end{lstlisting}
+
+In \autoref{lst:cExample}, \ref{lst:pythonExample} and \ref{lst:matlabExample} is some code, and here is some in-line matlab: \inlinematlab{randn(50)}

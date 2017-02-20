@@ -1,0 +1,68 @@
+<nickoe> What would the smart workflow be when having to read three UARTs whre one is a NMEA GPS stream, and the other two small command bytes (2 to 20 bytes)?
+<tld> Depends on a lot of things, like which hardware, etc.
+<tld> Are you using something with three uarts?  Are you multiplexing using one?  softserial?
+<nickoe> tld, using atmega2560 with its hardware uarts
+<nickoe> so no softserial and no multiplexing
+<nickoe> just directly connected
+<tld> Short read-loops, just pulling in the data, setting bits and buffers, then process from main loop?
+<tld> as workflow I mean?
+<OndraSter> what do you do with the data?
+* Roklobsta (~quassel@2001:44b8:4105:ea00:89a5:450b:c34a:c1f7) has joined #avr
+<nickoe> hmm, yes ooh yeah. The GPS data is actually kind of being forwarded completly to one of the other uarts and send only position data via the last
+<nickoe> so basically, I need to recieve the NMEA sentences and then forward the to antoher port as fast as possible and in the mean time send some small packets to the third UART while also listening a bit on that one together with listeningen ont he one I send NMEA on
+* zypher27 has quit ()
+<tld> small event-handlers then.
+<tld> do as little as possible on interrupt or polling, the rest in main event loop.
+<tld> could even just bit-set.
+* AnalogSound has quit (Ping timeout: 240 seconds)
+<tld> set a bit from an interrupt-handler, that you need to read from a serial, then do the reading in main.
+<jadew> if the target uart is at least as fast as the gps one, just send them like UDR0 = UDR1, in the interrupt
+<jadew> that can be made into an even faster interrupt if you do it in asm
+<jadew> then you only have to deal with the 3rd one
+<RikusW> bit set can be replaced with polling UART status register directly...
+* spillere has quit (Ping timeout: 265 seconds)
+<RikusW> jadew: good idea
+<nickoe> hmm, okay
+<nickoe> I will work on it
+<RikusW> if the output and input serial ports are on the same speed you could connect the GPS tx to both rx lines instead
+* julmuri- (~kamazharr@e191.ip4.netikka.fi) has joined #avr
+<RikusW> sbas, waas, egnos, msas,gagan.... sounds like todler talk to me :-P its actually DGPS acronyms
+* julmuri has quit (Ping timeout: 246 seconds)
+* julmae- (~MAXHARRIE@e191.ip4.netikka.fi) has joined #avr
+* Santh (~oryx@2a01:e35:2439:8660:c10:3a13:cf49:acdc) has joined #avr
+* julmae has quit (Ping timeout: 240 seconds)
+* julmuri- has quit (Ping timeout: 260 seconds)
+* R0b0t1 has quit (Ping timeout: 244 seconds)
+* Alice3 (~Alice@cpc3-grim12-0-0-cust856.12-3.cable.virginmedia.com) has joined #avr
+* eni4ever (~enigma@79.114.69.163) has joined #avr
+* julmuri (~kamazharr@e191.ip4.netikka.fi) has joined #avr
+* alem0lars has quit (Ping timeout: 244 seconds)
+* julmuri has quit (Read error: Connection reset by peer)
+* Steffanx (~Steffanx@ip4da726ae.direct-adsl.nl) has joined #avr
+* julmuri (~kamazharr@e191.ip4.netikka.fi) has joined #avr
+* Theta9 (~thetawave@7-139-42-72.gci.net) has joined #avr
+* Theta9 has quit (Remote host closed the connection)
+* Theta9 (~thetawave@7-139-42-72.gci.net) has joined #avr
+* tobbor has quit (Remote host closed the connection)
+* tobbor (~rue_mohr@24-207-19-104.eastlink.ca) has joined #avr
+* tobbor has quit (Changing host)
+* tobbor (~rue_mohr@unaffiliated/ruemohr/bot/tobbor) has joined #avr
+* |akaWolf| (~akaWolf@188.134.9.161) has joined #avr
+* hackvana (~mjd@222.125.65.241) has joined #avr
+* CapnKernel (~mjd@222.125.65.241) has joined #avr
+<Roklobsta> to read a whiole NMEA string takes about 100ms at 4800bps.  Turn off everything except GPZDA and GPRMC as the rest is pretty much a waste.
+* eni4ever has quit (Quit: Leaving.)
+<Roklobsta> sometimes the default nema output strings bunch up and put over a second between subsquent RMC messages.
+<Roklobsta> I have torn my hair out over NMEA before.  stupid system.  someone should settle on fast binary
+<OndraSter> hehe
+<OndraSter> sprintf yo!
+<OndraSter> err
+<OndraSter> sscanf
+<RikusW> Roklobsta: Globaltop offers binary mode for PA6H GPS's
+* RLa (~RL@gprs-inet-65-111.elisa.ee) has joined #avr
+<RikusW> Roklobsta: there is a GGA and VTG string too
+* alem0lars (~alem0lars@host246-2-dynamic.11-87-r.retail.telecomitalia.it) has joined #avr
+
+			//uart2_puts(buffer);
+			//uart2_putc('\n');
+			//uart2_putc( (unsigned char)c );

@@ -1,0 +1,48 @@
+\begin{tikzpicture}[ auto,
+thick,                          %<--setting line style
+node distance=1.5cm,            %<--setting default node distance
+scale=1.2,                      %<--|these two scale the whole thing
+every node/.style={scale=1},    %<  |(always change both)
+>=triangle 45 ]
+
+%-- Blocks creation --%
+\draw
+% DIRECT TERM %
+node[shape=coordinate][](input1) at (0,0){}
+node[shape=coordinate][](feed) at (0.5,0){}
+node(sum1) at (2,0) [sum] {\si{\sum}}
+node(controller) at (4,0) [block]{\large \si{D(s)}}
+node(plant) at (6,0) [block]{\large \si{G(s)}}
+node[shape=coordinate][](DummyNode) at (5,-1.5){}
+node[shape=coordinate][](FeedbackNode) at (7.5,0){}
+;
+
+%-- Block linking --%
+% INPUT %
+\draw[-](input1)        -- node{\large \si{U(s)}}(feed);
+\draw[->](feed)         -- (sum1);
+
+% OUTPUT %
+\draw[-](plant)         -- (FeedbackNode);
+\draw[->](FeedbackNode) -- node {\large \si{Y(s)}} (9,0);
+
+% DIRECT TERM %
+\draw[->] (sum1)        -- (controller);
+\draw[->] (controller)  -- (plant);
+
+% FEEDBACKS %
+\draw[-] (FeedbackNode) |- (DummyNode);
+\draw[->] (DummyNode)   -| (sum1);
+
+%-- Nodes --%
+\draw%--------------------------------------------------------------
+node at (input1)        [shift={(-0.08, -0.02 )}] {\Large \textopenbullet}
+node at (FeedbackNode)  [shift={( 0.008, -0.02 )}] {\Large \textbullet}
+;
+%-- Summation signs --%
+\draw%--------------------------------------------------------------
+node at (sum1) [right = -6.6mm, below = .6mm] {$+$}
+node at (sum1) [right = -3mm, below = 3.9mm]  {$-$}
+;
+
+\end{tikzpicture} 

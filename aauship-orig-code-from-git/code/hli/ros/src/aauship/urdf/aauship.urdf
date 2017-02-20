@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot name="myfirst">
+  <link name="boat_link">
+    <visual>
+      <origin rpy="3.141592 0 -1.570796" xyz="0 0 0.07"/>
+      <geometry>
+        <mesh filename="package://aauship/urdf/aauship.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+</robot>

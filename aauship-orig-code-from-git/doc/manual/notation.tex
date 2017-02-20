@@ -1,0 +1,48 @@
+\section{Notation}
+For convince this section defines notation that is used throughout
+this manuscript.
+
+\subsection{Reference Frames}
+When working with dynamical systems that move in space, such as the
+ship, it is convenient to work with different frames of reference, and
+this means that a proper notation has to be used.
+
+A more detailed explanation of the reference frames can be found in
+\citep{fossen}, whilst this is merely a reference for the definitions.
+
+Two types of reference frames is generally used, which are the
+Earth-Centered Reference Frames and the Geographic Reference Frames.
+
+\subsubsection{Earth-Centered Reference Frames}
+\begin{description}
+	\item[ECI:] \acl{ECI} $\{i\} = (x_i, y_i, z_i)$
+	\item[ECEF:] \acl{ECEF} $\{e\} = (x_e, y_e, z_e)$
+\end{description}
+
+\subsubsection{Geographic Reference Frames}
+\begin{description}
+	\item[NED:] \acl{NED} $\{n\} = (x_n, y_n, z_n)$
+	\item[BODY:] body-fixed reference frame $\{b\} = (x_b, y_b, z_b)$
+\end{description}
+
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{llccc}
+		\toprule
+		    & & Forces and & Liner and          & Positions and  \\
+		DOF & & moments    & angular velocities & Euler angles   \\ 
+		\midrule
+		1 & motion in the $x$ direction (surge)       & $X$ & $u$ & $x$ \\
+		2 & motion in the $y$ direction (sway)       & $Y$ & $v$ & $y$ \\
+		3 & motion in the $z$ direction (heave)       & $Z$ & $w$ & $z$ \\
+		4 & rotation about the $x$ axis (roll, heel)  & $K$ & $p$ & $\phi$ \\
+		5 & rotation about the $y$ axis (pitch, trim) & $M$ & $q$ & $\theta$ \\
+		6 & rotation about the $z$ axis (yaw)         & $N$ & $r$ & $\psi$ \\
+		\bottomrule
+	\end{tabular}
+	\caption{\cite{sname1950} notion for marine vessels, from
+	\citep[table~2.1]{fossen}}
+	\label{tab:sname}
+\end{table}
+

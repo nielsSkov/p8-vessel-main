@@ -1,0 +1,37 @@
+%preamble - package inclusion and set up
+\input{setup/preamble.tex}
+
+%macros - please read this file
+\input{setup/macros.tex}
+              
+\begin{document}       % TIP: If you are using TeXstudio you can open
+\tableofcontents       %      the file by Ctrl+LeftClick on setup/macros.tex
+\pagebreak             %      If the file doesn't exist, you will be asked
+                       %      weather or not you want to create it.
+
+%||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+%|||||||                 Example Inputs                  ||||||||
+%||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+%|||||||                                                 ||||||||
+             \input{chapters/aFigureSample.tex}         %|||||||
+             \input{chapters/bTableSample.tex}          %|||||||
+             \input{chapters/cEquationSample.tex}       %|||||||
+             \input{chapters/dTikzSample.tex}           %|||||||
+             \input{chapters/eCodeSample.tex}           %|||||||
+%|||||||                                                 ||||||||
+%||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+%||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+%---------- Chapter 1 ---------------------------------------- Introduction
+\input{chapters/chapter1/aChapters1.tex}
+
+%---------- Appendix A ---------------------------------------- Test Title
+\input{appendix/aTest.tex}
+
+%%% BIBLIOGRAPHY %%%
+\printbibliography
+
+%%% LIST OF CORRECTIONS %%%
+\listoffixmes
+
+\end{document}
