@@ -1,0 +1,10 @@
+\section{Strategy 3: Multi Path Following}
+Multi paths, or individual paths, for the vessels is where the agents follow their respective paths with respect to time along the path. This needs to make a formation for the vessels. They might only need to know from each other how far they are on their respective paths, such that every agent has a time depending factor on the path. If every agent fulfils its time dependency, this ensures, also by design of the path, that no collision will occur. The paths for the individual agents can be designed from the trajectory of the leader with an offset both in distance in a direction and a time. The time dependencies can make the following agents lack in time thus make this formation as a echelon formation, and the distance with a direction spans the formation itself. The different positions for the $i$th agent will then need to fulfil that the position is the desired position at a specific time
+\begin{align}
+\eta_d(t) = \eta(t)
+\end{align}
+where the error in position needs to be zero, $e_\eta(t) = \eta_d(t) - \eta(t) = 0$. The same needs to be fulfilled for the heading of the agents
+\begin{align}
+\psi_d(t) = \psi(t)
+\end{align}
+where the error in heading needs to be zero, $e_\psi(t) = \psi_d(t) - \psi(t) = 0$. When these two parameters given at the path are fulfilled the group of agents are said to be in formation. This formation strategy will not be tested as it did not get the highest rating from the analysis in the decision table \ref{tab:decision-matrix}. Though it can be a preferable way of designing the formation if the path can be generated to the specific case.

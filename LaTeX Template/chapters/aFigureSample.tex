@@ -1,0 +1,78 @@
+\chapter{Figure Sample}
+
+\begin{figure}[H]                                         %   File-type can be specified
+  \includegraphics[width=.4\textwidth]{figures/filename}  %<--but is not needed.
+  \caption{This image is clearly too small, remember to scale appropriately \fxnote{Remember source}}
+  \label{fig:FigureLABEL}  %<--give the figure a label, so you can reference!
+\end{figure}               %   For the label to work it must be under the caption.
+
+% Fxnotes will not compile properly inside the figure, only in the caption.
+% When \fxnote{} is used in caption, it does not show in a footnote as it normally 
+% would, it does however appear in list of corrections.
+
+\autoref{fig:FigureLABEL} $\leftarrow$ use autoref, unless you are referring to multiple pictures, then do like this: \autoref{fig:HbridgeClokwise4Q} and \ref{fig:HbridgeCounterClokwise4Q}.
+
+%Do NOT use \vspace{length}, \hspace{length} or \noindent etc. unless exceedingly necessary - LaTeX is a markup language, let it do its job.
+\vspace{.5cm}
+\noindent
+%
+%--------- BIBLIOGRAPHY REF EKSAMPLE -----------------------------------
+This reference only represents this line since it is before the punctuation mark\cite{YDing}. This next reference however represents the entire section. That is, all of the preceding sentences in the entire section. This is due to the fact that it is now after the punctuation mark in the end of the section (this is not used in the middle of a section!).\cite{YDing}
+
+%>>PLEASE ALSO READ THE NOTE IN bibliography/bibliography.bib<<
+
+Here is a way to make two images appear on the side of each other. Also, if you modified an image, this is how you properly refer to its original source:
+
+\begin{figure}[H]
+    \subcaptionbox  %<--use captionbox instead if no global caption is needed
+    {               %                                \%-%-%-%-%-%-%\
+      Clockwise 4Q operation.\newline                              %\
+      \emph{Edited from image by Biezl.\cite{Biezl}}                %\
+      \label{fig:HbridgeClokwise4Q}                                  %\
+    }                                                                 %\
+    {                                                                  %\
+      \includegraphics[width=.46\textwidth]{HbridgeClockwise4Q}         %\
+    }                                                                    %\
+    \hspace{5pt}                                                          %\
+    \subcaptionbox  %<-----------------------------------------------------%\
+    {                                                                       %\
+      Counterclockwise 4Q operation.\newline                                 %\
+      \emph{Edited from image by Biezl.\cite{Biezl}}                          %\
+      \label{fig:HbridgeCounterClokwise4Q}                                     %\
+    }                                                                           %\
+    {                                                                            %\
+      \includegraphics[width=.46\textwidth]{HbridgeCounterClockwise4Q}            %|
+    }                                                                             %|
+    \caption{The 4 quadrant H-bridge configuration shown in both directions.}%<-%-/
+    \label{fig:Hbridges}
+\end{figure}
+
+As seen \autoref{fig:HbridgeCounterClokwise4Q} can be referred to on its own, or you can use \autoref{fig:Hbridges} to refer to both \autoref{fig:HbridgeClokwise4Q} and \autoref{fig:HbridgeCounterClokwise4Q}.
+
+If the figures are not directly related you might not want to use \textbf{(a)} and \textbf{(b)}, but instead give each figure their own label, here is an example:
+
+\begin{figure}[H]
+    \captionbox
+    {
+      Clockwise 4Q operation.\newline
+      \emph{Edited from image by Biezl.\cite{Biezl}}
+      \label{fig:HbridgeClokwise4Q2}
+    }
+    {
+      \includegraphics[width=.46\textwidth]{HbridgeClockwise4Q}
+    }
+    \hspace{5pt}
+    \captionbox
+    {
+      Counterclockwise 4Q operation.\newline
+      \emph{Edited from image by Biezl.\cite{Biezl}}
+      \label{fig:HbridgeCounterClokwise4Q2}
+    }
+    {
+      \includegraphics[width=.46\textwidth]{HbridgeCounterClockwise4Q}
+    }
+\end{figure}
+
+In this case \autoref{fig:HbridgeClokwise4Q2} can be referred to without involving \autoref{fig:HbridgeCounterClokwise4Q2}.
+
+\pagebreak

@@ -1,0 +1,7 @@
+Instructions for latex on windows
+
+1.  Install texlive via install-tl.exe from tug.org.
+2a. Inatall inkscape with the installer option from the site.
+2b. Check that your path in make.bat is where inkscape.exe is located
+3.  Remember to build the manual before building thesis 
+4.  Use the make.bat file to build

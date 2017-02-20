@@ -1,0 +1,228 @@
+\chapter{Modelling}
+\label{ch:modelling}
+\head{This chapter describes the modelling of AAUSHIP. This is
+necessary to be able to use model based control algorithms and
+estimators.}
+
+\section{Hydrodynamic Modelling}
+Hydrodynamic added mass is defined as the mass added to a system due to an accelerating or decelerating body that needs to move a volume of the surrounding fluid as it moves through it. To this is said that the object and fluid is not able to occupy the same physical space simultaneously. An overall model can be given as:
+\begin{align}
+M_A \dot \nu_r + C_A(\nu_r)\nu_r + D(\nu_r)\nu_r + g(\eta_r) = \tau
+\label{eq:hydmodel}
+\end{align}
+\nomenclature{$M_A$}{The added mass matrix}
+where
+\begin{align}
+&M_A \text{ is the added mass matrix from the system}\nonumber\\
+&C_A \text{ is the added mass matrix due to the Coriolis force}\nonumber\\
+&D(\nu) \text{ is a combination of the potential and viscous damping matrices}\nonumber\\
+&g(\eta) \text{ is the restoring forces, which is dependent on the position of the vessel}\nonumber\\
+&\tau \text{ is control and propulsion forces}\nonumber\\
+&\nu \text{ is the velocities of the vessel in all directions and moments}
+\end{align}
+
+\section{Rigid Body Modelling}
+The rigid body is used to model the physics of the vessel. It is an idealisation of the solid body from where the physical motions of the vessel are to be derived. Translational motion and rotational motion can be derived by analysis of this, and by ~\citep{sname1950} and ~\citep[sec. (3.3.1)]{fossen} written in component form as:
+\begin{align}
+f^b_b &= [X,Y,Z]^T & &- \text{force through } o_b \text{ expressed in } \{b\}\\
+m^b_b &= [K,M,N]^T & &- \text{moment about } o_b \text{ expressed in } \{b\}\\
+v^b_{b/n} &= [u,v,w]^T & &- \text{linear velocity of } o_b \text{ relative } o_n \text{ expressed in } \{b\}\\
+\omega^b_{b/n} &= [p,q,r]^T & &- \text{angular velocity of } {b} \text{ relative to } \{n\} \text{ expressed in } \{b\}\\
+r^b_g &= [x_g,y_g,z_g]^T & &- \text{vector from } o_b \text{ to CG expressed in } \{b\}
+\end{align}
+
+The rigid body forces are written as:
+\begin{align}
+M_{RB} \dot \nu_r + C_{RB}(\nu_r)\nu_r = \tau_{RB}
+\label{eq:rigidmodel}
+\end{align}
+where
+\begin{align}
+M_{RB} &\text{ is the system inertia matrix}\nonumber\\
+C_{RB} &\text{ is coriolis-centriopedal matrix}\nonumber\\
+\tau_{RB} &\text{ is a lumped force combined of } \tau_{\text{hyd}} + \tau_{\text{hs}} + \tau_{\text{wind}} + \tau_{\text{wave}}\nonumber
+\end{align}
+where in $\tau_{RB}$
+\begin{align}
+\qquad \tau_{\text{hyd}} &\text{ is the hydrodynamic force}\nonumber\\
+\qquad \tau_{\text{hs}} &\text{ is the hydrostatic force}\nonumber\\
+\qquad \tau_{\text{wind}} &\text{ is the wind force}\nonumber\\
+\qquad \tau_{\text{wave}} &\text{ is the wave force}\nonumber
+\end{align}
+
+\section{Total Model of Vessel}
+\begin{align}
+\underbrace{M_{RB} \dot \nu_r + C_{RB}(\nu_r)\nu_r}_{\text{rigid-body forces}} + \underbrace{M_A \dot \nu_r + C_A(\nu_r)\nu_r + D(\nu_r)\nu_r + g(\eta_r)}_{\text{hydrodynamic forces}}  = \tau + \tau_{RB}
+\label{eq:totmodel}
+\end{align}
+Since the vessel within this project is of smaller scale, the $C_A$ and $C_{RB}$ from \ref{eq:hydmodel} and \ref{eq:rigidmodel} are neglected ~\citep[eq. (2.23)]{fullactuatship}. The model also builds on the assumption that the vessel will manoeuvre at lower speed, being $|u| < 2.0$. By assuming this the terms of low speed can be applied, which implies that some of the forces and moments can be linearized about $\nu = 0$ and that the pitch and roll angles can be linearized about the zero angle, their steady state \citep[][p.174-175]{fossen}. $M_A$ is the added mass and is as a start omitted due to the tests needs to be made as an object moving through the water with some drag, mass damper test. If the model needs to be further improved in the process this is a place to start modelling. The coefficients of $M_A$ are rather inconvenient to determine without advanced equipment like a towing tank, where constant velocity can be applied and measure drag and more in all directions and moments. $C_A$ and $C_{RB}$ represents forces due to a rotation of the body frame, \{$b$\}, about the inertial frame, the NED frame. These are omitted as well due to the small vessel where the body frame is placed in a predefined local frame which acts as the NED frame. This reduces equation \ref{eq:totmodel} down to the following:
+\begin{align}
+M_{RB} \dot \nu_r + D(\nu_r)\nu_r + g(\eta_r) = \tau_{RB} + \tau
+\label{eq:reducedmodel}
+\end{align}
+The damping matrix which contains the coefficients of the drag is denoted the hydrodynamic damping matrix. This consists both of $D$ which is the linear damping matrix due to potential damping and possible skin friction with the water and $D_n(\nu_r)$ which is the nonlinear damping matrix due to quadratic damping and higher order terms. This can be expressed as $D(\nu_r) = D + D_n(\nu_r)$. This will, as a start, be modelled as the linear part, being potential and viscous damping. At higher velocities will the nonlinear part become more dominant due to the quadratic terms of the velocity, thus is mostly used with faster vessels. The linear damping matrix $D$ contributes more at lower speed manoeuvrings and stationkeeping, $|u| < 2 \ ^\text{m}/_\text{s}$ ~\citep[fig. (7.2)]{fossen}. Therefore is the damping matrix $D$ used, and is expressed by ~\citep[eq. (6.62)]{fossen} for a 6 \ac{DOF} system to be:
+\begin{align}
+D =-
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0 & 0\\
+0 & Y_v & 0 & Y_p & 0 & Y_r\\
+0 & 0 & Z_w & 0 & Z_q & 0\\
+0 & K_v & 0 & K_p & 0 & K_r\\
+0 & 0 & M_w & 0 & M_q & 0\\
+0 & N_v & 0 & N_p & 0 & N_r
+\end{bmatrix}
+\label{eq:6dofd}
+\end{align}
+
+
+The rigid-body system matrix of the vessel is given for a 6 \ac{DOF} system by ~\citep[eq. (3.44)]{fossen} as:
+\begin{align}
+M_{RB} &=
+\begin{bmatrix}
+m\boldsymbol{I}_{3x3} & -m\boldsymbol{S}(r^b_g)\\
+-m\boldsymbol{S}(r^b_g) & \boldsymbol{I}_b
+\end{bmatrix}
+\nonumber\\
+&=
+\begin{bmatrix}
+m & 0 & 0 & 0 & mz_g & -my_g\\
+0 & m & 0 & -mz_g & 0 & mx_g\\
+0 & 0 & m & my_g & -mx_g & 0\\
+0 & -mz_g & my_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -mx_g & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & 0 & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
+\end{align}
+
+The restoring forces acting on the vessel, while not in zero angle position in pitch and roll, is given by the coefficients of the $g$ matrix. The restoring forces acts on the vessel when it is perturbed away from the steady state angle in both pitch and roll. Then vessel will, due to Archimedes law, move back into steady state. The change in mass under waterline will rotate back to steady state and the change in angle will become zero. The coefficients in $g$ is the nonlinear terms contributing to the restoring force. Though it can be convenient to use the linear approximation, defined for a 6 \ac{DOF} system by ~\citep[eq. (4.22)(4.26)]{fossen}, as:
+\begin{align}
+g(\eta) \approx G\eta
+\end{align}
+where $G$, for an asymmetric vessel, is defined as:
+\begin{align}
+G = -
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & -Z_z & 0 & -Z_\theta & 0\\
+0 & 0 & 0 & K_\phi & 0 & 0\\
+0 & 0 & -M_z & 0 & M_\theta & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
+\end{bmatrix}
+\end{align}
+This reduction is done under the assumption of small angles. Therefore is the water plane area approximately the same, which makes the of this a constant. By doing this it is only relevant to look at the heave, roll and pitch restoring forces, which can be used in a linearised model.
+
+\subsection{Model reduction}
+The model will be reduced to a 5 \ac{DOF} system due to the fact that the
+vessel's buoyancy cannot be controlled as such. The vessel will always
+be on the water surface and this removes the degree a freedom which
+is the heave, the change of $z$ position of the vessel. A 5 \ac{DOF}
+system will be modelled as:
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+m & 0 & 0 & mz_g & -my_g\\
+0 & m & -mz_g & 0 & mx_g\\
+0 & -mz_g & I_x & -I_{xy} & -I_{xz}\\
+mz_g & 0 & -I_{yx} & I_y & -I_{yz}\\
+-my_g & mx_g & -I_{zx} & -I_{zy} & I_z
+\end{bmatrix}
+\label{eq:rigidbody}
+\end{align}
+and
+\begin{align}
+D = -
+\begin{bmatrix}
+X_u & 0 & 0 & 0 & 0\\
+0 & Y_v & Y_p & 0 & Y_r\\
+0 & K_v & K_p & 0 & K_r\\
+0 & 0 & 0 & M_q & 0\\
+0 & N_v & N_p & 0 & N_r
+\end{bmatrix}
+\label{eq:damping-matrix}
+\end{align}
+and
+\begin{align}
+G = -
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & K_\phi & 0 & 0\\
+0 & 0 & 0 & M_\theta & 0\\
+0 & 0 & 0 & 0 & 0\\
+\end{bmatrix}
+\label{eq:restoreforce}
+\end{align}
+where the heave are neglected from the 6 \ac{DOF} system. In the principle could a 3 \ac{DOF} system be enough to make the control to the vessel and make it manoeuvre in the water, but as the scope is to exploit the sonar to map the seabed it would be beneficial to implement the roll and pitch as well and make the system as a 5 \ac{DOF}. The $G$ matrix has been reduced under the assumption that there exists yz-symmetry, which is a good assumption based on the design of the vessel.
+
+\section{Identification of Hydrodynamic Derivatives}
+\label{sec:hydrocoeff}
+The linear model \eqref{eq:reducedmodel1}, which is used to model AAUSHIP, consists of the mass matrix $M_{RB}$, the damping matrix $D$ and the restoring force matrix $G$. This makes the system as:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau_{RB} + \tau
+\label{eq:reducedmodel1}
+\end{align}
+The coefficients of the model needs to be determined before the model can be simulated and implemented. These coefficients can be determined in multiple ways. Often ship design companies are able to use \ac{CFD} to determine the coefficients, or make use of a towing tank to determine the coefficients. These applications are often expensive and proprietary. So a third method to do this is to perform tests to do approximations of the coefficients. To do so some assumptions needs to be made. The model is defined as:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau_{hyd} + \tau_{hs} + \tau_{wind} + \tau_{wave} + \tau
+\end{align}
+Since the tests will be performed in still water some of the forces can be neglected. This makes $\tau$, $\tau_{hyd}$ and $\tau_{hs}$ the only forces to be taken into account to perform the tests. This is the input to the vessel and the forces acting on the vessel while moving, and after reduction make the system as \ref{eq:testsystem}, which is assumed while tests are performed:
+\begin{align}
+M_{RB} \dot \nu_r + D\nu_r + G\eta = \tau_{hyd} + \tau_{hs} + \tau
+\label{eq:testsystem}
+\end{align}
+The system is modelled as a 5 \ac{DOF} system and the necessary coefficients are found in appendix \ref{app:damping}. In the appendix are some tests described and performed to be able to determine the coefficients for the model. This includes both the rigid body mass, the damping matrix and the restoring force matrix.
+
+% While testing, as seen in appendix \ref{app:damping}, the vessel will in one test surge straight forward, in the next only perform sway and in the last only perform a rotation. This will, in the second test, make the terms regarding rotation be zero. Therefore it becomes possible to determine the remaining coefficients. This is also done in the last test while rotating. By making the vessel be in the same position, then any movement in x and y can be neglected. This makes it possible to determine the damping while rotating. After these three tests it is possible to determine the last cross terms from the system. The equations to determine will look like:
+% \begin{align}
+% m \ddot x - X_u \dot x = \tau\\
+% m \ddot y - Y_v \dot y = \tau\\
+% I_z\ddot \psi - N_r \dot \psi = \tau
+% \end{align}
+% After determine the damping coefficients $X_u$, $Y_v$ and $N_r$ it is possible to determine the last parameters from the original system from \ref{eq:syseq}, and can be seen here:
+% \begin{align}
+% m \ddot y + mx_g\ddot\psi - Y_v \dot y - Y_r \dot \psi = \tau\\
+% mx_g \ddot y + I_z\ddot \psi - N_v \dot y - N_r \dot \psi = \tau
+% \end{align}
+% $Y_r$ and $N_v$ are the only unknowns and the rest to be determined. The performed tests to measure these coefficients can be found in appendix \ref{app:damping}.
+
+The final system ends up being as follows.
+
+The rigid body mass matrix have been weighted and measured, and is estimated to be as in equation \ref{eq:Mrb}.
+\begin{align}
+M_{RB} =
+\begin{bmatrix}
+13 & 0 & 0 & -0.39 & 0\\
+0 & 13 & 0.39 & 0 & -0.39\\
+0 & 0.39 & 0.06541 & -0.01260 & -0.05359\\
+-0.39 & 0 & -0.01260 & 1.08921 & -0.00108\\
+0 & -0.39 & -0.05359 & -0.00108 & 1.10675
+\end{bmatrix}
+\label{eq:Mrb}
+\end{align}
+
+The linear damping matrix, which holds the translational damping and cross terms, have been estimated to be as in equation \ref{eq:Dlin}.
+\begin{align}
+D = 
+\begin{bmatrix}
+2.86 & 0 & 0 & 0 & 0\\
+0 & 32.5 & -0.00503 & 0 & 0.09263\\
+0 & -0.975 & 0.1094 & 0 & 0.01273\\
+0 & 0 & 0 & 7.2030 & 0\\
+0 & 0.975 & -0.00069 & 0 & 0.26285
+\end{bmatrix}
+\label{eq:Dlin}
+\end{align}
+
+Lastly is the restoring force matrix, which is the one bringing the vessel back to steady state in pitch and roll. This has been estimated to be as in equation \ref{eq:restore}.
+\begin{align}
+G = 
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0\\
+0 & 0 & 6.9736 & 0 & 0\\
+0 & 0 & 0 & 131.8316 & 0\\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\label{eq:restore}
+\end{align}

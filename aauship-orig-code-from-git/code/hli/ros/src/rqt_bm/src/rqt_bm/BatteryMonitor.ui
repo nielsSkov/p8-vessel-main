@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>453</width>
+    <height>264</height>
+   </rect>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>2</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Battery Monitor</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Bank 1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar11">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar12">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar13">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar14">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Bank 2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar21">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar22">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar23">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar24">
+           <property name="minimum">
+            <number>3600</number>
+           </property>
+           <property name="maximum">
+            <number>4200</number>
+           </property>
+           <property name="value">
+            <number>3600</number>
+           </property>
+           <property name="invertedAppearance">
+            <bool>false</bool>
+           </property>
+           <property name="format">
+            <string>%v mV</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Enable pooling</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonSample">
+         <property name="text">
+          <string>Sample now</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

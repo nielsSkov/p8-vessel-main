@@ -1,0 +1,35 @@
+\section{Equation Sample} %<--In American English all Important Words in
+                          %   Headlines are with Big Letters
+
+% \unit is a macro. It uses SI units and aligns all the units neatly :)
+
+\textbf{A normal equation:}
+\begin{flalign}
+  J_m \cdot \dot{\omega}_m(t) &= \tau_m(t) - B_m \cdot \omega_m(t) - r_m \cdot f_c(t)& \unit{N \cdot m}
+  \label{eq:MotorGearNewtonSecLaw}
+\end{flalign}
+%
+\begin{where}
+  \va{ J_m               }{is the motor's inertia}                     {kg \cdot m^2}
+  \va{ \omega_m(t)       }{is the angular velocity of the motor}       {rad \cdot s^{-1}}
+  \va{ \dot{\omega}_m(t) }{is the angular acceleration of the motor}   {rad \cdot s^{-2}}
+  \va{ \tau_m(t)         }{is the torque delivered by the motor}       {N \cdot m}
+  \va{ B_m               }{is the motor's friction coefficient}        {N \cdot m \cdot s \cdot rad^{-1}}
+  \va{ r_m               }{is the radius of the gear, $G_m$}           {m}
+  \va{ f_c(t)            }{is the contact force between the two gears} {N}
+\end{where}
+
+\textbf{If you need to write something with numbers:} %<--Do not use \textbf{} as headlines, it is bad practice
+                                                      %   use instead \chapter{}, \section{}, \subcaption{}, \subsubsection{}
+                                                      %   in that order - never a \subsubsection{} directly under a \section{}
+\begin{flalign}
+  B      &= \num{2,2}\cdot 10^{-6}  \ \si{N\cdot m \cdot rad^{-1} \cdot s}& \label{eq:eq2} \\ %<-- if you want two equations to
+  \tau_c &= \num{0.0016}            \ \si{N\cdot m}                       & \label{eq:eq3}    %    allign in one envirenment,
+\end{flalign}                                                                              %    remember \\
+%using \num{} ensures the same use of decimal point throughout the repport
+%should you want to change it, the option is set in the preamble, just change 'period' to 'comma':
+%\sisetup{decimalsymbol=period}
+
+\autoref{eq:MotorGearNewtonSecLaw} $\leftarrow$ use autoref, unless you are referring to multiple equations, then do like this: \autoref{eq:eq2} and \ref{eq:eq3}.
+
+\pagebreak

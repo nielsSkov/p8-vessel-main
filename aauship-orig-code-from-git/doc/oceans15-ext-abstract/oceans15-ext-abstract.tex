@@ -1,0 +1,146 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc} % So we can input Nicks name in the paper title!
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb} % Added so we can do pretty math equations.
+\usepackage{geometry}
+\usepackage{lipsum}
+\geometry{left=3cm,right=3cm,bottom=4cm}
+\begin{document}
+
+\title{\vspace{-2cm}Autonomous Harbour Monitoring\\
+\vspace{0.3cm}\small{Extended Abstract}}
+\author{Nick Østergaard \and Jeppe Dam \and Jesper A. Larsen}
+\maketitle
+
+%\begin{center}
+%\vspace{-0.7cm}
+%Group 12gr730
+%\end{center}
+%\thispagestyle{empty}
+
+%\paragraph{Background}
+The background for the formation control subject of this project
+originate in a collaboration with The Port pf Aalborg.
+
+The Port of Aalborg is one of the major ports in Denmark. It has a vision to become one of the most
+intelligent harbours, meaning that the entire process, from ships approaching the harbour, through landing and loading of goods to the departure again should be optimized as well as possible. This will, among other
+things, include autonomous piloting of cargo ships bringing cargo to
+and from Aalborg. As part of the harbour protection it is important
+for the Port of Aalborg to ensure that the incoming ships are able to
+get safely to the docking area in the harbour. This means that for the
+cargo ships to enter the harbour the seabed needs to be deep enough
+and the sand not to build up larger bars or move the channel
+unexpectedly.
+
+Currently bathymetry surveys are performed manually with a small
+manned survey boat equipped with a multi beam sonar, scanning some
+area of interest, which is a smaller fraction of the whole Limfjord.
+
+This is done with a period between three months up to three years,
+depending on how active the seabed is. If the level is too shallow,
+such that the cargo ships cannot enter, it is the Port of Aalborg that
+needs to clear the area and ensure safe travel for their customers.
+
+The work within this project is carried out i collaboration with the Port of
+Aalborgs surveying group. The development and implementation of
+the AAUSHIP project will fit very well into this environment and be of
+good aid for the Port of Aalborg.
+
+The first focus point of the project is to model and test the
+prototype of the AAUSHIP and then extend the fleet with duplicates of
+the first AAUSHIP. The ship needs to follow a trajectory and thereby
+sail within a predetermined location of interest. The second focus
+point is to implement formation control of a fleet of AAUSHIP's and
+test this at the location of interest. An area of the harbour has been
+designated as a use case to test the results against.
+
+%\paragraph{Method}
+The AAUSHIP is modelled by a 5 degree of freedom (DOF) model, which
+differs from a 3 DOF model by including the pitch and roll also.
+These are taken into account due to the fact that the AAUSHIP runs
+with single beam sonars and therefore it is important to know the
+relative pitch and roll angles. The model is designed from the inertia
+matrix and the masses of the AAUSHIP, it includes the damping which is
+linearised at the operating velocity both in surge and sway, the
+restoring forces that brings the vessel to steady state when pitching
+and rolling and lastly the input forces from the actuators mounted at
+the vessel. This results in a satisfying model with 5 DOF, which suits
+the purpose of the project.
+
+From this model a simulation environment is created, such that
+development on other parts of the project is easily tested.  Different
+estimators have been implemented in the system to estimate the states
+needed in the model.
+
+%This includes a Attitude and Heading Reference
+%System and a Kalman Filter. Both filters are used to estimate the
+%heading of the AAUSHIP, and the Kalman Filter is used to the main
+%states estimates. The model is implemented with Robot Operating System
+%(ROS) and a simulation feature is available within both ROS and Matlab.
+
+A fleet of independent vessels could perform the bathymetry scannings
+without being in any kind of formation to perform the scannings all
+over the fjord, but since the Limfjord is rather trafficated with cargo
+ships it might not be of benefit to have the AAUSHIP as a relatively
+small single vessel. If the AAUSHIPs are working together in one
+specific area of interest to scan, then it could be an advantage for
+the rest of the maritime traffic that these autonomous ships were
+operating as one unit to make the navigation decisions easier for the
+other traffic.
+
+To solve the task of collecting the ships in a smaller neighbourhood
+not to confuse other maritime traffic, a solution is proposed to
+control the ships by the means of formation control. This will mean
+that the AAUSHIPs will operate in a defined way that are easier to predict
+for observers.
+
+The bathymetry scaninngs needs to be performed in the Limfjord but
+also in the port facilities. This will also include the seabed
+level inside the harbour such that also smaller vessels have the
+opportunity to navigate into the harbour. To manoeuvre inside the
+harbour can be difficult for the AAUSHIPs due to smaller working areas
+and objects in the way. These objects can be other ships being docked
+or testing facilities in the harbour, that is needed to avoid. To
+address this problem the AAUSHIPs will be controlled by a potential
+field approach that by its nature includes a dynamic way of including
+object avoidance.
+
+The results of the project is a complete survey of a
+bounded area from the use case given by the Port of Aalborg. This is
+used in a comparison with data measured from the Port of Aalborg to
+verify the AAUSHIP survey system. This map
+needs to be measured by two or three autonomous vessels that sails in
+a predetermined formation that is currently being investigated with
+respect to the area of interest.
+
+The current results shows that the implementation of formation control
+with potential fields has strong application benefits both in the
+fjord and within the harbour and therefore is this the analysed
+strategy.
+
+%From this will three different
+%candidates for formation strategies be analysed, implemented and
+%tested to verify the most promising result of the task resulting in a
+%formation that optimises the scanning process for the Port of Aalborg.
+
+
+ 
+
+
+
+\end{document}
+
+%Here's a suggestion as to what an extended abstract should contain:
+%
+%    Background - A little history about who's done what and how your work fits in with it.
+%    Aim - What you're trying to tell the audience that they don't already know (e.g. Your story.)
+%    Method - Why the audience should believe that the results you've got aren't made up or flawed
+%    Results - Evidence that you've come up with that confirms your story
+%    Conclusion - Recap of your story and its implications
+%    Limitations - Why someone might doubt your story and what you've done to get rid of as much doubt as possible.
+%
+%What if I'm presenting a review of my progress to date and I have no original research?
+%Method = literature survey.
+%Results = what you've read.

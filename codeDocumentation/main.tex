@@ -1,0 +1,23 @@
+%preamble - package inclusion and set up
+\input{setup/preamble.tex}
+
+%macros - please read this file
+\input{setup/macros.tex}
+
+\begin{document}
+\tableofcontents
+\pagebreak
+
+%\pagenumbering{gobble}
+
+%---------- Structure ----------------------------------------
+\input{texFiles/codeBase.tex}
+\input{texFiles/structure.tex}
+
+%%% BIBLIOGRAPHY %%%
+\printbibliography
+
+%%% LIST OF CORRECTIONS %%%
+\listoffixmes
+
+\end{document}
