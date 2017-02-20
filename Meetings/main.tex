@@ -8,48 +8,61 @@
 \renewcommand\figurename{Figur}
 \renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 8th of February of 2017}
-\subsection{Project Plan}
+%\section*{Supervisor meeting\\ \small Tuesday, 14th of February of 2017}
+\section*{Sensor Fusion Research}
+\subsection{Wikipedia}
 \begin{itemize}
-	\item Handle disturbances fits more to the semester requirements than trying to avoid obstacles.
-	\item Following a route can be done in many ways, with way-points, trajectories or others. We should decide which to use.
+	\item https://en.wikipedia.org/wiki/Extended\_Kalman\_filter
+	\item https://en.wikipedia.org/wiki/Kalman\_filter
+	\item In these two pages we can find the idea of what we need.
+\end{itemize}
+\subsection{GPS aided attitude and Heading Reference System Using MEMS Sensors}
+\begin{itemize}
+	\item Contains and explanation on how to use Kalman filter for a Micro Aerial Vehicle.
+	\item It only estimates three states, but the idea of it can be extracted. 
+	\item It includes a good model of the gyro and an incomplete one for the accelerometer.
+	\item Weird GPS model.
 \end{itemize}	
-\subsection{Organization of the controllers in Low Level/High Level}
+\subsection{Autonomous Navigation of a Small Boat using IMU/GPS/Compass}
 \begin{itemize}
-	\item In order to decide if we keep it as it is or put the inner loop in the arduino, we should look into the dynamics and the time to process in the high level processor.
+	\item It considers more states, but still only in a 2-D plane. Maybe we do not need to estimate every state in the system.
+	\item It includes a good model for the accelerometer and the GPS.
+	\item The explanation of the kalman filter is more or less what we need in theory, but it is quite messy.
+	\item The principle is: Make a model of the sensors which includes bias and noise for the accelerometers and gyro and noise for the GPS. Then make a model of the system (State Space) and include the sensor biases in the model as new states in some way.   
 \end{itemize}
-\subsection{Batteries and Power supplies}
+\subsection{INS/GPS Fusion Architectures for Unmaned Aerial Vehicles}
 \begin{itemize}
-	\item The batteries should be the same, but we can use the power supply for now.
+	\item Same gyro and acceleration model as those in the previous articles.
+	\item Good magnetometer model, I think.
+	\item It ends up with a 15 states Extended Kalman Filter. It is cumbersome to read, I don't know if we can get something out of the formula as it is there.
+	\item The approach is again similar to the previous articles an it seems to be the way to go.
 \end{itemize}
-\subsection{Model}
+\subsection{Adaptive Kalman Filter Based Navigation: An IMU/GPS Integration Approach}
 \begin{itemize}
-	\item We have a good simple starting model. It would be a good idea to keep it like this for now.
-	\item We are not able to control the other three degrees of freedom but we would get coupling dynamics through the extra equations.
-	\item The side-thrusters may not have any effect. Remove them if the goal is to sail and include them if it is to stay still.
-	\item We can reuse the parameters obtained from previous reports.
-	\item The simulation does not look correct now, it should be turning in a fixed circle at the end. 
-	\item The control problem can be solved with the three degree model.
+	\item Simpler explanation of the principle, but it is to simple as it does not include biases for sensors.
 \end{itemize}
-\subsection{Estimation}
+\subsection{GPS/IMU Data Fusion using Multisensor Kalman Filtering}
 \begin{itemize}
-	\item What you do is fusing all your sensors in order to get overall better position and direction. For example, you get a bias with the IMU which is corrected by the GPS.
-	\item For the estimation we need a six dimensional model in order to get a good estimation.
+	\item The equations for the filter are presented in a more detail way, but models for the sensors are not included.
+	\item Good for understanding how to set up the state/process model.
 \end{itemize}
-\subsection{GPS option}
+\subsection{Slides: Lecture Kalman Filter}
 \begin{itemize}
-	\item We could use an RTK GPS, which will give us a cm precision. It is more expensive and it requires radio-connection to a base station.
+	\item Simple explanation with a simple example. 
+	\item Good for understanding why the biases are included as states.
+	\item Example with a IMU and Gyro for estimating the attitude.
 \end{itemize}
-\subsection{Test suggestion}
+\subsection{A quaternion based Unscented Kalman Filter for Orientation tracking}
 \begin{itemize}
-	\item Drive in the parking lot and then check the position in the map. This could be used to test the estimation of the position.
+	\item Detailed, long and heavy explanation of unscented kalman filter, which is suitable for working with the system in non-linear form. 
+	\item The explanation uses quaternions in the paper.
 \end{itemize}
-\subsection{Miscellaneous}
+\subsection{A new Extension of the Kalman Filter to Nonlinear Systems}
 \begin{itemize}
-	\item We could start documenting the model.
-	\item 'Guidance and Control of Ocean Vehicles', 'Marine Craft Hydrodynamics and Motion Control' and 'Marine Control Systems and ...' are books that we can look into
+	\item General explanation of the Unscented Kalman Filter, just in case we need to look into it.
+	\item I do not think we should use this.
 \end{itemize}
-\subsection{Next Supervisor Meeting}
-Tuesday, 14th of February at 9:00
+%\subsection{Next Supervisor Meeting}
+%Wednesday, 22nd of February at 13:00
 
 \end{document}
