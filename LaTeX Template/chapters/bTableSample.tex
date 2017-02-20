@@ -1,0 +1,44 @@
+\section{Table Sample} %to view this sample properly in the code, the screen must be
+                       %wide enough, or you have to disable word-wrap in your editor.
+\begin{table}[H]
+\begin{tabular}{|l|p{5cm}|l|l|l|}
+  \hline %-----------------------------------------------------------------------------------
+  \textbf{No.} &\textbf{Description} &\textbf{Min} &\textbf{Max} &\textbf{Requirements}    \\
+  \hline %-----------------------------------------------------------------------------------
+  1            & Some Text           & Some Text   & Some Text   & Some Text               \\
+               &                     &             &             & Some More Text          \\
+               &                     &             &             & Text Text               \\
+               &                     &             &             & Text Text Text          \\
+  \hline %-----------------------------------------------------------------------------------
+  2            & Some Text           & Some Text   & Some Text   & Some Text               \\
+  \hline %-----------------------------------------------------------------------------------
+  3            & By specifying the
+                 width of a column
+                 (|p\{5cm\}|) the
+                 cells in that column
+                 will not exceed the
+                 specified width but         %Extra whitespace is used only for clarity
+                 instead expand              %and will not affect the compiled output.
+                 downward.
+                                     & Some Text           & Some Text   & Some Text       \\
+  \hline %-----------------------------------------------------------------------------------
+  4            & Some Text           & Some Text   & Some Text   & Some Text               \\
+  \hline %-----------------------------------------------------------------------------------
+  \multicolumn{2}{|l|}{Some Text}    & \multicolumn{3}{l|}{Some Text}                      \\
+  \hline %-----------------------------------------------------------------------------------
+  \multicolumn{2}{|l|}{Text Text}    & \multicolumn{3}{l|}{Text = Text}                    \\
+  \multicolumn{2}{|l|}{}             & \multicolumn{3}{l|}{Text = Text}                    \\
+  \multicolumn{2}{|l|}{}             & \multicolumn{3}{l|}{Text = Text}                    \\
+  \multicolumn{2}{|l|}{}             & \multicolumn{3}{l|}{Text = Text}                    \\
+  \multicolumn{2}{|l|}{}             & \multicolumn{3}{l|}{Text = Text}                    \\
+  \hline %-----------------------------------------------------------------------------------
+  \multicolumn{2}{|l|}{Some Text}    & \multicolumn{3}{l|}{Teeeexxtt}                      \\
+  \multicolumn{2}{|l|}{}             & \multicolumn{3}{l|}{\LaTeX}                         \\
+  \hline %-----------------------------------------------------------------------------------
+\end{tabular}
+\caption{This Is a Table\label{table:TableLABEL}}
+\end{table}
+
+\autoref{table:TableLABEL} $\leftarrow$ use autoref, unless you are referring to multiple tables, then do like this: \autoref{table:TableLABEL} and \ref{table:TableLABEL}.
+
+\pagebreak

@@ -1,0 +1,82 @@
+\begin{figure}[H]
+  \begin{tikzpicture}[ auto,
+                       thick,                         %<--setting line style
+                       node distance=2cm,             %<--setting default node distance
+                       scale=1.5,                     %<--|these two scale the whole thing
+                       every node/.style={scale=1.5}, %<  |(always change both)
+                       >=triangle 45 ]                %<--sets the arrowtype
+    \draw%-----------------------------------------------------------------------------------------
+    	%Drawing the Equation Blocks:
+    	
+    	%Naming the coordinate (0,0) input1, for later use:
+    	node[shape=coordinate][](input1) at (0,0){}
+  	
+    	%node(sum1)                       ...creates a node with name sum1
+    	%[sum, right of = input1]         ...create a sum-circle (defined in macros)
+    	%                                    to the right of the input node
+    	%{$\sum$}                         ...writes a summation symbol inside the circle
+    	node(sum1) [sum, right of = input1] {\si{\sum}}
+  	
+    	%at (4.5,0) [block]               ...creates block (as defined in macros) at (4.5,0)
+    	%{ $[...]$ }                      ...writes a transfer function in the block
+    	node(transferfunction) at (4.8,0) [block] {\large \si{\ \frac{a s + b}{c s^2 + d s + e}\ } }
+    
+      %node(integrate) at (6.8,0)       ...creates a node with name integrate @ (6.8,0)
+      %[block]                          ...creates a block (as defined in macros) @ specified node
+      %{\Large $\frac{1}{s}$}           ...writes an integrator in the block
+      node(integrate) at (7.8,0) [block] {\large \si{\frac{1}{s}}}
+    
+      %node(feedBack)                  ...creates node named feedBack
+      %[block, below of = block1]      ...creates block below block1
+      %{\Large$H(s)$}                  ...writes H(s) in the feed back block
+      node(feedBack) [block, below of = transferfunction] {\si{H(s)}}
+      
+    ;%---------------------------------------------------------------------------------------------
+    
+    %Joining the Blocks
+    %When using \draw with options like [->], each line must be enclosed as follows:
+    %\draw[..arrow/line..]  ..handelingOfArrow/Line..  ;
+    
+    %Naming the coordinate (9,0) output1:
+    \draw
+      node[shape=coordinate][](output1) at (9,0){}
+    ;
+    
+    % \draw[->](input1) --            ...draws a straight arrow from node with name: input1
+    % node {$X(Z)$}(sum1)             ...to the node with name: sum1 .. writes on arrow: X(s)
+  	\draw[->](input1) -- node {\si{X(s)}}(sum1);
+  	
+  	%same logic for the following as for the previous line
+    \draw[->](sum1) -- node {} (transferfunction);
+  	\draw[->](transferfunction) -- node {} (integrate);
+  	
+  	%\draw[->](feedBack)            ...draws an arrow from feedBack block
+  	%-| node{} (sum1)               ...makes a 90 degree turn and terminates @ node: sum1
+  	\draw[->](feedBack) -| node{} (sum1);
+
+  	%\draw[->] (integrate)          ...draws straight arrow from integrate
+  	%-- (output1)                   ...to (output1)
+  	%|-                             ...making a 90 degree turn @ (output1)
+  	%(feedBack)                     ...connects the arrow from (output1) to node: feedback
+  	\draw[-] (integrate) -- (output1);
+  	\draw[->] (output1) |- (feedBack);
+  	
+  	%Drawing output arrow from (output1) to (10.5,0)
+  	\draw[->](output1) -- node {\si{Y(s)}} (10.5,0);
+
+    %Drawing node(s) with \textbullet
+    %[shift={... adjusts the position of the bullets
+    \draw%--------------------------------------------------------------
+      node at (input1)  [shift={(-0.08, -0.02 )}] {\large \textopenbullet}
+    	node at (output1) [shift={( 0.008, -0.02 )}] {\textbullet}
+    ;%------------------------------------------------------------------
+
+    %Drawing + and - @ sum-block
+    \draw%--------------------------------------------------------------
+      node at (sum1) [right = -6.5mm, below = .6mm] {$+$} %<--Plus
+      node at (sum1) [right = -3mm, below = 3.9mm]  {$-$} %<--Minus
+    ;%------------------------------------------------------------------
+
+  \end{tikzpicture}
+  \centering\caption{Some tikzpicture drawing}
+\end{figure}
