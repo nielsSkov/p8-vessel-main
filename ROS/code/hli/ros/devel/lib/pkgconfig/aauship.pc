@@ -1,0 +1,8 @@
+prefix=/home/aauship/aauship-formation/code/hli/ros/devel
+
+Name: aauship
+Description: Description of aauship
+Version: 0.0.0
+Cflags: -I/home/aauship/aauship-formation/code/hli/ros/devel/include -I/home/aauship/aauship-formation/code/hli/ros/src/aauship/include
+Libs: -L/home/aauship/aauship-formation/code/hli/ros/devel/lib -laauship
+Requires: roscpp rospy std_msgs sensor_msgs message_runtime

@@ -1,0 +1,17 @@
+<library path="src">
+  <class name="My Plugin" type="rqt_mypkg.my_module.MyPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A Python GUI plugin for AAUSHIP.
+    </description>
+    <qtgui>
+      <group>
+        <label>AAUSHIP</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to AAUSHIP.</statustip>
+      </group>
+      <label>Test plugin</label>
+			<icon type="file">resource/emblem-games</icon>
+      <statustip>Used for testing</statustip>
+    </qtgui>
+  </class>
+</library>

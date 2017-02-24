@@ -1,0 +1,62 @@
+# General stuff
+#*~
+#*.swp
+
+# LaTeX stuff
+#*.aux
+#*.bbl
+#*.blg
+#*.fdb_latexmk
+#*.fls
+#*.log
+#*.maf
+#*.mtc
+#*.mtc0
+#*.out
+#*.pdf
+#*.pdf_tex
+#*.toc
+#*.tdo
+#*.eps
+#*.ilg
+#*.nlo
+#*.nls
+#*.snm
+#*.nav
+
+# Hardware files
+#*.bak
+#*.dcm
+#*.ps
+#*.000
+#*.bak
+#*.bck
+#*.kicad_pcb-bak
+#*.bak
+#*.fped
+#*.fpd
+#*autosave-*.kicad_pcb
+#log.txt
+#shapes3D/
+
+# Software files
+#*.hex
+#*.elf
+#*.lst
+#*.sym
+#*_bak
+#test/
+#code/**/doc
+#*.pyc
+#*.bag
+
+# Media files
+#*.avi
+#*.png
+
+# MATLAB
+#slprj/
+#*.mat
+
+# ROS
+code/hli/ros/src/aauship/bags

@@ -1,0 +1,35 @@
+<launch>
+  <arg
+    name="model" />
+  <arg
+    name="gui"
+    default="False" />
+		<arg name="foo" /> 
+  <param
+    name="robot_description"
+    textfile="$(find aauship)/urdf/aauship.urdf" />
+  <param
+    name="use_gui"
+    value="$(arg gui)" />
+  <node
+    name="joint_state_publisher"
+    pkg="joint_state_publisher"
+    type="joint_state_publisher" />
+  <node
+    name="robot_state_publisher"
+    pkg="robot_state_publisher"
+    type="state_publisher" />
+  <node
+    name="ned_static_transform_publisher"
+    pkg="tf"
+    type="static_transform_publisher"
+    args="0 0 0 1.5707963267948966 0 3.141592653589793 map ned 100"/>
+  <node
+		if="$(arg foo)"
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find aauship)/aauship-double.rviz"
+    required="true"
+    />
+</launch>

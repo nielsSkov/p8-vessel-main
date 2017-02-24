@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "rqt_bm")
+set(rqt_bm_MAINTAINER "nickoe <nickoe@todo.todo>")
+set(rqt_bm_DEPRECATED "")
+set(rqt_bm_VERSION "0.0.0")
+set(rqt_bm_BUILD_DEPENDS "rospy" "rqt_gui" "rqt_gui_py")
+set(rqt_bm_RUN_DEPENDS "rospy" "rqt_gui" "rqt_gui_py")
+set(rqt_bm_BUILDTOOL_DEPENDS "catkin")

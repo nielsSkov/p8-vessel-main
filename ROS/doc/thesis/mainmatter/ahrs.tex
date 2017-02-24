@@ -1,0 +1,16 @@
+\chapter{\acl{AHRS}}
+\head{This chapter describes the methods used for \ac{AHRS} using the a \ac{IMU} outputting raw linear acceleration, gyration rate and magnetic field strength to determine the attitude and heading of the ship.}
+
+\noindent As described on figure~\vref{fig:blockkf} and attitude observer is needed, this is realised by implementing this \ac{AHRS} described here.
+
+\section{Mahony explicit complementery filter}
+An \ac{AHRS} filter descibed in the \citep{mahony} is widely used on MAV's worldwide according to the conclusion of the paper. It also states that the filter is locally exponentially stable. It is locally unstable when 
+
+
+The magnetometer and acclerometer fields are normalised
+"Only the direction of the
+magnetometer output is relevant for attitude estimation and
+we will use a vectorial measurement" - mahony
+
+\section{Madgwick filter}
+The Madgwick filter is similar to the Mahony filter, but is a little bit less computationally intensive. \todo{The mathematical differences and charachteristics is to be described}

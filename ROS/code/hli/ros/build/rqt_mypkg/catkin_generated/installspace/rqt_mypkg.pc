@@ -1,0 +1,8 @@
+prefix=/home/aauship/aauship-formation/code/hli/ros/install
+
+Name: rqt_mypkg
+Description: Description of rqt_mypkg
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/aauship/aauship-formation/code/hli/ros/install/lib 
+Requires: 

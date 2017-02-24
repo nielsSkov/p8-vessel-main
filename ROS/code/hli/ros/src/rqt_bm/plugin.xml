@@ -1,0 +1,17 @@
+<library path="src">
+  <class name="My battery monitor plugin" type="rqt_bm.my_module.MyPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Enables the user to add notes with timestamps to a log file.
+    </description>
+    <qtgui>
+      <group>
+        <label>AAUSHIP</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to AAUSHIP.</statustip>
+      </group>
+      <label>Battery monitor</label>
+      <icon type="theme">battery-caution</icon>
+      <statustip>Used for minitoring the battery levels</statustip>
+    </qtgui>
+  </class>
+</library>

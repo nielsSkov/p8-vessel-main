@@ -1,0 +1,75 @@
+\section{Thrust Allocation}
+\label{sec:thrust_allocation}
+\todo{Dette azfsnit er forkert, se kode og note papir på opslagstavle}
+Thrust allocation is a way to relate the desired actuation forces to multiple inputs. In the simplest case it is a scaling factor on the inputs. On real ship one also include the power management system in the thrust allocation system, such that the system knows if it can deliver the power needed or reconfigure the allocation such the need can be met.
+
+For AAUSHIP there is no power management, hence the simple case can be use.
+
+\begin{align}
+f  = K u
+\label{eq:fKu}
+\end{align}
+
+\begin{subequations}
+\begin{align}
+ \tau &=  T ( \alpha)  f\\
+&=  T (  \alpha)  K  u
+\end{align}
+\end{subequations}
+
+\begin{align}
+T =
+\begin{bmatrix}
+0 & 0 & 1 & 1\\
+1 & 1 & -\sin(\alpha_3) & \sin(\alpha_4)\\
+-1 & -1 & 0 & 0\\
+0 & 0 & \sin(\theta_3) l_{z3} & \sin(\theta_4)l_{z4} \\
+l_{x1} & l_{x2} & -\sin(\alpha_3) l_{x3} & \sin(\alpha_4) l_{x4}
+\end{bmatrix}
+\end{align}
+\citep{mss}
+
+
+For thrusters where the thrust characteristics do not map
+proportionally to forces, the computed $u$ values must be mapped
+to the relevant actuator commands.
+
+\begin{figure}[htbp]
+	\centering
+%\fbox{
+	\begin{minipage}[l]{0.3\textwidth}
+		\begin{tabular}{llc}
+		\toprule
+		Symbol & Value & Unit\\
+		\midrule
+		$l_{x1}$& 0.41 & m\\
+		$l_{x2}$& 0.18 & m\\
+		$l_{x3}$& 0.48 & m\\
+		$l_{x4}$& 0.48 & m\\
+		$l_{y3}$& 0.05 & m\\
+		$l_{y4}$& 0.05 & m\\
+		\bottomrule
+		\end{tabular}
+	\end{minipage}%
+%}
+\noindent
+%\fbox{
+	\begin{minipage}[l]{0.7\textwidth}
+		\includesvg[width=\textwidth]{thrust_allocation}
+	\end{minipage}
+%}
+	\caption{Thrust configuration for AAUSHIP. $F_1$ and $F_2$ are the
+	bow thrusters and $F_3$ and $F_4$ the main propellers. Grey fat
+arrows indicate positive thrust vector given positive input.} 
+	\label{fig:thrust_allocation}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\includesvg{thrust_allocation_block}
+\caption{Block diagram showing the control allocation block in a
+feedback control system \citep[fig.12.25]{fossen}. The thrust
+allocation converts the computed control forces to actuator inputs.}
+\label{fig:thrust_allocation_block}
+\end{figure}

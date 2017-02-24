@@ -1,0 +1,74 @@
+\chapter{Path Generation}
+\label{ch:pathgen}
+\head{A guidance system usually consists of a subsystem to generate
+	paths for the trajectory it is desired to have the object follow.
+	There exists multiple methodologies for this, also depending on the
+mission purpose. A description of these methods are described in this
+chapter with focus on pre-mission defined paths.}
+
+For these kind of guidance systems, it is usually generated via some
+form of human interface -- some more intelligent than others. For the
+purpose of this thesis, the interest lies in the use for surveying
+purposes, such that a path should be generated from some waypoints
+that is generated from some polygonal area of interest.
+
+The concept of this is to make run lines (lawn mover pattern) with
+straight line segments, and the corners can be handled in a specific
+way such that the physical constraints of the ship manoeuvring ability
+is considered to generate feasible paths.
+
+The here is basically two ways to consider a lawn mover pattern. The
+one is the have the area of interest be covered only by straight line
+segments and the end connected with a turning maneouver outside the
+area of interest as show on figure~\vref{fig:lawn-straight-inside} or
+with all manoeuvers constrained inside the area of interest as
+illustrated on figure~\vref{fig:lawn-all-inside}.
+
+\begin{figure}[htbp]
+	\centering
+	\subfloat[Only straight lines\label{fig:lawn-straight-inside}]{\includesvg{lawn_straight_inside}}
+	\qquad
+	\subfloat[All paths constrained\label{fig:lawn-all-inside}]{\includesvg{lawn_all_inside}}
+	\caption{Comparison of two ways to cover an area with a lawn mower
+	pattern.}
+\end{figure}
+
+\section{Dubins Path}
+\todo{This chapter will depend on the formation control choosen.}
+
+
+\missingfigure{Figure of Dubins path generated with fixed and angle
+dependent circles}
+
+\section{Improvement of Dubins Path with Clothoids}
+The goal with using Clothoids (Euler Spirals) is the have a yank
+continuous parametrized path.
+
+\section{\acs{LOS} Guidance}
+\acl{LOS} is one paradigm for a path following controller. It can be relised in different ways.
+
+\section{Guidance System}
+The guidance system is a system that takes the wishes from the
+operator and converts those to some trajectory via a path generating
+algorithm.
+
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg{guidance-overview}
+	\caption{Overview of guidance system where a mission static waypoint
+	database is used with a \ac{LOS} algorithm.}
+\end{figure}
+
+
+\begin{figure}[htbp]
+	\centering
+	\includesvg[width=\textwidth]{use-case-polygon}
+	\caption{Comparison of two ways to cover an area with a lawn mower
+	pattern.}
+    \label{fig:use-case-polygon}
+\end{figure}
+
+
+Tesselation with quadrilaterals (polygons with four edges and four vertices) is a way to help divide a given polygonal shape into some shape where it is usefull to use the plough fure motion.
+

@@ -1,0 +1,17 @@
+\section{Model Verification}
+\label{sec:model_verification}
+In order to confidently use the model developed in the modelling chapter~\vref{ch:modelling}, it is important to verify that it actually reflect the real behaviour of the ship. This section will be used as a sanity check for the model and give indication of how well the model fits with the real ship.
+
+As the hydrodynamic model parameters has been determined in the appendix\vref{app:damping}, using the state space representation presented in \vref{eq:ss}, it can be used to verify the complete simulation model.
+
+\subsection{Step Response}
+A step response of the model can be used to verify the steady state input-output relations. This can both give the steady state but also the time constant to verify the system. This can be done by accelerating the vessel from steady state and measure the velocity curve of the ship. The vessel will reach zero acceleration witch implies constant velocity, from where the time constant can be measured. This time constant needs to be approximately the same for the vessel and the model of the vessel. All the steady state input-output relations needs to be approximately the same, such as the time constant in surge. The same kind of test may be performed from all steady state scenarios.
+
+\subsection{Stability}
+A stability analysis can be conducted by examining the eigenvalues of the system. To ensure stability it is a criteria that the eigenvalues should all be stable for this system. This is fulfilled if the real part of all the eigenvalues of the system are negative, which implies a stable fixed point.
+
+Stability of the discretised version also has to be checked by ensuring that the pole-zero map is within the unit circle. The eigenvalues of the Jacobian also needs to have absolute value less than one, which implies placement within the unit circle. If these are placed within the unit circle it is also a fixed point. If just one eigenvalue is greater than one it implies instability. If the eigenvalue is exactly equal to one it needs further investigation by looking more into the Jacobian.
+
+\subsection{Simulation of the Model}
+A final verification is to compare the correlation between a sea trail operated by human operator. It is desired to do multiple manoeuvers similar to what the system is supposed to perform. That is i.e. making a e.g. turning circle manoeuver and zig-zag manoeuvers.
+\todo{Compare the simulation with the same inputs as a sea trail, especially for the inertial sensors}

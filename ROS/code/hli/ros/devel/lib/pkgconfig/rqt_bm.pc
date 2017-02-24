@@ -1,0 +1,8 @@
+prefix=/home/aauship/aauship-formation/code/hli/ros/devel
+
+Name: rqt_bm
+Description: Description of rqt_bm
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/aauship/aauship-formation/code/hli/ros/devel/lib 
+Requires: 

@@ -1,0 +1,219 @@
+\chapter{Simulation Model}
+\label{ch:simulation-model}
+\head{This chapter will describe the model
+that is used for simulation of the system, as a replacement for
+testing on the real ship.}
+
+To make a model for simulation model, it is needed to emulate the real
+sensor outputs with noise imposed onto the signals. Using a \ac{LTI}
+state space model based on the unified model \vref{eq:totmodel} is
+constructed as \vref{eq:ss} as defined by \citep[p. 175]{fossen}.
+
+\begin{subequations}
+\begin{align}
+	\dot x &=  A x + B u + E w \\
+	y &= H x + v \\
+	A &=
+	\begin{bmatrix}
+		0 & I\\ -M^{-1}G & -M^{-1}D
+	\end{bmatrix}, \quad
+	B = 
+	\begin{bmatrix}
+		0 \\ M^{-1}
+	\end{bmatrix}, \quad
+	E =
+	\begin{bmatrix}
+		0 \\ M^{-1}
+	\end{bmatrix}
+\end{align}
+\label{eq:ss}
+\end{subequations}
+
+The matrix $E$ describes the sea state and vector $w$ the process noise, and $v$ the sensor (measurement) noise. Both noise
+vectors are assumed zero-mean Gaussian white noise processes.
+
+\nomenclature{$x_n, y_n$}{Position in the \acs{NED}-frame, usually
+computed from a \acs{GPS}}
+\nomenclature{$a_x, a_y, a_z$}{Linear accelerations from accelerometer}
+\nomenclature{$m_x, m_y, m_z$}{Magnetic field from magnetometer}
+\nomenclature{$\omega_x, \omega_y, \omega_z$}{Angular velocity from rate gyro}
+\nomenclature{$\psi$}{Heading angle (yaw)}
+\nomenclature{$\mathbf{p}^n _{b/n}$}{Linear position of $o_b$ with respect to ${n}$ expressed in ${n}$}
+\nomenclature{$\boldsymbol{\Theta}_{nb}$}{Euler angles between ${n}$ and ${b}$}
+
+
+\section{Position Trajectory in \acs{NED}}
+The positon trajectory \vref{eq:NEDtrajectory} in \ac{NED} is calculated with numerical Euler integration of the velocities \vref{eq:NEDvel}.
+\begin{subequations}
+\begin{align}
+\dot{\mathbf{p}}^n _{b/n} &= \mathbf{R}^n _b (\boldsymbol{\Theta}_{nb}) \boldsymbol{\nu}^b _{b/n} \label{eq:NEDvel}\\
+\mathbf{p}^n _{b/n}(k+1) &= \mathbf{p}^n _{b/n}(k) + h \dot{\mathbf{p}}^n _{b/n} \label{eq:NEDtrajectory} \\
+&= \mathbf{p}^n _{b/n}(k) + h \mathbf{R}^n _b
+(\boldsymbol{\Theta}_{nb}(k+1)) \boldsymbol{\nu}^b _{b/n}(k+1) 
+\end{align}
+\end{subequations}
+The generalised position, velocity, acceleration and force vectors, in that order, is:
+\begin{align}
+\boldsymbol{\eta} =
+\begin{bmatrix}
+\mathbf{p}^n _{b/n}\\\boldsymbol{\Theta}_{nb}
+\end{bmatrix},\qquad
+\boldsymbol{\nu} =
+\begin{bmatrix}
+\boldsymbol{\nu}^b _{b/n}\\\boldsymbol{\omega}^b _{nb}
+\end{bmatrix},\qquad
+\dot{\boldsymbol{\nu}} =
+\begin{bmatrix}
+\dot{\boldsymbol{\nu}}^b _{b/n}\\\dot{\boldsymbol{\omega}}^b _{n/b}
+\end{bmatrix},\qquad
+\boldsymbol{\tau} =
+\begin{bmatrix}
+\mathbf{f}^b _b\\\mathbf{m}^b _b
+\end{bmatrix}
+\end{align}
+
+\section{Sensor Measurements to State Vector}
+For the control system it is needed to convert the sensor measurements
+to the system state vector, such that the control system can be
+designed. Figure~\vref{fig:intermediate-calc} shows the computation
+flow to determine this. It shall be noted that the \ac{GPS} and
+\ac{IMU} blocks has the sensor noise in them.
+
+Now that the state vector is present an state observer can be used
+in i.e. a Kalman filter to reduce the noise.
+
+\begin{figure}
+	\centering
+	\includesvg{intermediate-sensor-calculations-block}
+	\caption{Block diagram over the computation of system states from
+	raw sensor measurements.}
+	\label{fig:intermediate-calc}
+\end{figure}
+
+Since the simulation is performed by iterating over the state space
+model, it is needed to somehow get the variances from the sensors
+modelled in the state space model. Because of the intermediate
+computations described in the figure~\vref{fig:intermediate-calc} it
+is not straight forward to add the sensor noise to the model, because
+this noise is specified at the raw sensor measurements. So some way
+has to be used to calculate the noise $v$.
+
+A method is the simply set the inputs as the variance value and the
+output will be the variance in the state vector. \todo{Is this true?}
+
+A method is to set the sensor measurements to no movement values, and
+only add the noise on the measurements. I all sensors were zero in
+stagnation, then it would be enough to simulate this with only noise and
+get the corresponding variance out. This is not the case, as the
+magnetometer has a bias, just because it is situated in a constant
+magnetic field and this is dependent on the attitude of the ship. So
+to compute the variances on the state vector it is needed to make
+multiple simulations where this bias is different also. A normalized
+normal distribution of this should suffice. \todo{Is this good enough
+or even correct? We have nonlinearities.}
+
+\section{\acs{SOG} to Body Frame Velocities}
+The \acl{SOG} block on the figure~\vref{fig:intermediate-calc} is used to calculate the body frame velocities in surge $u$ and sway $v$, which in turn is filtered by the Kalman filter described in section~\vref{sec:kfdesign}. The block on the diagram uses the \ac{SOG} from the \ac{GPS}, denoted as the magnitude $U$ and the course angle relative to true north, denoted the course angle $\chi$. Which is the sum of the heading $\psi$ and sideslip $\beta$ angles:
+\nomenclature{$\chi$}{Course angle}
+\nomenclature{$\beta$}{Sideslip angle}
+\nomenclature{$U$}{Course speed}
+\begin{align}
+\chi = \psi + \beta \quad \Rightarrow  \quad \beta = \chi - \psi
+\end{align}
+
+To calculate the body frame velocities the rotation matrix around $z$ is used. It is enough to use this one basic rotation, because this is on the 2D system ($x,y$) in the \ac{NED} frame.
+
+\begin{align}
+R_{z} (\psi) =
+\begin{bmatrix}
+\cos(\psi) & -\sin(\psi)\\
+\sin(\psi) & \cos(\psi)
+\end{bmatrix}
+\label{eq:Rz}
+\end{align}
+First the course speed magnitude $U$ can be calculated in \ac{NED} by the following computation, where we describe the course speed as a vector $[U\quad 0]^\top$, such that the 
+\begin{align}
+U_n = R_{z} (\chi)
+\begin{bmatrix}
+U \\ 0 
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos(\chi) \\
+\sin(\chi)
+\end{bmatrix}
+U
+\end{align}
+Now this can be rotated into \ac{BODY}, using the same rotation matrix \vref{eq:Rz}, but with the sideslip angle instead of the course angle. Such that:
+\begin{align}
+U_b = \begin{bmatrix}
+u \\ v
+\end{bmatrix}
+= R_z (\beta) U_n
+\end{align}
+Assuming the course speed vector in relation to the \ac{BODY} (as opposed to \ac{NED} initially suggested) it is enough to use the sideslip for rotation directly.
+\begin{align}
+U_b = R_{z} (\beta)
+\begin{bmatrix}
+U \\ 0 
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos(\beta) \\
+\sin(\beta)
+\end{bmatrix}
+U
+\end{align}o
+
+\todo{Add figure about this}
+
+\section{Magnetic and Acceleration Vectors from State Attitude}
+The simulation model state vector do not contain magnetic field
+strength directly, therefore it has to be calculated from the
+attitude, that is the pitch, roll and yaw values.
+
+First the magnetic field direction has to be known for the area where the system operates. There exists models of the magnetic field on the earth, accessible from \citep{geomag}. Using the ``WMM 2010'' model, the declination and inclination has been determined to be $2.167 \arcdeg$ (east), and $70.883 \arcdeg$ (down) respectively. Additionally the field strength is about $50432$ nT.
+
+This defines the magnetic field in the earth frame as:
+\begin{align}
+m_n = \begin{bmatrix}0 & \text{inclination} & \text{declination}\end{bmatrix}^\top
+\end{align}
+
+The magnetic field in the body frame $m_b$ is:
+\begin{align}
+m_b = R_b^n(\Theta_{nb}) m_n 
+\end{align}
+where the rotation matrix $R_b^n(\Theta_{nb})$ \vref{eq:Rfromntob}.
+\begin{align}
+R_b^n (\Theta_{nb}) &=
+\begin{bmatrix}
+c\psi c\theta & -s\psi c\theta + c\psi s\theta s\phi & s\psi s\phi + c\psi c\phi s\theta \\
+s\psi c\theta & c\psi c\phi + s\phi s\theta s\psi & -c\psi s\phi + s\theta s\psi c\phi \\
+-s\theta & c\theta s\phi & c\theta s\phi
+\end{bmatrix}
+\label{eq:Rfrombton} \\
+R_n^b (\Theta_{nb}) &= R_b^n (\Theta_{nb})^{-1}
+\label{eq:Rfromntob}
+\end{align}
+where $s \cdot = \sin(\cdot)$ and $c \cdot = \cos(\cdot)$. $\Theta_{nb}$ is the Euler angles of the {b} in {n}.
+
+The acceleration is made in a similar way as the magnetic body vector is made, except it adds the bodyframe accelerations caused by the ship itself.
+\begin{align}
+a_\text{IMU} = [a_{bx}, a_{by}, 0]^T + R_n^b (\Theta_{nb}) [0,0,g]^\top
+\label{eq:accl_IMU_construction}
+\end{align}
+where $g$ is the gravity, defined as 9.82 m/s$^2$
+
+\section{Reconstruction of Body Accelerations}
+The ship is equipped with an accelerometer, but this does not mean that the accelerations measured is in the body frame, $a_b$, because it also measure the the added gravity vector. This gravity vector has to be subtracted before the body acceleration is know. This is calculated by defining the gravity vector in the NED frame $a_g$, then rotate that to the body frame and subtract it from the IMU measurement $a_\text{IMU}$.
+\begin{align}
+a_g = [0, 0, g]^\top \quad, \quad 
+a_\text{IMU} = [a_x, a_y, a_z]^\top \quad, \quad 
+a_b = [a_{bx}, a_{by}, a_{bz}]^\top
+\end{align}
+Where $g$ is the gravitational acceleration, and the computation is \vref{eq:accl_body_calc}, which is basically the opposite of~\vref{eq:accl_IMU_construction}.
+\begin{align}
+a_b = a_\text{IMU} - R_n^b (\Theta_{nb}) a_g
+\label{eq:accl_body_calc}
+\end{align}
+

@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC    -shared -Wl,-soname,libaauship.so -o /home/aauship/aauship-formation/code/hli/ros/devel/lib/libaauship.so CMakeFiles/aauship.dir/src/MahonyAHRS.cpp.o CMakeFiles/aauship.dir/src/MadgwickAHRS.cpp.o CMakeFiles/aauship.dir/src/KalmanFilter.cpp.o 

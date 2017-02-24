@@ -1,0 +1,22 @@
+<launch>
+	<group ns="boat1">
+		<param name="tf_prefix" value="/boat1_tf" />
+  	<node cwd="node" name="simulation_node" pkg="aauship" type="simulation-node.py" output="log"/>
+  	<node cwd="node" name="ahrs_mahony_node" pkg="aauship" type="ahrs-mahony-node" output="log"/>
+  	<node cwd="node" name="kalmanfilter_node" pkg="aauship" type="kalmanfilter-node.py" output="log"/>
+  	<node cwd="node" name="control_node" pkg="aauship" type="control-node.py" output="screen"/>
+		<include file="$(find aauship)/rviz-double.launch">
+			<arg name="foo" value="1" />
+		</include>
+	</group>
+	<group ns="boat2">
+		<param name="tf_prefix" value="/boat2_tf" />
+  	<node cwd="node" name="simulation_node" pkg="aauship" type="simulation-node.py" output="log"/>
+  	<node cwd="node" name="ahrs_mahony_node" pkg="aauship" type="ahrs-mahony-node" output="log"/>
+  	<node cwd="node" name="kalmanfilter_node" pkg="aauship" type="kalmanfilter-node.py" output="log"/>
+  	<node cwd="node" name="control_node" pkg="aauship" type="control-node.py" output="log"/>
+		<include file="$(find aauship)/rviz-double.launch">
+			<arg name="foo" value="0" />
+		</include>
+	</group>
+</launch>

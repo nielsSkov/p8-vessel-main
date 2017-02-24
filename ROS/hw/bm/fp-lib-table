@@ -1,0 +1,6 @@
+(fp_lib_table
+  (lib (name local)(type Legacy)(uri ${KIPRJMOD}/lib/buccaneer-PX0707-P-6.mod)(options "")(descr ""))
+  (lib (name aauship)(type Legacy)(uri ${KIPRJMOD}/lib/aauship.mod)(options "")(descr ""))
+  (lib (name argo)(type Legacy)(uri ${KIPRJMOD}/lib/argo.mod)(options "")(descr ""))
+  (lib (name cow)(type Github)(uri https://github.com/liftoff-sr/pretty_footprints)(options allow_pretty_writing_to_this_dir=${HOME}/pretty/github.pretty)(descr ""))
+)

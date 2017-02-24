@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "aauship")
+set(aauship_MAINTAINER "Nick Østergaard <nickoe@es.aau.dk>")
+set(aauship_DEPRECATED "")
+set(aauship_VERSION "0.0.0")
+set(aauship_BUILD_DEPENDS "roscpp" "rospy" "std_msgs" "sensor_msgs" "message_generation" "python-numpy")
+set(aauship_RUN_DEPENDS "roscpp" "rospy" "std_msgs" "sensor_msgs" "message_runtime" "python-numpy")
+set(aauship_BUILDTOOL_DEPENDS "catkin")
