@@ -1,0 +1,23 @@
+close all
+clear
+clc
+
+% Parameters
+m=;     % [kg] mass
+Ix=     %
+Iy=     %
+Iz=;     % [kgm2]
+
+dx=;    % [] 
+dy=;	% []
+dz=;    % []
+droll=  % []
+dpitch= % []
+dyaw=50;    % []
+
+l1=1;   % [m]
+l2=1;   % [m]
+
+F1=0;
+F2=20;
+
