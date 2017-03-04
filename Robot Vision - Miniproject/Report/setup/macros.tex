@@ -1,0 +1,33 @@
+%Macro for 'where'-enviroment was improved by Andrea and Niels :-)
+
+%-----------UNITS-------------------------------------------
+\newcommand{\unit}[1]{&& \left[\si{#1}\right]}
+%
+%\newcommand{\unit}[1]{[\si{#1}]}            %<<| Use these if you want equations to be
+%\newcommand{\eq}[2]{&&\si{#1} &= \si{#2}&&} %<<| centered.. .. will appear scrambled
+%                                            %  | from one equation to the next though..
+%                                            %  | and does not work with long equations.. :/
+%
+%-----------------------------------------------------------
+
+%-----------WHERE ENVIRONMENT-------------------------------
+\newenvironment{where}{\leavevmode{\parindent=1em\indent} Where:\\}{}
+\newcommand{\va}[3]
+{
+  \begin{tabular}{p{20pt} p{40pt} p{290pt} l}
+    & { $#1$ } & { #2 } & \ifthenelse{\isempty{ #3 }}  {}  {[{\si{#3}}]} \\
+  \end{tabular}\\
+}
+%-----------------------------------------------------------
+
+%-----------TikZ SETTINGS-----------------------------------
+\tikzset{
+  block/.style    = {draw, thick, rectangle,
+                     minimum height = 2.1em,
+                     minimum width = 1.7em},
+  sum/.style      = {draw, circle, inner sep=3pt} %<--Adder
+}
+%-----------------------------------------------------------
+
+%------------VECTORS----------------------------------------
+\renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}

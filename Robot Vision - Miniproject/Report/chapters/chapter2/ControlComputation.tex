@@ -1,0 +1,14 @@
+\section{Control System}\label{sec:ControlComputation}
+\fxnote{Check the title os the section}The control system takes the sensor data and computes the required actuation output according to the desired motion for the vessel. It is structured in two entities that run in different devices. These entities are the Low Level Interface and the High Level Interface.
+
+\subsection{Low Level Interface} 
+
+The Low Level Interface (LLI) implemented on the vessel runs in a Arduino Mega Development board with the Atmel microcontroller ATMEGA 2560. It is in charge of extracting the sensor data from the IMU and the GPS and send it to the HLI that runs in the computer. This includes managing the serial communication from the sensors to the Arduino Board and from the Arduino Board to the HLI. 
+
+The LLI handles also the actuators as it receives the rotational speed command for the thrusters from the HLI and calculates the appropiate PWM so the ESCs make the motors turn at the desired speed.
+
+\subsection{High Level Interface}
+
+The High Level Interface (HLI) takes care of the control, sensor fusion and trajectory planning algorithms. This includes communicating with the LLI to get sensor data and send commands to the thrusters. 
+
+The HLI is implemented in a ASUS Eee Computer \cite{asus} that runs with Ubuntu 14.04. In order to implement the aforementioned algorithms, the Robotic Operating System (ROS) is used. ROS allows programming the different tasks without considering the transmission of data between threads, as this is managed by ROS due to its structure of nodes an topics. Besides communication between tasks, it also includes multiple tools and capabilities useful for trajectory planning, computer vision and others \cite{ROS}.
