@@ -3,20 +3,23 @@ clear
 clc
 
 % Parameters
-mx=200;     % [kg] mass + added mass in xb direction
-my=250;     % [kg] mass + added mass in yb direction
-Iz=700;     % [kgm2]
+m=13;     % [kg] mass
+Ix=0.06541;     % [kgm2]
+Iy=1.08921;     % [kgm2]
+Iz=1.10675;     % [kgm2]
 
-dx=70;      % [kg/s] 
-dy=100;     % [kg/s]
-dyaw=50;    % [kgm2/s]
+dx=2.86;    % [] 
+dy=32.5;	% []
+dz=0;    % []
+droll=0.1094;  % []
+dpitch=7.203; % []
+dyaw=0.26285;    % []
 
-l1=1;
-l2=1;
-l3=2;
-l4=2;
+l1=0.05;   % [m]
+l2=0.05;   % [m]
 
-F1=0;
-F2=20;
-F3=0;
-F4=0;
+Troll=6.9736;   % [N/m]
+Tpitch=131.8316;   % [N/m]
+
+F1=20;
+F2=0;

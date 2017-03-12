@@ -1,0 +1,20 @@
+\chapter{Problem Analysis}
+This chapter analyses the scope of the project as well as the requirements that need to be fulfilled.
+
+\section{Scope of the Project}
+The goal of this project is to develop a control strategy that can make the autonomous surface vessel be suitable for survey tasks in the water. 
+
+The controller design must be able to track references provided by the trajectory planer as well as rejecting disturbances such as possible wind or the effect of the waves. This requires to include a model of the disturbances in the controller design as well as a robust controller capable of handling model uncertainties.
+
+The trajectory planer needs to be able to design a route in the form of waypoints, to send to the controller, to reach all the position needed to perform the different measurements required for the survey. 
+
+One important aspect to be taken into account is the precision of the route tracking, that should be below 10 cm. This requires a positioning system able of providing position data with more precision that the GPS module mounted on the vessel. A test that shows the distribution of the sample from this GPS can be seen in \fxnote{Refer to test with GPS to show it is not enough} For that reason, an RTK GPS is more suitable to enhance the precision of position data.
+
+
+\section{Requirements}
+To be able to design a working product some functional requirements need to be set and verified at the end of the project once all the design has been carried out.
+
+- tracking of reference position with a precision below 10 cm
+
+- 
+
