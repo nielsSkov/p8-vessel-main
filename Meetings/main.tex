@@ -8,39 +8,39 @@
 \renewcommand\figurename{Figur}
 \renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 22th of February of 2017}
-\subsection{Comments on the model}
+\section*{Supervisor meeting\\ \small Wednesday, 08th of March 2017}
+\subsection{Status}
 \begin{itemize}
-	\item If you rotate slow and drive slow - off diagonal elements in the damping matrix are not that relevant. The same happens with the Coriolis-Centripetal matrix. We should just state clear that we are aware of them and why we do not consider them. 
-	\item Although the off-diagonal elements might be bigger, they occur in axes with low speeds.
-	\item How to interpret the Coriolis effect: It is related to rigid body movement. An object will always rotate around the axis with most inertia or the axes with least inertia. Anything in the middle makes it swing because the object wants to rotate in one of the other axes so the rotation is "unstable". 
-	\item Ideally the boat inertia is symmetric so nothing happens but practically there is some imbalance due to mass distribution. As the speeds are low, we can ignore the Coriolis effect.
-	\item Added mass: We should take it into account but maybe at low speeds it is not important. We need confirmation of this fact.
+	\item We have set up ROS for the initial tests.
+	\item We have made the charger
+	\item We did mostly research this week. On robust control and on trajectory generation.
 \end{itemize}	
-\subsection{GPS}
+\subsection{Reducing the model}
 \begin{itemize}
-	\item The variation of the GPS is large, but maybe it needs more time. It could also be that it was just beside the building, that could be the problem. Specially when the building is south of the boat.
-	\item If you have raw data, you also get the precision on the estimation, so you could vary your weights in the Kalman filter according to that confidence.
-	\item We could also get an RTK GPS.
+	\item We can reduce the model if there are some states that we do not need.
+	\item We also remove $\dot{y}_\mathrm{b}$ state as the model is to be used in control design.
+	\item With non linear control we could actuate along the $y_\mathrm{b}$ axis by using the couplings from damping and Coriolis effects.
+	\item A boat movement can be seen to be similar to that of a car. You can move sideways if you maneuver.
+\end{itemize}	
+\subsection{Controller for the low level}
+\begin{itemize}
+	\item The input is the heading and the speed and the output is the input to the motors.
+	\item A drawing of all the control structure and how the different controllers interact could be a good idea.
 \end{itemize}
-\subsection{Batteries}
+\subsection{Simulation}
 \begin{itemize}
-	\item Simon order charging cables because we could not find them.
-	\item Batteries: Simon had some but they have less that half the capacity, they may not be enough for a final test. 
-	\item We will order some new batteries.
+	\item Now the simple simulation is fixed. 
 \end{itemize}
-\subsection{Comments on the document}
+\subsection{RTK-GPS}
 \begin{itemize}
-	\item It is a good idea to note what the rotation matrices do: Including b and n in the notation, for example.
-	\item Put references for the rotation convention and to the use of the NED frame.
-	\item Does the force of the propellers affect the y body axis?
-	\item Normally for references you use [p17,1] in the references, rather than referencing the same book several times.
+	\item We will know about the RTK GPS when Simon is back. Probably tomorrow.
 \end{itemize}
-\subsection{Miscellaneous}
+\subsection{Path Planning}
 \begin{itemize}
-	\item Make a plan with milestones.
+	\item You have a simple predefined scenario, a straight line for example, and then you apply your controller. This way it is easy to evaluate the performance of the controller.
+	\item We need to consider how to keep ourselves on the path, how to reach the path when we are not there, how to make a control that is good when turning, among others.
 \end{itemize}
 \subsection{Next Supervisor Meeting}
-Wednesday, 1st of March at 13:00
+Wednesday, 15th of March at 13:00
 
 \end{document}
