@@ -8,39 +8,34 @@
 \renewcommand\figurename{Figur}
 \renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 08th of March 2017}
+\section*{Supervisor meeting\\ \small Wednesday, 15th of March 2017}
 \subsection{Status}
 \begin{itemize}
-	\item We have set up ROS for the initial tests.
-	\item We have made the charger
-	\item We did mostly research this week. On robust control and on trajectory generation.
+	\item The PS3 controller works on the boat and we can actuate the motors. 
 \end{itemize}	
-\subsection{Reducing the model}
+\subsection{Structure of the System}
 \begin{itemize}
-	\item We can reduce the model if there are some states that we do not need.
-	\item We also remove $\dot{y}_\mathrm{b}$ state as the model is to be used in control design.
-	\item With non linear control we could actuate along the $y_\mathrm{b}$ axis by using the couplings from damping and Coriolis effects.
-	\item A boat movement can be seen to be similar to that of a car. You can move sideways if you maneuver.
+	\item MPC could be also used in the outer controller. The outer loop runs slower than the inner one so MPC could be feasible. 
+	\item Our structure sounds like a feasible structure, although there are many ways to approach it.
+	\item In the sensor input data, we could actually use two GPS modules if we want.
 \end{itemize}	
-\subsection{Controller for the low level}
+\subsection{Controller Design}
 \begin{itemize}
-	\item The input is the heading and the speed and the output is the input to the motors.
-	\item A drawing of all the control structure and how the different controllers interact could be a good idea.
-\end{itemize}
-\subsection{Simulation}
-\begin{itemize}
-	\item Now the simple simulation is fixed. 
+	\item Typically we would do a simple PI controller to compare them with an LQR or a Robust control design. We plan to design an LQR controller for now and then compare to the robust controller.
+	\item Robust Control Theory: A controller robust to parameter variations is a usual way to go. An example is the mass matrix because it is a clear thing that varies. It is important to specify what you want to optimize against or to want you want to be robust against. For example, you could minimize the acceleration of the boat. 
+	\item We could put the robust design control on hold for now until we get the lectures on the course.
+	\item We could also try MPC in the boat. We could show that it would work although there might be some implementation issues due to the computational cost of the MPC. That could be considered a robust controller that handles, for example, wave disturbances, which are predictable.
 \end{itemize}
 \subsection{RTK-GPS}
 \begin{itemize}
-	\item We will know about the RTK GPS when Simon is back. Probably tomorrow.
+	\item We have ordered a similar GPS that should be here soon. It is a Reach GPS.
+	\item This one connects to base station.
 \end{itemize}
-\subsection{Path Planning}
+\subsection{Miscellaneous}
 \begin{itemize}
-	\item You have a simple predefined scenario, a straight line for example, and then you apply your controller. This way it is easy to evaluate the performance of the controller.
-	\item We need to consider how to keep ourselves on the path, how to reach the path when we are not there, how to make a control that is good when turning, among others.
+	\item We should look at Oceans15 biannual autonomous boat conference, it will give inspiration of the kind of controllers used at the moment. We could also use it for other references.
 \end{itemize}
 \subsection{Next Supervisor Meeting}
-Wednesday, 15th of March at 13:00
+Wednesday, 22nd of March at 13:00
 
 \end{document}
