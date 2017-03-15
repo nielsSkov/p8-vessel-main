@@ -1,19 +1,22 @@
 \chapter{Recognition of Bricks}
+The recognition of the bricks is based on the the information of value, saturation and color given by the representation on the image in HSV color space.
 
+The algorithm is illustrated with an example image taken in similar conditions as the workstation, \autoref{fig:RealLego4}.
 
 \begin{figure}[H]
     \includegraphics[width=0.4\textwidth]{figures/RealLego4.jpg}
-    \caption{}
+    \caption{Original image that include the color bricks to recognize in random positions.}
     \label{fig:RealLego4}
 \end{figure}
 
-Convert the image to HSV and split the channels.
+The first step is to convert the image to HSV color space and split the channels different channels.
 
-To find the color blocks (orange, yellow, green and blue) the saturation channel is used combined with a threshold to find the pixels that have a high saturation value (bright colors). This step results in a binary mask.
+To find the color blocks (orange, yellow, green and blue) the saturation channel is used combined with a threshold to find the pixels that have a high saturation value (bright colors). This step results in a binary mask, where the white pixels represent the object.
 
 \begin{figure}[H]
     \captionbox  %<--use captionbox instead if no global caption is needed
-    {               %                                \%-%-%-%-%-%-%\               
+    { 
+        Saturation channel of the original image in HSV color space.              
         \label{fig:saturation}                                  
     }                                                                 
     {                                                                  
@@ -21,7 +24,8 @@ To find the color blocks (orange, yellow, green and blue) the saturation channel
     }                                                                    
     \hspace{5pt}                                                          
     \captionbox
-    {       
+    {      
+        Mask for the color bricks (orange, green, blue and yellow). 
         \label{fig:colour_mask}                                     
     }
     {
@@ -29,19 +33,22 @@ To find the color blocks (orange, yellow, green and blue) the saturation channel
     }                                                                             
 \end{figure}
 
-To fin the black bricks for Homer, the value channel can be used to find the pixels with very low value.
+To fin the black bricks, the value channel, \autoref{fig:value} can be used to find the pixels with very low value, that results in another mask, as seen in \autoref{fig:black_mask}.
 
 \begin{figure}[H]
     \captionbox  %<--use captionbox instead if no global caption is needed
-    {               %                                \%-%-%-%-%-%-%\               
+    {
+        Value channel of the original image in HSV color space.                
         \label{fig:value}                                  
     }                                                                 
-    {                                                                  
+    {       
+                                                                    
         \includegraphics[width=.4\textwidth]{figures/value.png}         
     }                                                                    
     \hspace{5pt}                                                          
     \captionbox
-    {       
+    {  
+        Mask for the black brick.
         \label{fig:black_mask}                                     
     }
     {
@@ -53,7 +60,8 @@ Combining the two masks, the final one can be found as seen in \autoref{fig:fina
 
 \begin{figure}[H]
     \captionbox  %<--use captionbox instead if no global caption is needed
-    {               %                                \%-%-%-%-%-%-%\               
+    {
+        Combination of both masks before processing.             
         \label{fig:final_mask}                                  
     }                                                                 
     {                                                                  
@@ -62,6 +70,7 @@ Combining the two masks, the final one can be found as seen in \autoref{fig:fina
     \hspace{5pt}                                                          
     \captionbox
     {       
+        Enhanced mask after removing noise and filling holes in the objects.
         \label{fig:final_mask2}                                     
     }
     {
@@ -69,17 +78,51 @@ Combining the two masks, the final one can be found as seen in \autoref{fig:fina
     }                                                                             
 \end{figure}
 
+Once the mask is enhanced, each of the objects can be labeled to be analyzed one by one. It is noticeable that only the objects that have an area larger than a threshold are considered for future processing.
+
+The position of each brick can be found using the centroid of the pixels corresponding to each object, as seen in \autoref{fig:centroids}.
 
 \begin{figure}[H]
     \includegraphics[width=0.4\textwidth]{figures/centroids.png}
-    \caption{}
+    \caption{Centroids of the different objects in the mask (blue marks).}
     \label{fig:centroids}
 \end{figure}
 
+Once the position of the brick in the image is found, its color and orientation need to be stored as well to be used in further algorithms in the overall program.
+
+The first one, the color, can be found looking at a small region around the center of each brick in the hue channel. The mean of the hue of these pixels is compared to four values corresponding to yellow, gree, blue and orange. The color of the object is selected as the one closer to the mean of the region.
+
+To get the orientation is based on and edge detection followed by a Hough line transform. 
+
+Since the image is already binary, \autoref{fig:object_mask}, the edges can be detected by calculating the difference between the image and a dilation of it. The result can be seen in \autoref{fig:edges}.
+
+
 \begin{figure}[H]
-    \includegraphics[width=0.4\textwidth]{figures/centroids_colour.png}
-    \caption{}
-    \label{fig:centroids_colour}
+    \captionbox  %<--use captionbox instead if no global caption is needed
+    {
+        Mask for one of the objects.              
+        \label{fig:object_mask}                                  
+    }                                                                 
+    {                                                                  
+        \includegraphics[width=.4\textwidth]{figures/object_mask.png}         
+    }                                                                    
+    \hspace{5pt}                                                          
+    \captionbox
+    {       
+        Edges found in the object by the difference of the original mask and a dilated one.
+        \label{fig:edges}                                     
+    }
+    {
+        \includegraphics[width=.4\textwidth]{edges.png}            
+    }                                                                              
 \end{figure}
 
+Once the edges are found, the Hough transform is used to find the lines. The orientation is defined by the angle of the largest line with respect to the horizontal, see \autoref{fig:object}.
 
+\begin{figure}[H]
+    \includegraphics[width=0.4\textwidth]{figures/object.png}
+    \caption{Largest line in the object marked in blue.}
+    \label{fig:object}
+\end{figure}
+
+At this point, each brick is identified by its position in the image, its color and its orientation, so it is ready for being used in following algorithms.
