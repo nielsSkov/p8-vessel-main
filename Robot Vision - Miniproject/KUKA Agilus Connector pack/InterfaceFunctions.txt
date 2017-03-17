@@ -1,0 +1,20 @@
+function A = getJoint(obj) 
+function A = getPosition(obj)
+function speed_out = checkSpeed(obj,speed_in)
+
+robotClearBuf(obj)
+
+function robotWait(obj,str)
+function moveJoint(obj,varargin)
+function moveCart(obj,varargin)
+function moveLinear(obj,varargin) (kuka,x,y,z,a,b,c,vel)
+function moveRelativeJoint(obj,varargin)
+function moveRelativeLinear(obj,varargin)
+function openGrapper(obj)
+function closeGrapper(obj)
+
+Safe Position (396.77 0.2 371.30)
+Safe Orientation (-98.83 -7.86 -176.27)
+
+
+offset = (411.69 -285.27 342.19)

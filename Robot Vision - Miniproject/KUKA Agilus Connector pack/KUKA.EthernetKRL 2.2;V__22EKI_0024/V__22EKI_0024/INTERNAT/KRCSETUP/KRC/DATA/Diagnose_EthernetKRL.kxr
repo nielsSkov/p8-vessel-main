@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns="http://www.kuka.com/schemas/kxr/2009">
+   <module name="Diagnose">
+      <uiText key="Diagnose_Description7001">
+         <text xml:lang="de-DEV">Diagnose fÃ¼r Ethernet KRL Interface</text>
+         <text xml:lang="en-DEV">Diagnosis fpr Ethernet KRL Interface</text>
+      </uiText>
+      <uiText key="Diagnose_Name7001">
+         <text xml:lang="de-DEV">EKI</text>
+         <text xml:lang="en-DEV">EKI</text>
+      </uiText>
+      <uiText key="Diagnose_Description7002">
+         <text xml:lang="de-DEV">VerfÃ¼gbarer Speicher in Bytes</text>
+         <text xml:lang="en-DEV">Total memory in bytes</text>
+      </uiText>
+      <uiText key="Diagnose_Name7002">
+         <text xml:lang="de-DEV">Gesamtspeicher</text>
+         <text xml:lang="en-DEV">Total memory</text>
+      </uiText>
+      <uiText key="Diagnose_Description7003">
+         <text xml:lang="de-DEV">Verbrauchter Speicher in Bytes</text>
+         <text xml:lang="en-DEV">Allocated memory in bytes</text>
+      </uiText>
+      <uiText key="Diagnose_Name7003">
+         <text xml:lang="de-DEV">Verbrauchter Speicher</text>
+         <text xml:lang="en-DEV">Allocated memory</text>
+      </uiText>
+      <uiText key="Diagnose_Description7004">
+         <text xml:lang="de-DEV">Verbindungen, welche dem Roboterinterpreter zugeteilt sind</text>
+         <text xml:lang="en-DEV">Connections in relationship to robotinterpreter</text>
+      </uiText>
+      <uiText key="Diagnose_Name7004">
+         <text xml:lang="de-DEV">Verbindungen Roboterprogramm</text>
+         <text xml:lang="en-DEV">Connections robotprogram</text>
+      </uiText>
+      <uiText key="Diagnose_Description7005">
+         <text xml:lang="de-DEV">Verbindungen, die dem Submitinterpreter zugeteilt sind</text>
+         <text xml:lang="en-DEV">Connections in relationship to submitinterpreter</text>
+      </uiText>
+      <uiText key="Diagnose_Name7005">
+         <text xml:lang="de-DEV">Verbindungen Submitprogramm</text>
+         <text xml:lang="en-DEV">Connections submitprogram</text>
+      </uiText>
+      <uiText key="Diagnose_Description7006">
+         <text xml:lang="de-DEV">Verbindungen, die dem System zugeteilt sind</text>
+         <text xml:lang="en-DEV">Connections in relationship to system</text>
+      </uiText>
+      <uiText key="Diagnose_Name7006">
+         <text xml:lang="de-DEV">Verbindungen System</text>
+         <text xml:lang="en-DEV">Connections system</text>
+      </uiText>
+      <uiText key="Diagnose_Description7007">
+         <text xml:lang="de-DEV">Offene Ethernetverbindungen</text>
+         <text xml:lang="en-DEV">Open ethernet connections</text>
+      </uiText>
+      <uiText key="Diagnose_Name7007">
+         <text xml:lang="de-DEV">Ethernet Verbindungen</text>
+         <text xml:lang="en-DEV">Etherent connections</text>
+      </uiText>
+      <uiText key="Diagnose_Description7008">
+         <text xml:lang="de-DEV">Zeit, welche benÃ¶tigt wird, um empfangene Daten zu bearbeiten</text>
+         <text xml:lang="en-DEV">Time to process a received document</text>
+      </uiText>
+      <uiText key="Diagnose_Name7008">
+         <text xml:lang="de-DEV">Verarbeitungszeit</text>
+         <text xml:lang="en-DEV">Execution time</text>
+      </uiText>
+      <uiText key="Diagnose_Description7010">
+         <text xml:lang="de-DEV">Angefallene Fehler</text>
+         <text xml:lang="en-DEV">occured errors</text>
+      </uiText>
+      <uiText key="Diagnose_Name7010">
+         <text xml:lang="de-DEV">Fehlermeldungen</text>
+         <text xml:lang="en-DEV">Error messages</text>
+      </uiText>
+      <uiText key="Diagnose_Description7011">
+         <text xml:lang="de-DEV">Angefallene Warnungen</text>
+         <text xml:lang="en-DEV">occured warnings</text>
+      </uiText>
+      <uiText key="Diagnose_Name7011">
+         <text xml:lang="de-DEV">Warnmeldungen</text>
+         <text xml:lang="en-DEV">Warnings</text>
+      </uiText>
+   </module>
+</resources>

@@ -1,0 +1,707 @@
+&ACCESS RO
+&REL 2396
+&PARAM DISKPATH = KRC:\R1\TP\EthernetKRL
+DEF EthernetKRL( )
+   ;************************************************************
+   ; CopyRight       KUKA Roboter GmbH 2012
+   ; last modified   11.07.2012
+   ; prefix          EKI
+   ; functions       Interface between KRL and Ethernet (non Realtime)
+   ;                 This file is mainly designed to communicate
+   ;                 with external devices like sensors, vision
+   ;                 systems, other controllers and so on. 
+   ;************************************************************
+END
+
+;FOLD EKI_InternalProgram
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_Init(strChannelName[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret       
+      
+      Ret = EKI_NULL_STATUS   
+      Mode = #SYNC     
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Init",strChannelName[])
+      
+      Ret.Msg_No = -Stat.Msg_No  
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_Close(strChannelName[]:IN)
+      DECL CHAR strChannelName[]        
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Ret = EKI_NULL_STATUS  
+      Mode = #SYNC
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Close",strChannelName[])
+      
+      Ret.Msg_No = -Stat.Msg_No   
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_LOCK(strChannelName[]:IN)
+      DECL CHAR strChannelName[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      DECL BOOL LOCK
+      
+      Ret = EKI_NULL_STATUS  
+      Mode = #SYNC
+      LOCK = TRUE
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_LockUnLock",strChannelName[], LOCK, Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No   
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_UNLOCK(strChannelName[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      DECL BOOL LOCK
+      
+      Ret = EKI_NULL_STATUS  
+      Mode = #SYNC
+      LOCK = FALSE
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_LockUnLock",strChannelName[], LOCK, Ret.Connected)
+      
+      ; interrupt timeout to detect new edge    
+      CONTINUE
+      wait sec 0.002
+      
+      Ret.Msg_No = -Stat.Msg_No      
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_ClearBuffer(strChannelName[]:IN,strPlace[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Ret = EKI_NULL_STATUS
+      Mode = #SYNC
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_ClearBuff",strChannelName[],strPlace[],Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No   
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_Open(strChannelName[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Open",strChannelName[])
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      showMsgDepend(Ret)
+      
+      IF (Ret.Msg_No == 0) THEN
+         Ret.Connected = true
+      ENDIF
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_Clear(strChannelName[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Clear",strChannelName[])
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_GetInteger(strChannelName[]:IN,strPlace[]:IN,value:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL INT value 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value,Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   GLOBAL DEFFCT EKI_STATUS EKI_GetInt(strChannelName[]:IN,strPlace[]:IN,value:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL INT value 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value,Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_GetIntegerArray(strChannelName[]:IN,strPlace[]:IN,value[]:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL INT value[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value[],Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   GLOBAL DEFFCT EKI_STATUS EKI_GetIntArray(strChannelName[]:IN,strPlace[]:IN,value[]:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL INT value[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value[],Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_GetBool(strChannelName[]:IN,strPlace[]:IN,value:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL BOOL value 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value,Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   GLOBAL DEFFCT EKI_STATUS EKI_GetBoolArray(strChannelName[]:IN,strPlace[]:IN,value[]:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL BOOL value[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value[],Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_GetReal(strChannelName[]:IN,strPlace[]:IN,value:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL REAL value 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value,Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   GLOBAL DEFFCT EKI_STATUS EKI_GetRealArray(strChannelName[]:IN,strPlace[]:IN,value[]:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL REAL value[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value[],Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_GetString(strChannelName[]:IN,strPlace[]:IN,value[]:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL CHAR value[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],value[],Ret.Buff, Ret.Read, TYPENULL,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_GetFrame(strChannelName[]:IN,strPlace[]:IN,value:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL FRAME value 
+      DECL CHAR Buff[24]
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      DECL INT Offset
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      Ret.buff=1
+      
+      Offset = 0
+      Cast_To(Buff[], Offset,value)
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],Buff[],Ret.Buff, Ret.Read, TYPEFRAME,Ret.Connected, Ret.Counter)
+      
+      Offset=0
+      Cast_From(Buff[], Offset,value)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   GLOBAL DEFFCT EKI_STATUS EKI_GetFrameArray(strChannelName[]:IN,strPlace[]:IN,value[]:OUT)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[] 
+      DECL FRAME value[] 
+      DECL CHAR Buff[3600]
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      DECL INT Offset
+      DECL INT i,arraysize
+      DECL BOOL ReadContinue
+      DECL INT MayArrSz
+      DECL INT ReadElements
+      
+      MayArrSz = 150
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS    
+      
+      REPEAT
+         ReadContinue = false
+         ReadElements=0
+         arraysize=0
+         ; detect array size!
+         Offset=0
+         WHILE(($ERR.NUMBER==0) AND (arraysize<MayArrSz))
+            arraysize = arraysize + 1
+            ON_ERROR_PROCEED
+            CAST_TO(Buff[],Offset,value[arraysize+Ret.read])
+         ENDWHILE
+         
+         IF ((arraysize+Ret.read == 1) AND ($ERR.NUMBER<>0)) THEN
+            Ret.Msg_No = -26
+            EXIT
+         ENDIF
+         
+         IF ((arraysize == 1) AND ($ERR.NUMBER<>0)) THEN
+            EXIT
+         ENDIF
+         
+         IF ((arraysize == MayArrSz) AND ($ERR.NUMBER==0)) THEN
+            ReadContinue = true;         
+         ELSE
+            arraysize = arraysize - 1
+         ENDIF
+         
+         Ret.Buff = arraysize
+         
+         CONTINUE
+         CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Get",strChannelName[],strPlace[],Buff[],Ret.Buff,ReadElements, TYPEFRAME,Ret.Connected, Ret.Counter)
+         
+         Offset = 0
+         FOR i=1 to ReadElements
+            Cast_From(Buff[], Offset,value[i + Ret.Read])
+         ENDFOR
+         
+         Ret.Read = Ret.Read + ReadElements
+         Ret.Msg_No = -Stat.Msg_No
+         showMsgDepend(Ret)
+         
+      UNTIL ((Ret.Msg_No <> 0) OR (ReadContinue == false) OR (Ret.Buff == 0) OR (arraysize<MayArrSz))
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_Send(strChannelName[]:IN,strPlace[]:IN, Len:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      DECL INT Len
+	  
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS      
+      
+	  IF (VARSTATE("Len") == #Declared) THEN
+		Len = 0
+      ENDIF
+	  
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Send",strChannelName[],strPlace[],Ret.Connected,Len)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_SetInt(strChannelName[]:IN,strPlace[]:IN,value:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]  
+      DECL INT value 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Set",strChannelName[],strPlace[],value,TYPENULL,Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_SetReal(strChannelName[]:IN,strPlace[]:IN,value:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]  
+      DECL REAL value 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Set",strChannelName[],strPlace[],value,TYPENULL,Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_SetBool(strChannelName[]:IN,strPlace[]:IN,value:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]  
+      DECL BOOL value 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Set",strChannelName[],strPlace[],value,TYPENULL,Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_SetString(strChannelName[]:IN,strPlace[]:IN,value[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]  
+      DECL CHAR value[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Set",strChannelName[],strPlace[],value[],TYPENULL,Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_SetFrame(strChannelName[]:IN,strPlace[]:IN,value:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]  
+      DECL FRAME value
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      DECL CHAR BUFF[24]
+      DECL INT Offset
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      Offset = 0
+      Cast_To(BUFF[], Offset,value)
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_Set",strChannelName[],strPlace[], BUFF[], TYPEFRAME,Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_SetParameter(strChannelName[]:IN,strParName[]:IN,strValue[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strParName[] 
+      DECL CHAR strValue[] 
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_SetParam",strChannelName[],strParName[],strValue[],Ret.Connected)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   GLOBAL DEF EKI_Check(Ret:IN,Type:IN,strChannelName[]:IN)
+      DECL CHAR strChannelName[] 
+      DECL EKI_STATUS Ret  
+      DECL EKrlMsgType Type
+      INT Handle
+      DECL KrlMsg_T name
+      DECL KrlMsgPar_T params[3]
+      DECL KrlMsgOpt_T options
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode       
+      DECL INT Offset
+      DECL INT Filter
+      DECL INT i
+      
+      IF (VARSTATE("strChannelName[]")==#INITIALIZED) THEN
+         
+         CONTINUE
+         CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_CheckErr",strChannelName[],Ret.Connected)
+         
+         Ret.Msg_No = -Stat.Msg_No
+      ENDIF
+      
+      Ret.Msg_No = (ERRMSG_ALL B_AND Ret.Msg_No)
+      
+      IF (Ret.Msg_No <>0) THEN      
+         name={modul[] "EthernetKRL", Nr 1, msg_txt[] "0"}
+         Filter = 255
+         FOR i=(0) TO (1)
+            name.nr = (Ret.Msg_No B_AND Filter)
+            IF (name.nr <> 0) THEN
+               Offset = 0            
+               CONTINUE              
+               SWRITE(name.msg_txt[],Stat,Offset,"eki%i",name.nr)
+               Handle = Set_KrlMsg(Type, name, params[], options)
+            ENDIF
+            Filter = 65280
+         ENDFOR
+         IF(Type==#Quit) THEN
+            WHILE(Exists_KrlMsg(Handle))
+               wait sec 0.2
+            ENDWHILE
+         ENDIF      
+      ENDIF  
+      
+      IF (VARSTATE("strChannelName[]")==#INITIALIZED) THEN
+         EKI_Check_User(Ret,Type,strChannelName[])   
+      ELSE
+         EKI_Check_User(Ret,Type)   
+      ENDIF   
+   END
+   
+   
+   ; ===========================================================
+   GLOBAL DEFFCT EKI_STATUS EKI_CheckBuffer(strChannelName[]:IN,strPlace[]:IN)
+      DECL CHAR strChannelName[]  
+      DECL CHAR strPlace[]    
+      DECL STATE_T Stat   
+      DECL MODUS_T Mode 
+      DECL EKI_STATUS Ret      
+      
+      Mode = #SYNC
+      Ret = EKI_NULL_STATUS
+      
+      CONTINUE
+      CWRITE($FCT_CALL,Stat,Mode,"EFC_eki_CheckBuff",strChannelName[],strPlace[],Ret.Buff,Ret.Connected, Ret.Counter)
+      
+      Ret.Msg_No = -Stat.Msg_No 
+      
+      showMsgDepend(Ret)
+      
+      RETURN Ret
+   ENDFCT
+   
+   ; ===========================================================
+   DEF showMsgDepend(Ret:OUT)
+      DECL EKI_STATUS Ret
+      
+      IF (Ret.Msg_no B_AND ERRMSG_FORBIDDEN)==0 THEN   
+         EKI_CHECK(Ret,#QUIT)
+      ENDIF
+      
+      Ret.Msg_no = Ret.Msg_no B_AND ERRMSG_ALL     
+   END
+   
+;ENDFOLD EKI_InternalProgram
+

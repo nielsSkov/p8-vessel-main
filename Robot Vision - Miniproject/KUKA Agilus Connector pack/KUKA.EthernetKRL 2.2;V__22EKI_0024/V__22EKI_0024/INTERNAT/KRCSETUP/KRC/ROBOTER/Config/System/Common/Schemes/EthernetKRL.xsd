@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2009 (http://www.altova.com) von Guldner (KUKA Roboter GmbH) bearbeitet -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="EthernetKRL">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Interface" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="MemSize" type="xs:unsignedInt" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Logger" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Enabled" type="xs:boolean" minOccurs="0"/>
+							<xs:element name="MQueueSize" type="xs:unsignedInt" minOccurs="0"/>
+							<xs:element name="FileSize" type="xs:unsignedInt" minOccurs="0"/>
+							<xs:element name="LogLevel" type="xs:string"/>
+							<xs:element name="ErrorHistory" type="xs:boolean" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="NetDependency" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="NetConfig" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,19 @@
+<ETHERNETKRL>
+	<CONFIGURATION>
+		<EXTERNAL>
+			<IP>x.x.x.x</IP>
+			<PORT>49152</PORT>
+			<TYPE>Server</TYPE>
+		</EXTERNAL>
+		<INTERNAL>
+			<ENVIRONMENT>Program</ENVIRONMENT>
+			<BUFFERING Mode="FIFO" Limit="16"/>
+			<BUFFSIZE Limit="13029"/>
+			<TIMEOUT Connect="1000"/>
+			<ALIVE Set_Out="1" Ping="10"/>
+			<IP>x.x.x.x</IP>
+			<PORT>49152</PORT>
+			<PROTOCOL>TCP</PROTOCOL>
+		</INTERNAL>
+	</CONFIGURATION>
+</ETHERNETKRL>

@@ -1,0 +1,59 @@
+      ===========================
+      R E L E A S E    N O T E S
+      ===========================
+
+          KUKA.EthernetKRL
+
+Copyright (c) 2012 KUKA Roboter GmbH
+        All rights reserved.
+            2013/01/22
+
+
+--------------------------------------
+Version: EthernetKRL 2.2.0
+--------------------------------------
+
+	 System Requirements:
+	 =================
+   • KR C4 robot controller
+	 • KUKA System Software KSS8.2, KSS8.2sr, VSS8.2, KSS8.3, VSS8.3 
+
+   New Functionality:
+   =================
+   • supports new versions of KSS and VSS (see system requirements)
+   • installation via WorkVisual (KOP-File)
+   
+   Bugfixes:
+   =================
+   • EKI_CLEARBUFFER() allowed for send structures
+   • Send a part of XML
+   • after lost connection next open displayed no old errors
+   • EKI_GETFRAMEARRAY work until 512 frames    
+
+--------------------------------------
+Version: EthernetKRL 2.1.3
+--------------------------------------
+	 
+	 System Requirements:
+	 =================
+   • KR C4 robot controller
+	 • KUKA System Software KSS8.2, VSS8.2
+
+   New Functionality:
+   =================
+   • Data exchange via the EthernetKRL interface
+	 • Receiving XML data from an external system
+	 • Sending XML data to an external system
+	 • Receiving binary data from an external system
+	 • Sending binary data to an external system
+	 • Robot controller and external system as a client or server
+	 • Configuration of connections via XML-based configuration file
+	 • Configuration of “event messages”
+	 • Monitoring of connections by a ping on the external system
+	 • Reading and writing data from the Submit interpreter
+	 • Reading and writing data from the robot interpreter
+   
+   Bugfixes:
+   =================
+	 None 
+  

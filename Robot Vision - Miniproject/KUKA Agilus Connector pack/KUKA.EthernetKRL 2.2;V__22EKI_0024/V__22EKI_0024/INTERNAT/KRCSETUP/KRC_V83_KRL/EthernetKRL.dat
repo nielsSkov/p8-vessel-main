@@ -1,0 +1,30 @@
+&ACCESS RVO2
+&REL 2396
+&PARAM DISKPATH = KRC:\R1\TP\EthernetKRL
+DEFDAT  EthernetKRL PUBLIC
+;************************************************************
+; CopyRight       KUKA Roboter GmbH 2012
+; last modified   11.07.2012
+; prefix          EKI
+; functions       Interface between KRL and Ethernet (non Realtime)
+;                 This file is mainly designed to communicate
+;                 with external devices like sensors, vision
+;                 systems, other controllers and so on. 
+;************************************************************
+
+;FOLD EKI_Declaration
+   ; Not used anymore see documentation for replaced functionality!!!
+   CONST BOOL SHOWMSG=TRUE
+   ; ***********************
+   
+   ;FOLD INTERNAL
+      GLOBAL STRUC EKI_STATUS INT Buff,Read,Msg_No,BOOL Connected,INT Counter
+      DECL CONST EKI_STATUS EKI_NULL_STATUS={Buff 0,Read 0,Msg_No 0,Connected FALSE,Counter 0}
+      DECL CONST INT TYPEFRAME=6
+      DECL CONST INT TYPENULL=0
+      DECL CONST INT ERRMSG_FORBIDDEN = 32768
+      DECL CONST INT ERRMSG_ALL = 32767
+   ;ENDFOLD   
+;ENDFOLD EKI_Declaration
+
+ENDDAT

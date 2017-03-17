@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns="http://www.kuka.com/schemas/kxr/2009">
+   <module name="EthernetKRL" shortcut="EKI">
+      <message key="eki1" number="1" type="Error">
+         <text xml:lang="de-DEV">Unbekannter Fehler</text>
+         <text xml:lang="en-DEV">Unknown error</text>
+      </message>
+      <message key="eki2" number="2" type="Error">
+         <text xml:lang="de-DEV">Der Systemspeicher ist verbraucht</text>
+         <text xml:lang="en-DEV">Out of Systemmemory</text>
+      </message>
+      <message key="eki3" number="3" type="Error">
+         <text xml:lang="de-DEV">Zugriff auf Datei fehlgeschlagen</text>
+         <text xml:lang="en-DEV">Fileaccess failed</text>
+      </message>
+      <message key="eki4" number="4" type="Error">
+         <text xml:lang="de-DEV">Angeforderte Funktion nicht implementiert</text>
+         <text xml:lang="en-DEV">Function not implemented</text>
+      </message>
+      <message key="eki5" number="5" type="Error">
+         <text xml:lang="de-DEV">Fehler bei Erstellen des XML Parsers</text>
+         <text xml:lang="en-DEV">Create of XML parser failed</text>
+      </message>
+      <message key="eki6" number="6" type="Error">
+         <text xml:lang="de-DEV">Interpretieren der Konfiguration fehlgeschlagen</text>
+         <text xml:lang="en-DEV">Interpet of configuration failed</text>
+      </message>
+      <message key="eki7" number="7" type="Error">
+         <text xml:lang="de-DEV">Schreiben der Daten zum Senden fehlgeschlagen</text>
+         <text xml:lang="en-DEV">Write of data to send failed</text>
+      </message>
+      <message key="eki8" number="8" type="Error">
+         <text xml:lang="de-DEV">Neues Element konnte nicht angelegt werden</text>
+         <text xml:lang="en-DEV">Add new element failed</text>
+      </message>
+      <message key="eki9" number="9" type="Error">
+         <text xml:lang="de-DEV">Verbindung nicht vorhanden</text>
+         <text xml:lang="en-DEV">Channel not available</text>
+      </message>
+      <message key="eki10" number="10" type="Error">
+         <text xml:lang="de-DEV">Ethernet ist getrennt</text>
+         <text xml:lang="en-DEV">Ethernet disconnect</text>
+      </message>
+      <message key="eki11" number="11" type="Error">
+         <text xml:lang="de-DEV">Ethernetverbindung zu externem System bereits vorhanden</text>
+         <text xml:lang="en-DEV">Ethernetconnection to extrenal system established</text>
+      </message>
+      <message key="eki12" number="12" type="Error">
+         <text xml:lang="de-DEV">Erstellen des Servers fehlgeschlagen</text>
+         <text xml:lang="en-DEV">Create server failed</text>
+      </message>
+      <message key="eki13" number="13" type="Error">
+         <text xml:lang="de-DEV">Ethernetparameter konnten nicht initialisiert werden</text>
+         <text xml:lang="en-DEV">Initialization of ethernetparameters failed</text>
+      </message>
+      <message key="eki14" number="14" type="Error">
+         <text xml:lang="de-DEV">Ethernetverbindung zu externem System konnte nicht hergestellt werden</text>
+         <text xml:lang="en-DEV">Connect to external system failed</text>
+      </message>
+      <message key="eki15" number="15" type="Error">
+         <text xml:lang="de-DEV">Zugriff auf leeren Empfangsspeicher</text>
+         <text xml:lang="en-DEV">Access to empty elementmemory</text>
+      </message>
+      <message key="eki16" number="16" type="Error">
+         <text xml:lang="de-DEV">Element konnte nicht gefunden werden</text>
+         <text xml:lang="en-DEV">Element not found</text>
+      </message>
+      <message key="eki17" number="17" type="Error">
+         <text xml:lang="de-DEV">Zusammenstellen der Daten zum Senden fehlgeschlagen</text>
+         <text xml:lang="en-DEV">Assemble of data to send failed</text>
+      </message>
+      <message key="eki18" number="18" type="Error">
+         <text xml:lang="de-DEV">Senden von Daten fehlgeschlagen</text>
+         <text xml:lang="en-DEV">Send data failed</text>
+      </message>
+      <message key="eki19" number="19" type="Error">
+         <text xml:lang="de-DEV">Keine Daten zum Senden vorhanden</text>
+         <text xml:lang="en-DEV">No data to send defined</text>
+      </message>
+      <message key="eki20" number="20" type="Error">
+         <text xml:lang="de-DEV">Datentypen passen nicht zusammen</text>
+         <text xml:lang="en-DEV">Mismatch in type of data</text>
+      </message>
+      <message key="eki21" number="21" type="Error">
+         <text xml:lang="de-DEV">Mit maximaler Datenhaltung Systemspeicher nicht ausreichend</text>
+         <text xml:lang="en-DEV">Estimation to max reserve of data failed</text>
+      </message>
+      <message key="eki22" number="22" type="Error">
+         <text xml:lang="de-DEV">Fehler bei Lesen der Konfiguration. XML Fehler.</text>
+         <text xml:lang="en-DEV">Read configuration failed. XML not valid.</text>
+      </message>
+      <message key="eki23" number="23" type="Error">
+         <text xml:lang="de-DEV">Initialisierung bereits durchgeführt.</text>
+         <text xml:lang="en-DEV">Init already done.</text>
+      </message>
+      <message key="eki24" number="24" type="Error">
+         <text xml:lang="de-DEV">Bindung an interne Parameter (Port,IP) fehlgeschlagen</text>
+         <text xml:lang="en-DEV">Bind to parameters (Port,IP) failed</text>
+      </message>
+      <message key="eki25" number="25" type="Error">
+         <text xml:lang="de-DEV">Interner Softwarefehler</text>
+         <text xml:lang="en-DEV">Internal software error</text>
+      </message>
+      <message key="eki26" number="26" type="Error">
+         <text xml:lang="de-DEV">Das FRAME-Feld ist nicht initialisiert</text>
+         <text xml:lang="en-DEV">FRAME array not initialized</text>
+      </message>
+      <message key="eki27" number="27" type="Error">
+         <text xml:lang="de-DEV">Das KRL CHAR[] Feld ist zu klein.</text>
+         <text xml:lang="en-DEV">CHAR[] Array too small.</text>
+      </message>
+      <message key="eki512" number="512" type="Error">
+         <text xml:lang="de-DEV">Ethernetverbindung gestört</text>
+         <text xml:lang="en-DEV">Ethernetconnection destroyed</text>
+      </message>
+      <message key="eki768" number="768" type="Error">
+         <text xml:lang="de-DEV">Ping meldet kein Kontakt</text>
+         <text xml:lang="en-DEV">Ping report not contact</text>
+      </message>
+      <message key="eki1024" number="1024" type="Error">
+         <text xml:lang="de-DEV">Fehler bei Lesen empfangener XML-Daten</text>
+         <text xml:lang="en-DEV">Error while read received XML-data</text>
+      </message>
+      <message key="eki1280" number="1280" type="Error">
+         <text xml:lang="de-DEV">Grenze speicherbarer Elemente erreicht</text>
+         <text xml:lang="en-DEV">Limit of elementstorage reached</text>
+      </message>
+      <message key="eki1536" number="1536" type="Error">
+         <text xml:lang="de-DEV">Empfangene Zeichenkette zu lang</text>
+         <text xml:lang="en-DEV">Received string to long</text>
+      </message>
+      <message key="eki1792" number="1792" type="Error">
+         <text xml:lang="de-DEV">Limit Empfangsspeicher erreicht</text>
+         <text xml:lang="en-DEV">Receivebuffer limit reached</text>
+      </message>
+      <message key="eki2048" number="2048" type="Error">
+         <text xml:lang="de-DEV">Server Zeitgrenze erreicht</text>
+         <text xml:lang="en-DEV">Server Timeout</text>
+      </message>
+   </module>
+</resources>

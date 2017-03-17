@@ -1,0 +1,56 @@
+&ACCESS RVP
+&REL 2725
+&PARAM DISKPATH = KRC:\R1\Program
+&PARAM SensorITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+DEF BinaryFixed( )
+;FOLD Declaration
+INT i
+INT OFFSET
+DECL EKI_STATUS RET
+CHAR Bytes[10]
+INT valueInt
+REAL valueReal
+BOOL valueBool
+CHAR valueChar[1]
+;ENDFOLD
+;FOLD INI
+  ;FOLD BASISTECH INI
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+;FOLD Initialize sample data
+ FOR i=(1) TO (10)  
+  Bytes[i]=0
+ ENDFOR  
+ OFFSET=0
+ valueInt=0
+ valueBool=FALSE
+ valueReal=0
+ valueChar[1]=0
+;ENDFOLD
+
+RET=EKI_Init("BinaryFixed")
+RET=EKI_Open("BinaryFixed")
+EKI_CHECK(RET,#QUIT)
+
+OFFSET=0
+CAST_TO(Bytes[],OFFSET,34.425,674345,"R",TRUE)
+
+RET = EKI_Send("BinaryFixed",Bytes[])
+
+WAIT FOR $FLAG[1]
+RET=EKI_GetString("BinaryFixed","Buffer",Bytes[])
+$FLAG[1]=FALSE
+
+OFFSET=0
+CAST_FROM(Bytes[],OFFSET,valueReal,valueInt,valueChar[],valueBool)
+
+
+RET=EKI_Close("BinaryFixed")
+RET=EKI_Clear("BinaryFixed")
+END

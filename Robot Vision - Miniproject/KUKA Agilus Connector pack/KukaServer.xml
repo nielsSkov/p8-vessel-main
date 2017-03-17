@@ -1,0 +1,22 @@
+<ETHERNETKRL>
+	<CONFIGURATION>
+		<EXTERNAL>
+			<TYPE>Client</TYPE>
+		</EXTERNAL>
+		<INTERNAL>
+			<IP>192.168.1.210</IP>
+			<PORT>54601</PORT>
+			<ALIVE Set_Flag="1"/>
+		</INTERNAL>
+	</CONFIGURATION>
+	<RECEIVE>
+		<RAW>
+			<ELEMENT Tag="Buffer" Type="STREAM" Set_Flag="1" Size="64" EOS="13,10"/>
+		</RAW>
+	</RECEIVE>
+	<SEND>
+		<RAW>
+			<ELEMENT Tag="Buffer" Type="STREAM" Set_Flag="1" Size="64" EOS="13,10"/>
+		</RAW>
+	</SEND>
+</ETHERNETKRL>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LogManager xsi:noNamespaceSchemaLocation="/Roboter/Config/System/Common/Schemes/LoggingSpecial.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<LoggingOptions isActive="true"/>
+	<LogFile Name="EKI" Path="Log/EthernetKRL" NbrFiles="10" FileSize="100000" FileFormat="putty" BufferLogs="false"></LogFile>
+	<LogRegistry>
+	    <LoggingStrategy Strategy="PureClass"/>
+		<ContextConfig>
+			<DefaultContextConfig ContextLogging="enabled"/>
+			<Context Name="tSystem" ContextLogging="disabled"/>
+			<Context Name="tSysBoot" ContextLogging="disabled"/>
+		</ContextConfig>
+		<ClassConfig>
+			<DefaultClassConfig LogLevel="basic"/>
+			<Class Name="EKILogger" LogLevel="warning" />
+		</ClassConfig>
+	</LogRegistry>
+</LogManager>

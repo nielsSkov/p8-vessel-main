@@ -1,0 +1,34 @@
+&ACCESS RO
+&REL 2314
+&PARAM DISKPATH = TP/EthernetKRL
+DEF EthernetKRL_USER( )
+;************************************************************
+; CopyRight       KUKA Roboter GmbH 2012
+; last modified   11.07.2012
+; prefix          EKI
+; functions       write your own error handling here 
+;************************************************************
+END
+
+;FOLD EKI_UserProgram
+; ===========================================================
+GLOBAL DEF EKI_Check_User(Ret:IN,Type:IN,strChannelName[]:IN)
+   ;FOLD Initialize variables
+   DECL CHAR strChannelName[] 
+   DECL EKI_STATUS Ret  
+   DECL EKrlMsgType Type
+   INT Handle
+   DECL KrlMsg_T name
+   DECL KrlMsgPar_T params[3]
+   DECL KrlMsgOpt_T options
+   DECL STATE_T Stat   
+   DECL MODUS_T Mode 
+   DECL BOOL B
+   DECL INT Offset
+   ;ENDFOLD
+   
+   IF (VARSTATE("strChannelName[]")==#INITIALIZED) THEN
+      ; strChannelName is initialized      
+   ENDIF
+END
+;ENDFOLD EKI_UserProgram

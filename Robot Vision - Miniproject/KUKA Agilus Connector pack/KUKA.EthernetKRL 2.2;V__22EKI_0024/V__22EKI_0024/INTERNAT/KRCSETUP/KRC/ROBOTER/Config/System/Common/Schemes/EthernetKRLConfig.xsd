@@ -1,0 +1,327 @@
+<!-- Mit XMLSpy v2009 (http://www.altova.com) von Rolke Rajko (KUKA Roboter GmbH) bearbeitet -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="ETHERNETKRL">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CONFIGURATION">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="EXTERNAL">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="TYPE" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Client"/>
+													<xs:enumeration value="Server"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="IP" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3})"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PORT" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:minInclusive value="1"/>
+													<xs:maxInclusive value="65634"/>
+													<xs:enumeration value="49152"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="INTERNAL" minOccurs="0">
+								<xs:complexType>
+									<xs:all minOccurs="0">
+										<xs:element name="TIMEOUT" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="Connect" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:unsignedShort">
+															<xs:minInclusive value="0"/>
+															<xs:maxInclusive value="65534"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PROTOCOL" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="UDP"/>
+													<xs:enumeration value="TCP"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="IP" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3})"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PORT" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:positiveInteger">
+													<xs:minInclusive value="54600"/>
+													<xs:maxInclusive value="54615"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="BUFFSIZE" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="Limit" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="65534"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="BUFFERING" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="Mode" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="LIFO"/>
+															<xs:enumeration value="FIFO"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Limit" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="512"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ENVIRONMENT" default="Program" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Submit"/>
+													<xs:enumeration value="System"/>
+													<xs:enumeration value="Program"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="MESSAGES" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="Logging" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="error"/>
+															<xs:enumeration value="disabled"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Display" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="error"/>
+															<xs:enumeration value="disabled"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="CLEARBUFFER" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="receive"/>
+													<xs:enumeration value="send"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="ALIVE" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="Set_Flag" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="1025"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Set_Out" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="4096"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Ping" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:unsignedInt">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="65534"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RECEIVE" minOccurs="0">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="XML" minOccurs="0">
+								<xs:complexType>
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="ELEMENT" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="Mode">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="LIFO"/>
+															<xs:enumeration value="FIFO"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Set_Flag" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="1025"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Set_Out" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="4096"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Tag" type="xs:string" use="required"/>
+												<xs:attribute name="Type" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="STRING"/>
+															<xs:enumeration value="INT"/>
+															<xs:enumeration value="FRAME"/>
+															<xs:enumeration value="BOOL"/>
+															<xs:enumeration value="REAL"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="RAW" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ELEMENT" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence minOccurs="0">
+													<xs:element name="HEADER" minOccurs="0">
+														<xs:complexType>
+															<xs:sequence minOccurs="0">
+																<xs:element name="MSGSIZE" minOccurs="0">
+																	<xs:complexType>
+																		<xs:attribute name="Pos" type="xs:positiveInteger" use="required"/>
+																		<xs:attribute name="Size" type="xs:positiveInteger" use="required"/>
+																		<xs:attribute name="Header" default="Included">
+																			<xs:simpleType>
+																				<xs:restriction base="xs:string">
+																					<xs:enumeration value="Excluded"/>
+																					<xs:enumeration value="Included"/>
+																				</xs:restriction>
+																			</xs:simpleType>
+																		</xs:attribute>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="CUT" minOccurs="0">
+																	<xs:simpleType>
+																		<xs:restriction base="xs:boolean">
+																			<xs:pattern value="false"/>
+																			<xs:pattern value="true"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+															</xs:sequence>
+															<xs:attribute name="Size" type="xs:positiveInteger" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="EOS" type="xs:string" use="optional"/>
+												<xs:attribute name="Size" use="required">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="3600"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Set_Flag" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="1025"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Set_Out" use="optional">
+													<xs:simpleType>
+														<xs:restriction base="xs:positiveInteger">
+															<xs:minInclusive value="1"/>
+															<xs:maxInclusive value="4096"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+												<xs:attribute name="Tag" type="xs:string" use="required"/>
+												<xs:attribute name="Type" use="required">
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:enumeration value="STREAM"/>
+															<xs:enumeration value="BYTE"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SEND" minOccurs="0">
+					<xs:complexType>
+						<xs:all minOccurs="0">
+							<xs:element name="XML" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="ELEMENT" minOccurs="0">
+											<xs:complexType>
+												<xs:attribute name="Tag" type="xs:string" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

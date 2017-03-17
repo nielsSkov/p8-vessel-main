@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EthernetKRL xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/Roboter/Config/System/Common/Schemes/EthernetKRL.xsd">
+	<Interface>
+		<MemSize>1048576</MemSize>
+	</Interface>
+	<NetDependency>
+      <NetConfig>
+      </NetConfig>
+   </NetDependency>
+</EthernetKRL>

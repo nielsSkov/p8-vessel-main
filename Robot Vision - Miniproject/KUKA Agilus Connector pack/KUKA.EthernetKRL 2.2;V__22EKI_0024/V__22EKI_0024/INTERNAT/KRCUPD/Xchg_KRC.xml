@@ -1,0 +1,19 @@
+<XchgXmlInput>
+<action>
+	<type>CHANGEVAL</type>
+      <params>
+         <path>/KRC/FctCallChannel</path>
+         <identifier>[@Enable="false"]</identifier>
+         <location>@Enable</location>
+         <val>true</val>
+      </params>
+   </action>
+   <action>
+	<type>CHANGEVAL</type>
+      <params>
+         <path>/KRC/FctCallChannel</path>
+         <location>@TaskStackBytes</location>
+         <val>401408</val>
+      </params>
+   </action>
+</XchgXmlInput>

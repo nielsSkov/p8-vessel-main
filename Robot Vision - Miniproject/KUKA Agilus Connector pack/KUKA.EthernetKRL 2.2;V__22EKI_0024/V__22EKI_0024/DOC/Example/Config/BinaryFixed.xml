@@ -1,0 +1,14 @@
+<ETHERNETKRL>
+	<CONFIGURATION>
+		<EXTERNAL>
+			<IP>x.x.x.x</IP>
+			<PORT>49152</PORT>
+		</EXTERNAL>
+	</CONFIGURATION>
+	<RECEIVE>
+		<RAW>
+			<ELEMENT Tag="Buffer" Type="BYTE" Set_Flag="1" Size="10"/>
+		</RAW>
+	</RECEIVE>
+	<SEND/>
+</ETHERNETKRL>

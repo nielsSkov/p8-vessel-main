@@ -1,0 +1,22 @@
+<ETHERNETKRL>
+	<CONFIGURATION>
+		<EXTERNAL>
+			<TYPE>Client</TYPE>
+		</EXTERNAL>
+		<INTERNAL>
+			<IP>x.x.x.x</IP>
+			<PORT>49152</PORT>
+			<ALIVE Set_Flag="1"/>
+		</INTERNAL>
+	</CONFIGURATION>
+	<RECEIVE>
+		<XML>
+			<ELEMENT Tag="Sensor/A" Type="BOOL"/>
+		</XML>
+	</RECEIVE>
+	<SEND>
+		<XML>
+			<ELEMENT Tag="Robot/B"/>
+		</XML>
+	</SEND>
+</ETHERNETKRL>

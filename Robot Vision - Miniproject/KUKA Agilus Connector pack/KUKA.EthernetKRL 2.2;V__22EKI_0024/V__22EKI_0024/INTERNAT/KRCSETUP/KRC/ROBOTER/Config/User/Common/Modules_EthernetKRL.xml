@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ModuleList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/ROBOTER/Config/System/Common/Schemes/Modules.xsd">
+	<Version Label="">
+		<Info Version="KRCV8.0"/>
+		<Schema Version="1"/>
+	</Version>	
+	<Module isActive="true" Name="EthernetKRL.o" Config="EthernetKRL.xml" DisplayName="EthernetKRL" Prio="186" Stacksize="131072" Affinity="0" reload="true"/>
+</ModuleList>

@@ -1,0 +1,151 @@
+&ACCESS RVO
+&REL 1
+&PARAM SensorITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM DISKPATH = KRC:\R1\Program
+DEF KukaServer( )
+;FOLD Declaration
+INT i
+DECL EKI_STATUS RET 
+DECL STATE_T state
+DECL REAL vel
+DECL E6POS cart
+DECL AXIS joint
+DECL INT offset
+DECL INT command_id ;defined the command type received
+CHAR Bytes[64]
+;ENDFOLD
+;FOLD INI
+  ;FOLD BASISTECH INI   
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+;FOLD Initialize sample data
+ FOR i=(1) TO (64)  
+  Bytes[i]=0
+ ENDFOR   
+;ENDFOLD
+
+;deactivate advance pointer - no looking forward
+$advance =0
+
+;initial move to the current pos
+ptp $pos_act
+
+RET=EKI_Init("KukaServer1")
+RET=EKI_Open("KukaServer1")
+EKI_CHECK(RET,#QUIT)
+
+; wait until server is conntected
+wait for $FLAG[1]
+
+Bytes[]="Stream ends with CR,LF"
+
+WHILE $FLAG[1]==TRUE
+;$FLAG[3]=true
+;RET = EKI_Send("KukaServer1",Bytes[])
+
+;Wait for command
+WAIT FOR $FLAG[2]
+RET=EKI_GetString("KukaServer1","Buffer",Bytes[])
+$FLAG[2]=FALSE
+offset = 0
+
+;read command
+sread(Bytes[],state,offset,"%i",command_id)
+offset = 2
+
+;switch depending on command
+SWITCH command_id
+
+  case 1 ;Move joint
+    SREAD(Bytes[],state,offset,"%f %f %f %f %f %f %f",joint.A1,joint.A2,joint.A3,joint.A4,joint.A5,joint.A6,vel)
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveJ;started;")
+    $ov_pro = 100*vel;
+    ptp joint
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveJ;ended;")
+
+  case 2 ;Move cart ptp
+    SREAD(Bytes[],state,offset,"%f %f %f %f %f %f %f",cart.x,cart.y,cart.z,cart.A,cart.B,cart.C,vel)
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveC;started;")
+    $ov_pro = 100*vel;
+    ptp cart
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveC;ended;")
+
+  case 3 ;Move cart lin
+    SREAD(Bytes[],state,offset,"%f %f %f %f %f %f %f",cart.x,cart.y,cart.z,cart.A,cart.B,cart.C,vel)
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveL;started;")
+    $ov_pro = 100*vel;
+    lin cart
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveL;ended;")
+    
+  case 4 ;Move joint relative
+    SREAD(Bytes[],state,offset,"%f %f %f %f %f %f %f",joint.A1,joint.A2,joint.A3,joint.A4,joint.A5,joint.A6,vel)
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveJR;started;")
+    $ov_pro = 100*vel;
+    ptp_rel joint
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveJR;ended;")
+  
+  case 5 ;Move cart LIN relative
+    SREAD(Bytes[],state,offset,"%f %f %f %f %f %f %f",cart.x,cart.y,cart.z,cart.A,cart.B,cart.C,vel)
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveLR;started;")
+    $ov_pro = 100*vel;
+    lin_rel cart
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","MoveLR;ended;")
+  
+  case 6 ;Open gripper
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","OpenG;started;")
+    $OUT[7] = false
+    $OUT[10] = true
+    WAIT SEC 0.5 
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","OpenG;ended;")
+
+  case 7 ;Close gripper
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","CloseG;started;")
+    $OUT[7] = true
+    $OUT[10] = false
+    WAIT SEC 0.5 
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1","CloseG;ended;")
+  
+  case 8 ;Get Joint config
+    joint = $Axis_act
+    offset = 0
+    swrite(Bytes[],state,offset,"%f %f %f %f %f %f",joint.A1,joint.A2,joint.A3,joint.A4,joint.A5,joint.A6)
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1",Bytes[])
+    
+  case 9 ;Get Cart pose
+    cart = $Pos_act
+    offset = 0 
+    swrite(Bytes[],state,offset,"%f %f %f %f %f %f",cart.x,cart.y,cart.z,cart.A,cart.B,cart.C)
+    $FLAG[3]=true
+    ret = EKI_send("KukaServer1",Bytes[])
+  
+ENDSWITCH
+
+
+ENDWHILE
+
+; wait until server is deconnected
+;wait for $FLAG[1]==FALSE
+
+RET=EKI_Clear("KukaServer1")
+END

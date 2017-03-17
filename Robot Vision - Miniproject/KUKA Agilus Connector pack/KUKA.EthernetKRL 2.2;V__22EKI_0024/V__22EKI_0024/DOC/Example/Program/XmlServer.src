@@ -1,0 +1,30 @@
+&ACCESS RV
+&REL 9
+&PARAM DISKPATH = KRC:\R1\Program
+&PARAM SensorITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+DEF XmlServer( )
+;FOLD Declaration
+DECL EKI_STATUS RET 
+;ENDFOLD
+;FOLD INI
+  ;FOLD BASISTECH INI   
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+
+RET=EKI_Init("XmlServer")
+RET=EKI_Open("XmlServer")
+EKI_CHECK(RET,#QUIT)
+
+; wait until server is conntected
+wait for $FLAG[1]
+; wait until server is deconnected
+wait for $FLAG[1]==FALSE
+
+RET=EKI_Clear("XmlServer")
+END
