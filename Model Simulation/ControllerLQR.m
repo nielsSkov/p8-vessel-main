@@ -71,7 +71,7 @@ R(R==Inf)=0;
 
 % LQR Controller
 
-Fe = dlqr(Ai,Bi,Q,R)
+Fe = dlqr(Ai,Bi,Q,R);
 
 eig(Ai-Bi*Fe);
 

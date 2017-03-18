@@ -22,12 +22,15 @@ Troll=6.9736;   % [N/m]
 Tpitch=131.8316;   % [N/m]
 
 % Path controller parameters
-R=10;
-AcceptRadius=10;
+r=5;
+AcceptRadius=3;
 wps=[1 1;
-    10 15;
-    10 20;
-    15 20;
-    30 5;
-    30 30];
-
+    -100 20;
+    -100 200;
+    0 200;
+    100 200;
+    20 20;
+    100 20;
+    100 -150];
+% global index
+% index=1;
