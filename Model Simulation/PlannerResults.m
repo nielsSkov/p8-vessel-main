@@ -1,14 +1,14 @@
-%% Diagnosis script
+%% Script to check the performance of the trajectory following.
 
-plot(xn_3DOF.Data,yn_3DOF.Data,'--r','LineWidth',2)
+plot(xn_3DOF.Data,yn_3DOF.Data,'-xr')
 hold on 
-plot(wps(:,1),wps(:,2),'-ok');
+plot(wps(:,1),wps(:,2),'--xk');
+% 
+% xlim([-150 200])
+% ylim([-20 300])
 
-xlim([-150 200])
-ylim([-20 300])
-
-circle_x=linspace(-100-30,-100+30,100);
-circle_y=sqrt(30^2-(circle_x-(-100)).^2)+20;
-circley2=-sqrt(30^2-(circle_x-(-100)).^2)+20;
-plot(circle_x,circle_y);
-plot(circle_x,circley2);
+%circle_x=linspace(-100-AcceptRadius,-100+AcceptRadius,100);
+%circle_y=sqrt(AcceptRadius^2-(circle_x-(-100)).^2)+20;
+%circley2=-sqrt(AcceptRadius^2-(circle_x-(-100)).^2)+20;
+%plot(circle_x,circle_y);
+%plot(circle_x,circley2);

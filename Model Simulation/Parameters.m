@@ -24,7 +24,8 @@ Tpitch=131.8316;   % [N/m]
 % Path controller parameters
 r=5;
 AcceptRadius=3;
-wps=[1 1;
+wps=[0 0;
+    0 20;
     -100 20;
     -100 200;
     0 200;

@@ -23,3 +23,16 @@ plot(circle_x,circley2);
 axis equal
 scatter(crossing(1),crossing(2));
 
+%% Test code for Distance to waypoint calculation.
+
+wp_k=[2,6];
+wp_k1=[6,2];
+vessel_pos=[4,2];
+
+FindDistWP(wp_k,wp_k1,vessel_pos)
+
+
+
+
+
+
