@@ -7,6 +7,8 @@
 % original=imread('RealLego1.jpg');
 % cam = webcam('Logitech');
 original=snapshot(cam);
+original=original(MyParameters.YMIN:MyParameters.YMAX,...
+    MyParameters.XMIN:MyParameters.XMAX,:);
 % original=original(138:end,131:512,:);
 
 x=size(original,2);

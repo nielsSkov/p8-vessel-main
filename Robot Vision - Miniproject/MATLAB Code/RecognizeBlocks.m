@@ -2,24 +2,6 @@ function [blocks]=RecognizeBlocks(original)
 % This function receives an image and returns the founded bricks, sorted by
 % color, and its position and orientation with respect to the base x-axis.
 
-image_points=[348 304;
-    335 22;
-    65 24;
-    59 307
-    183 139
-    18 307;
-    63 181]';
-
-real_points=40*[0 0;
-    7 0;
-    7 7;
-    0 7;
-    4 4
-    0 8;
-    3 7]';
-
-K=vgg_H_from_x_lin(image_points,real_points);  % Prejection matrix
-
 x=size(original,2);
 y=size(original,1);
 
@@ -71,9 +53,9 @@ for i=1:1:nobjects
         end
         [~,max_dist]=max(dist);
         
-        xy1_real=K*[lines(max_dist).point1 1]';     % The position of the points that define the line are trasnformed
+        xy1_real=MyParameters.K*[lines(max_dist).point1 1]';     % The position of the points that define the line are trasnformed
         xy1_real=xy1_real(1:2)'/xy1_real(3);        % to real positions using the projection matrix
-        xy2_real=K*[lines(max_dist).point2 1]';
+        xy2_real=MyParameters.K*[lines(max_dist).point2 1]';
         xy2_real=xy2_real(1:2)'/xy2_real(3);
         
         xy_real = [xy1_real; xy2_real];
@@ -88,11 +70,11 @@ for i=1:1:nobjects
         cent_x=round(centroid(i).Centroid(1));
         region_hue=hue(cent_y-MyParameters.MASK_SIDE:cent_y+MyParameters.MASK_SIDE,cent_x-MyParameters.MASK_SIDE:cent_x+MyParameters.MASK_SIDE);
         region_blackmask=black_mask(cent_y-MyParameters.MASK_SIDE:cent_y+MyParameters.MASK_SIDE,cent_x-MyParameters.MASK_SIDE:cent_x+MyParameters.MASK_SIDE);
-        cent_real=K*[cent_x,cent_y,1]';
+        cent_real=MyParameters.K*[cent_x,cent_y,1]';
         cent_real=cent_real(1:2)'/cent_real(3);
         
         % Sort by colour and store centroid position and orientation
-        if (mean(mean(region_blackmask,1)) >= 0.9)
+        if (mean(mean(region_blackmask,1)) >= 0.8)
             blocks.black = [blocks.black; [cent_real angle]];
         else
             meanhue=mean(mean(region_hue));

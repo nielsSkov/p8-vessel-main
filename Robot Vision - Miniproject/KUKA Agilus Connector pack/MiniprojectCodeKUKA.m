@@ -4,7 +4,7 @@ kuka=RobotConnectorKUKA;
 
 offsetX=411.69;
 offsetY=-285.27;
-offsetZ=342.19;
+offsetZ=340.12;
 offsetC=180;
 
 homex=50;
