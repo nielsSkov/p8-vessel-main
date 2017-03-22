@@ -1,41 +1,39 @@
 %implementing document formatting:
 \input{preamble.tex}
-%Vectors
+% Vectors
 \renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}
 \begin{document}
-\renewcommand\chaptername{KAPITEL}
-\renewcommand\contentsname{Indhold}
-\renewcommand\figurename{Figur}
-\renewcommand\tablename{Tabel}
+%\renewcommand\chaptername{KAPITEL}
+%\renewcommand\contentsname{Indhold}
+%\renewcommand\figurename{Figur}
+%\renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 15th of March 2017}
-\subsection{Status}
+\section*{Supervisor meeting\\ \small Wednesday, 22nd of March 2017}
+\subsection{LQR Controller}
 \begin{itemize}
-	\item The PS3 controller works on the boat and we can actuate the motors. 
-\end{itemize}	
-\subsection{Structure of the System}
-\begin{itemize}
-	\item MPC could be also used in the outer controller. The outer loop runs slower than the inner one so MPC could be feasible. 
-	\item Our structure sounds like a feasible structure, although there are many ways to approach it.
-	\item In the sensor input data, we could actually use two GPS modules if we want.
-\end{itemize}	
-\subsection{Controller Design}
-\begin{itemize}
-	\item Typically we would do a simple PI controller to compare them with an LQR or a Robust control design. We plan to design an LQR controller for now and then compare to the robust controller.
-	\item Robust Control Theory: A controller robust to parameter variations is a usual way to go. An example is the mass matrix because it is a clear thing that varies. It is important to specify what you want to optimize against or to want you want to be robust against. For example, you could minimize the acceleration of the boat. 
-	\item We could put the robust design control on hold for now until we get the lectures on the course.
-	\item We could also try MPC in the boat. We could show that it would work although there might be some implementation issues due to the computational cost of the MPC. That could be considered a robust controller that handles, for example, wave disturbances, which are predictable.
+	\item Test the step independently on each variable, the dynamics are not the same when turning if you are stationary, with constant speed or accelerating.
+    \item The motors have some dynamics that we could include in the simulation because they are fast but not instantaneous.
+    \item A first order model should be sufficient for describing the motors.
+    \item Maybe it is a good idea to do a test in water (step). Use a tachometer on the coupling inside the boat to read the speed.
+    \item It could be interesting to change the limits in the motors, for example allowing only forward movement or with different maxima.
 \end{itemize}
-\subsection{RTK-GPS}
+\subsection{Kalman Filter Implementation}
 \begin{itemize}
-	\item We have ordered a similar GPS that should be here soon. It is a Reach GPS.
-	\item This one connects to base station.
+	\item Maybe the estimator is not a Kalman filter in the implementation, Jesper will talk with Nick about it.
 \end{itemize}
-\subsection{Miscellaneous}
+\subsection{Path Following Algorithm}
 \begin{itemize}
-	\item We should look at Oceans15 biannual autonomous boat conference, it will give inspiration of the kind of controllers used at the moment. We could also use it for other references.
+	\item Path following algorithm without taking wind into account gives an offset.
+    \item The offset is corrected a bit measuring the real speed of the boat.
+    \item Looking at the perpendicular distance in the path to the waypoint is good for going from one point to another.
+    \item If you have a strict path you need to follow maybe it is a good idea to ensure that we pass through the waypoints.
+    \item We could have a look at Helmsman's controller.
+\end{itemize}
+\subsection{Exam Date}
+\begin{itemize}
+    \item 22nd or 23rd of June if possible. Jesper will find a censor and figure it out for next time.
 \end{itemize}
 \subsection{Next Supervisor Meeting}
-Wednesday, 22nd of March at 13:00
+Wednesday, 29th of March at 13:00
 
 \end{document}
