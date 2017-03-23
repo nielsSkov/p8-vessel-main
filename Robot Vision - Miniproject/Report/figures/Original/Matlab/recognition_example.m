@@ -2,7 +2,7 @@ clear
 clc
 close all
 
-original=imread('RealLego4.jpg');
+original=imread('image_cut.png');
 x=size(original,2);
 y=size(original,1);
 
@@ -36,13 +36,13 @@ imwrite(value,'value.png')
 
 saturation=imgaussfilt(saturation,'FilterSize',9);
 
-colour_threshold=0.43;
+colour_threshold=0.35;
 colour_mask=saturation>colour_threshold*ones(y,x);
 % subplot(2,2,2);
 % imshow(colour_mask);
 
 % Then, the black blocks using the Value channel
-blackthreshold=0.1;
+blackthreshold=0.2;
 black_mask=value<blackthreshold*ones(y,x);
 
 % subplot(2,2,3)
@@ -95,7 +95,7 @@ se = strel('square',3);
 yellow=0.12;
 orange=0.05;
 blue=0.61;
-green=0.22;
+green=0.44;
 
 blocks = struct('yellow', [], 'green', [], 'blue', [], 'orange', [], 'black', []);
 
@@ -104,7 +104,7 @@ colorlist=[yellow green blue orange];
 centroids_colour=original;
 
 for i=1:1:nobjects
-    if area(i).Area(1)>100
+    if area(i).Area(1)>400
         % Get edges in each object and fin the orientation of the longest line
         object_mask = false(y,x); % Create a mask for each object
         for j=1:1:size(pixelList(i).PixelList,1)
