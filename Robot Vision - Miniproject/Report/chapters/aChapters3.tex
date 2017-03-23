@@ -1,4 +1,7 @@
-\chapter{Recognition of Bricks}
+\chapter{}\label{chap:bricks}
+The be able to pick the bricks it is needed to recognize them in the picture, as well as find their position and orientation to send them as commands to the robot
+
+\section{Recognition of the Bricks}
 The recognition of the bricks is based on the the information of value, saturation and color given by the representation on the image in HSV color space.
 
 The algorithm is illustrated with an example image taken in similar conditions as the workstation, \autoref{fig:RealLego4}.
@@ -80,7 +83,7 @@ Combining the two masks, the final one can be found as seen in \autoref{fig:fina
 
 Once the mask is enhanced, each of the objects can be labeled to be analyzed one by one. It is noticeable that only the objects that have an area larger than a threshold are considered for future processing.
 
-The position of each brick can be found using the centroid of the pixels corresponding to each object, as seen in \autoref{fig:centroids}.
+The position of each brick in the picture can be found using the centroid of the pixels corresponding to each object, as seen in \autoref{fig:centroids}.
 
 \begin{figure}[H]
     \includegraphics[width=0.4\textwidth]{figures/centroids.png}
@@ -88,10 +91,23 @@ The position of each brick can be found using the centroid of the pixels corresp
     \label{fig:centroids}
 \end{figure}
 
-Once the position of the brick in the image is found, its color and orientation need to be stored as well to be used in further algorithms in the overall program.
+Once the position of the brick in the image is known, the color can be found looking at a small region around the center of each brick in the hue channel. The mean of the hue of these pixels is compared to four values corresponding to yellow, green, blue and orange. The color of the object is selected as the one closer to the mean of the region.
 
-The first one, the color, can be found looking at a small region around the center of each brick in the hue channel. The mean of the hue of these pixels is compared to four values corresponding to yellow, gree, blue and orange. The color of the object is selected as the one closer to the mean of the region.
-
+\section{Position and Orientation of the Bricks}
+To be able to relate the position of the bricks with the real one, the transformation matrix defined in \autoref{section} is used as follows
+\begin{flalign}
+    \begin{bmatrix}
+        U \\
+        V \\
+        W
+    \end{bmatrix}
+    =H
+    \begin{bmatrix}
+        x \\
+        y \\
+        1
+    \end{bmatrix}
+\end{flalign}
 To get the orientation is based on and edge detection followed by a Hough line transform. 
 
 Since the image is already binary, \autoref{fig:object_mask}, the edges can be detected by calculating the difference between the image and a dilation of it. The result can be seen in \autoref{fig:edges}.
