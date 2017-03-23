@@ -4,19 +4,22 @@ close all
 clc
 kuka=RobotConnectorKUKA;
 cam = webcam('Logitech');
-%original=snapshot(cam);
-%original=original(138:end,131:512,:);
 
 %%
 MoveHome(kuka);
-final_poses=[80, 500, 5, 0, 0, 0;
-    160, 500, 5, 0, 0, 0];
+openGrapper(kuka);
+pause(3);
+final_poses=[107.22,406.84,50,-44.10,0,0;
+    107.22,470.66,50,-44.10,0,0;
+    107.22,534.86,50,-44.10,0,0;
+    107.22,599.1,50,-44.10,0,0;
+    107.22,662.39,50,-44.10,0,0];
 Homer=0;
 Marge=0;
-Bart=1;
-Lisa=0;
+Bart=0;
+Lisa=1;
 Maggie=1;
-vel=0.7;
+vel=1;
 
 if (size(final_poses,1)<Homer+Marge+Bart+Lisa+Maggie)
     disp('WARNING: Not enough room to place the desired figures')
@@ -41,13 +44,9 @@ else
     if (nyellow<yellow)||(norange<orange)||(nblue<blue)||(ngreen<green)||(nblack<black)
         disp('WARNING: Not enough bricks to build the desired figures')
     else
-        k=1;                        % Figure index
+        k=3;                        % Figure index
         for i=1:1:Homer             % Build Homer
             % Blue brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.blue(nblue,1);
             y=blocks.blue(nblue,2);
             angle=blocks.blue(nblue,3);
@@ -61,10 +60,6 @@ else
             nblue=nblue-1;
             
             % Black brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.black(nblack,1);
             y=blocks.black(nblack,2);
             angle=blocks.black(nblack,3);
@@ -78,10 +73,6 @@ else
             nblack=nblack-1;
             
             % Yellow brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.yellow(nyellow,1);
             y=blocks.yellow(nyellow,2);
             angle=blocks.yellow(nyellow,3);
@@ -99,10 +90,6 @@ else
         
         for i=1:1:Marge             % Build Marge
             % Green brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.green(ngreen,1);
             y=blocks.green(ngreen,2);
             angle=blocks.green(ngreen,3);
@@ -116,10 +103,6 @@ else
             ngreen=ngreen-1;
             
             % Yellow brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.yellow(nyellow,1);
             y=blocks.yellow(nyellow,2);
             angle=blocks.yellow(nyellow,3);
@@ -133,10 +116,6 @@ else
             nyellow=nyellow-1;
             
             % Blue brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.blue(nblue,1);
             y=blocks.blue(nblue,2);
             angle=blocks.blue(nblue,3);
@@ -154,10 +133,6 @@ else
         
         for i=1:1:Bart             % Build Bart
             % Blue brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.blue(nblue,1);
             y=blocks.blue(nblue,2);
             angle=blocks.blue(nblue,3);
@@ -171,10 +146,6 @@ else
             nblue=nblue-1;
             
             % Orange brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.orange(norange,1);
             y=blocks.orange(norange,2);
             angle=blocks.orange(norange,3);
@@ -188,10 +159,6 @@ else
             norange=norange-1;
             
             % Yellow brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.yellow(nyellow,1);
             y=blocks.yellow(nyellow,2);
             angle=blocks.yellow(nyellow,3);
@@ -209,10 +176,6 @@ else
         
         for i=1:1:Lisa             % Build Lisa
             % Yellow brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.yellow(nyellow,1);
             y=blocks.yellow(nyellow,2);
             angle=blocks.yellow(nyellow,3);
@@ -226,10 +189,6 @@ else
             nyellow=nyellow-1;
             
             % Orange brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.orange(norange,1);
             y=blocks.orange(norange,2);
             angle=blocks.orange(norange,3);
@@ -243,10 +202,6 @@ else
             norange=norange-1;
             
             % Yellow brick
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.yellow(nyellow,1);
             y=blocks.yellow(nyellow,2);
             angle=blocks.yellow(nyellow,3);
@@ -264,11 +219,6 @@ else
         
         for i=1:1:Maggie             % Build Maggie
             % Blue brick
-            clear original blocks
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.blue(nblue,1);
             y=blocks.blue(nblue,2);
             angle=blocks.blue(nblue,3);
@@ -282,11 +232,6 @@ else
             nblue=nblue-1;
             
             % Yellow brick
-            clear original blocks
-            original=snapshot(cam);
-            original=original(MyParameters.YMIN:MyParameters.YMAX,...
-                MyParameters.XMIN:MyParameters.XMAX,:);
-            blocks=RecognizeBlocks(original);
             x=blocks.yellow(nyellow,1);
             y=blocks.yellow(nyellow,2);
             angle=blocks.yellow(nyellow,3);

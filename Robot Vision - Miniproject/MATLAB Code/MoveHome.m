@@ -8,5 +8,5 @@ z=MyParameters.HOMEZ+MyParameters.OFFSETZ;
 a=MyParameters.OFFSETA;
 b=MyParameters.OFFSETB;
 c=MyParameters.OFFSETC;
-moveLinear(kuka,x,y,z,a,b,c,0.3)
+moveLinear(kuka,x,y,z,a,b,c,0.6);
 end

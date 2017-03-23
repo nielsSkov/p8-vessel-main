@@ -1,8 +1,11 @@
 %% Script to check the performance of the trajectory following.
+run ControllerLQR.m
+sim PathFollowingModel.slx
 
-plot(xn_3DOF.Data,yn_3DOF.Data,'-xr')
+plot(xn_3DOF.Data,yn_3DOF.Data,'-r')
 hold on 
 plot(wps(:,1),wps(:,2),'--xk');
+
 % 
 % xlim([-150 200])
 % ylim([-20 300])

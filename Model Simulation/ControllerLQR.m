@@ -54,9 +54,9 @@ Di = Dd;
 %% LQR weights
 
 % For Q Matrix
-maxYaw = pi/100;          %[rad]
+maxYaw = 1000;          %[rad]
 maxYawDot = 10;          %[rad/s]
-maxXDot = 1;             %[m/s]
+maxXDot = 1000;             %[m/s]
 Q = diag([maxYaw maxYawDot maxXDot 0.01 0.01]);
 Q = 1./(Q.^2);
 Q(Q==Inf)=0;
@@ -92,7 +92,7 @@ F = Fe(1:2,1:3);
 Fi = Fe(1:2,4:5);
 
 
-refYaw = pi/3;      % [rad]
+refYaw = 1;      % [rad]
 refXdot = 1;        % [m/s]
 
 %% Plot Outputs of Simulation

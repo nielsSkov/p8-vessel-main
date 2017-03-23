@@ -8,34 +8,41 @@
 \renewcommand\figurename{Figur}
 \renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 15th of March 2017}
+\section*{Supervisor meeting\\ \small Wednesday, 22nd of March 2017}
 \subsection{Status}
 \begin{itemize}
-	\item The PS3 controller works on the boat and we can actuate the motors. 
+	\item 
+	\item
+	\item
+	\item
 \end{itemize}	
-\subsection{Structure of the System}
+\subsection{LQR and Integral Control}
 \begin{itemize}
-	\item MPC could be also used in the outer controller. The outer loop runs slower than the inner one so MPC could be feasible. 
-	\item Our structure sounds like a feasible structure, although there are many ways to approach it.
-	\item In the sensor input data, we could actually use two GPS modules if we want.
+	\item 
+	\item 
+	\item 
 \end{itemize}	
-\subsection{Controller Design}
+\subsection{Path Following Algorithm}
 \begin{itemize}
-	\item Typically we would do a simple PI controller to compare them with an LQR or a Robust control design. We plan to design an LQR controller for now and then compare to the robust controller.
-	\item Robust Control Theory: A controller robust to parameter variations is a usual way to go. An example is the mass matrix because it is a clear thing that varies. It is important to specify what you want to optimize against or to want you want to be robust against. For example, you could minimize the acceleration of the boat. 
-	\item We could put the robust design control on hold for now until we get the lectures on the course.
-	\item We could also try MPC in the boat. We could show that it would work although there might be some implementation issues due to the computational cost of the MPC. That could be considered a robust controller that handles, for example, wave disturbances, which are predictable.
+	\item 
+	\item  
+	\item 
+	\item 
 \end{itemize}
 \subsection{RTK-GPS}
 \begin{itemize}
-	\item We have ordered a similar GPS that should be here soon. It is a Reach GPS.
-	\item This one connects to base station.
+	\item 
+	\item 
+\end{itemize}
+\subsection{Kalman Filter Code}
+\begin{itemize}
+	\item 
+	\item 
 \end{itemize}
 \subsection{Miscellaneous}
 \begin{itemize}
-	\item We should look at Oceans15 biannual autonomous boat conference, it will give inspiration of the kind of controllers used at the moment. We could also use it for other references.
+	\item 
 \end{itemize}
 \subsection{Next Supervisor Meeting}
-Wednesday, 22nd of March at 13:00
-
+Wednesday, 29th of March at 13:00
 \end{document}
