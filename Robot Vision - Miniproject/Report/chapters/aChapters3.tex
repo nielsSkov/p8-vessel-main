@@ -1,8 +1,43 @@
-\chapter{}\label{chap:bricks}
-The be able to pick the bricks it is needed to recognize them in the picture, as well as find their position and orientation to send them as commands to the robot
+\chapter{Algorithm}\label{chap:algorithm}
+The algorithm followed to fulfill the required funcionality for the project is presented in this chapter. The code for the KUKA robot is contained in \lstinline[style=matlabinline]{MiniprojectCodeKUKA.m} whereas the code for the simulation in Robot Studio can be found in \lstinline[style=matlabinline]{MiniprojectCodeRobotStudio.m}. Both of these files show the same algorithm, which can be summarized as
+\begin{enumerate}
+	\item Identification of the Lego blocks in order to obtain its position and orientation.
+	\item Check figures required and number of bricks available and number of final locations available. 
+	\item If everything is correct, pick and place the bricks in their destination with subsequent operations.
+\end{enumerate}
+
+\section{Pick and Place Movement}
+The strategy for picking a piece and placing it in its final destination is composed by several movements. This operation is programed in the MATLAB function located in \lstinline[style=matlabinline]{PickPlace.m}
+
+Initially, the robot is placed on top of the brick that is to be picked. This also includes rotating the gripper to the appropiate orientation. Then, the gripper is moved down vertically until the height is correct and the brick can be grasped. Finally, the tool with the brick move up vertically finishing the pick operation. \autoref{list:pick} shows how these sequence looks like when programed in MATLAB.
+\begin{lstlisting}[ language = Matlab,
+caption  = {Matlab code to perform the pick instruction},
+label    = list:pick ]
+% Move to the initial pose with some heigth, go down, grab the brick and go up
+% again
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+moveLinear(kuka,x,y,z,a,b,c,vel)
+closeGrapper(kuka)
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+\end{lstlisting}
+
+After the brick has been picked, it is placed in its final destination following similar movements. The tool moves to the final location with the right orientation, then moves down, releases the brick and moves up vertically, ready to start a new pick operation with another block. In MATLAB, this movements are programed as in \autoref{list:place}
+\begin{lstlisting}[ language = Matlab,
+caption  = {Matlab code to perform the pick instruction},
+label    = list:place ]
+% Move to the pose with some heigth, go down, release the brick and go up
+% again
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+moveLinear(kuka,x,y,z,a,b,c,vel)
+openGrapper(kuka)
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+\end{lstlisting}
+
 
 \section{Recognition of the Bricks}
-The recognition of the bricks is based on the the information of value, saturation and color given by the representation on the image in HSV color space.
+The be able to pick the bricks it is needed to recognize them in the picture, as well as find their position and orientation to send them as commands to the robot.
+
+The recognition is based on the the information of value, saturation and color given by the representation on the image in HSV color space.
 
 The algorithm is illustrated with an example image taken in similar conditions as the workstation, \autoref{fig:RealLego4}.
 
@@ -45,7 +80,7 @@ To fin the black bricks, the value channel, \autoref{fig:value} can be used to f
         \label{fig:value}                                  
     }                                                                 
     {       
-                                                                    
+        
         \includegraphics[width=.25\textwidth]{figures/value.png}         
     }                                                                    
     \hspace{5pt}                                                          
@@ -93,7 +128,6 @@ The position of each brick in the picture can be found using the centroid of the
 
 Once the position of the brick in the image is known, the color can be found looking at a small region around the center of each brick in the hue channel. The mean of the hue of these pixels is compared to four values corresponding to yellow, green, blue and orange. The color of the object is selected as the one closer to the mean of the region.
 
-\section{Position and Orientation of the Bricks}
 To be able to relate the position of the bricks with the real one, the transformation matrix defined in \autoref{section} is used as follows
 \begin{flalign}
     \begin{bmatrix}
