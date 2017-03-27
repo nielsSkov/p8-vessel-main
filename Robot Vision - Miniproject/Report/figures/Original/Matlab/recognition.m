@@ -2,27 +2,19 @@ clear
 clc
 close all
 
-original=imread('image_cut.png');
+original=imread('blocks.png');
+original=original(MyParameters.YMIN:MyParameters.YMAX,MyParameters.XMIN:MyParameters.XMAX,:);
+imtool(original)
 x=size(original,2);
 y=size(original,1);
+imwrite(original,'original.png');
 
 %% Transform into HSV and separate in the different channels
-%gray=rgb2gray(original);
 hsv=rgb2hsv(original);
 
 hue=hsv(:,:,1);
 saturation=hsv(:,:,2);
 value=hsv(:,:,3);
-
-% figure
-% subplot(2,2,1)
-% imshow(original);
-% subplot(2,2,2)
-% imshow(hue);
-% subplot(2,2,3)
-% imshow(saturation);
-% subplot(2,2,4)
-% imshow(value);
 
 imwrite(hue,'hue.png')
 imwrite(saturation,'saturation.png')
@@ -30,24 +22,13 @@ imwrite(value,'value.png')
 
 %% Look for blocks
 % First, coloured blocks using the saturation channel
-% figure 
-% subplot(2,2,1);
-% imshow(original);
 
 saturation=imgaussfilt(saturation,'FilterSize',9);
 
-colour_threshold=0.35;
-colour_mask=saturation>colour_threshold*ones(y,x);
-% subplot(2,2,2);
-% imshow(colour_mask);
+colour_mask=saturation>MyParameters.COLOR_THRESHOLD*ones(y,x);
 
 % Then, the black blocks using the Value channel
-blackthreshold=0.2;
-black_mask=value<blackthreshold*ones(y,x);
-
-% subplot(2,2,3)
-% imshow(black_mask)
-
+black_mask=value<MyParameters.BLACK_THRESHOLD*ones(y,x);
 
 % Join masks for coloured blocks and black block.
 final_mask=black_mask | colour_mask;
@@ -57,13 +38,10 @@ imwrite(black_mask,'black_mask.png')
 imwrite(final_mask,'final_mask.png')
 
 % Final Processing
-se = strel('square',10);
+se = strel('square',5);                            
 final_mask=imopen(final_mask,se);
-se = strel('square',10);
+se = strel('square',5);
 final_mask=imclose(final_mask,se);
-
-% subplot(2,2,4)
-% imshow(final_mask)
 
 imwrite(final_mask,'final_mask2.png')
 
@@ -77,29 +55,22 @@ nobjects=length(centroid);
 centroids=255*repmat(uint8(final_mask),1,1,3); % Converto final_mask to
                                                % be able to put markers
 for i=1:1:nobjects
-    if area(i).Area(1)>100
+    if area(i).Area(1)>MyParameters.AREA_MIN
         cent_y=round(centroid(i).Centroid(2));
     	cent_x=round(centroid(i).Centroid(1));
         centroids = insertMarker(centroids,[cent_x cent_y],'*','color','blue','size',10);
     end
 end
 
-% figure
-% imshow(centroids)
 imwrite(centroids,'centroids.png')
 
 %% Finding and storing centroids according to the colour as well as their orientation according with their longest edge
 clear lines H theta rho
 se = strel('square',3);
 
-yellow=0.12;
-orange=0.05;
-blue=0.61;
-green=0.44;
-
 blocks = struct('yellow', [], 'green', [], 'blue', [], 'orange', [], 'black', []);
 
-colorlist=[yellow green blue orange];
+colorlist=[MyParameters.YELLOW MyParameters.GREEN MyParameters.BLUE MyParameters.ORANGE];
 
 centroids_colour=original;
 
@@ -136,19 +107,16 @@ for i=1:1:nobjects
             object = insertShape(object,'circle',...
                         [xy(2,1) xy(2,2) 5],'LineWidth',3,'color','blue');  
            	object = insertShape(object,'line',[xy(1,1) xy(1,2) xy(2,1) xy(2,2)],'LineWidth',5,'color','blue');
-%             plot(xy(:,1),xy(:,2),'LineWidth',2,'Color',[0 0.7 0]);
-%             plot(xy(1,1),xy(1,2),'o','LineWidth',2,'Color',[0 0 0.7]);
-%             plot(xy(2,1),xy(2,2),'o','LineWidth',2,'Color',[0.7 0 0]);
-%             hold off
             imwrite(object,'object.png')
-            % imshow(object)
         end
         
         % Get a mask of the object in the hue
         cent_y=round(centroid(i).Centroid(2));
         cent_x=round(centroid(i).Centroid(1));
-        region_hue=hue(cent_y-5:cent_y+5,cent_x-5:cent_x+5);
-        region_blackmask=black_mask(cent_y-5:cent_y+5,cent_x-5:cent_x+5);
+        region_hue=hue(cent_y-MyParameters.MASK_SIDE:cent_y+MyParameters.MASK_SIDE,...
+            cent_x-MyParameters.MASK_SIDE:cent_x+MyParameters.MASK_SIDE);
+        region_blackmask=black_mask(cent_y-MyParameters.MASK_SIDE:cent_y+...
+            MyParameters.MASK_SIDE,cent_x-MyParameters.MASK_SIDE:cent_x+MyParameters.MASK_SIDE);
         
         % Sort by colour and store centroid and orientation
         if (mean(mean(region_blackmask,1)) >= 0.9)
@@ -180,8 +148,6 @@ for i=1:1:nobjects
     end
 end
 
-%figure
-% imshow(centroids_colour)
 imwrite(centroids_colour,'centroids_colour.png')
 
 
