@@ -24,7 +24,7 @@ moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
 After the brick has been picked, it is placed in its final destination following similar movements. The tool moves to the final location with the right orientation, then moves down, releases the brick and moves up vertically, ready to start a new pick operation with another block. In MATLAB, this movements are programed as in \autoref{list:place}
 \begin{lstlisting}[ language = Matlab,
 caption  = {Matlab code to perform the pick instruction},
-label    = list:pick ]
+label    = list:place ]
 % Move to the pose with some heigth, go down, release the brick and go up
 % again
 moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
