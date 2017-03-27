@@ -1,0 +1,259 @@
+%preamble - package unclusion and set up
+\input{setup/preamble.tex}
+
+%macros - please read this file
+\input{setup/macros.tex} %TIP: If you are using TeXstudio you can open
+                         %     the file by Ctrl+LeftClick on setup/macros.tex
+
+\begin{document}
+\section*{Model Predictive Control Exercise - Group 17gr832}
+Alejandro Alonso García\\
+Anders Egelund Kjeldal\\
+Himal Kooverjee  \\
+Niels Skov Vestergaard\\
+Noelia Villarmarzo Arruñada
+%
+\subsection*{Description of the Problem}
+The objective is to optimize the profit that can be obtained by running the plant showed in \autoref{fig:powerPlant}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/powerPlant}
+    \caption{Diagram of the plant, where $Q_\mathrm{G}$ is the power produced by the gas turbine, $Q_\mathrm{W}$ is the power produced by the waste burner, $Q_\mathrm{A,in}$ is the power feed into the accumulator, $Q_\mathrm{bp}$ is the power bypassing the accumulator, $Q_\mathrm{A,out}$ is the power leaving the accumulator, and $Q_\mathrm{E}$ is the power leaving the plant. The units of power are given in megawatt [MW]}
+    \label{fig:powerPlant}
+\end{figure}
+
+The power flows in the plant have some constraints shown below:
+%
+\begin{flalign}
+    Q_\mathrm{W} + Q_\mathrm{G} = Q_\mathrm{bp} + Q_\mathrm{A,in}, \ \ & \ \ Q_\mathrm{E} = Q_\mathrm{bp} + Q_\mathrm{A,out} \label{eq:equality} \\
+    0 \leq Q_\mathrm{W} \leq 40, \ \  \ \  0 \leq Q_\mathrm{G} \leq 20 \ \ & \ \ 0, \leq Q_\mathrm{A,in} \leq 50, \ \  \ \ 0 \leq Q_\mathrm{A,out} \leq 25 \label{eq:inequality}
+\end{flalign}
+
+And the accumulator have some dynamics and some constraints as well
+%
+\begin{flalign}
+    &E_\mathrm{A}[k+1] = E_\mathrm{A}[k] + (Q_\mathrm{A,in}[k] - Q_\mathrm{A,out}[k]) T_\mathrm{s} \label{eq:dynamics}\\
+    &0 \leq E_\mathrm{A} \leq 200 \label{eq:inequality_E}
+\end{flalign}
+
+The profit can be optimize by scheduling the power production using the knowledge of the plant and future prices of gas, waste burning and electricity ($P_\mathrm{G}$, $P_\mathrm{W}$ and $P_\mathrm{E}$). The profit is given by
+%
+\begin{flalign}
+    \sum_{i=k}^{k+L-1} (P_\mathrm{E}[i] Q_\mathrm{E}[i] - (P_\mathrm{G}[i] Q_\mathrm{G}[i] + P_\mathrm{W}[i] Q_\mathrm{W}[i])) T_\mathrm{s} \label{eq:cost}
+\end{flalign}
+
+\subsection*{Problem Formulation in CVX Form}
+Once the problem has been described, the constraints, the dynamic equation and the cost function need to be rewritten in a suitable way to be able to optimize the problem using CVX.
+
+The dynamic equation, \autoref{eq:dynamics}, of the accumulator can be rewritten by substituting backwards each $E_\mathrm{A}[k]$ until it depends only on the inputs and the initial state.
+%
+\begin{flalign}
+    E_\mathrm{A}[k+1] = E_\mathrm{A}[k] + &(Q_\mathrm{A,in}[k] - Q_\mathrm{A,out}[k]) T_\mathrm{s} \\
+    &... \nonumber \\
+    E_\mathrm{A}[k+l] = E_\mathrm{A}[k] + &\sum_{i=k}^{k+l-1}(Q_\mathrm{A,in}[i] - Q_\mathrm{A,out}[i]) T_\mathrm{s} \\
+    &... \nonumber \\
+    E_\mathrm{A}[k+L] = E_\mathrm{A}[k] + &\sum_{i=k}^{k+L-1}(Q_\mathrm{A,in}[i] - Q_\mathrm{A,out}[i]) T_\mathrm{s}
+\end{flalign}
+
+This expression can also be rewritten in matrix form as follows
+\begin{flalign}
+    \begin{bmatrix}
+        E_\mathrm{A}[k+1] \\
+        E_\mathrm{A}[k+2] \\
+        ...\\
+        E_\mathrm{A}[k+L] \\
+    \end{bmatrix}
+    =  
+    \begin{bmatrix}
+        E_\mathrm{A}[k] \\
+        E_\mathrm{A}[k] \\
+        ...\\
+        E_\mathrm{A}[k] \\
+    \end{bmatrix}  
+    +
+    \begin{bmatrix}
+        Q_\mathrm{A,in}[k] - Q_\mathrm{A,out}[k] \\
+        Q_\mathrm{A,in}[k+1] - Q_\mathrm{A,out}[k+1] \\
+        ... \\
+        Q_\mathrm{A,in}[k+L-1] - Q_\mathrm{A,out}[k+L-1]
+    \end{bmatrix}^\mathrm{T}
+    \begin{bmatrix}
+        1 & 1 & 1 & ... & 1 \\
+        0 & 1 & 1 & ... & 1\\
+        0 & 0 & 1 & ... & 1\\
+        ... & ... & ... & ... & ... \\
+        0 & 0 & 0 & ... & 1
+    \end{bmatrix} \label{eq:matrix_dynamics}
+\end{flalign}
+
+Since there exists a constraint on the amount of charge that can be stored in the accumulator at each time, \autoref{eq:matrix_dynamics} can be used to write that constraint in an appropriate form.
+\begin{flalign}
+    0 \leq  
+    \begin{bmatrix}
+        E_\mathrm{A}[k] \\
+        E_\mathrm{A}[k] \\
+        ...\\
+        E_\mathrm{A}[k] \\
+    \end{bmatrix}  
+    +
+    \begin{bmatrix}
+        Q_\mathrm{A,in}[k] - Q_\mathrm{A,out}[k] \\
+        Q_\mathrm{A,in}[k+1] - Q_\mathrm{A,out}[k+1] \\
+        ... \\
+        Q_\mathrm{A,in}[k+L-1] - Q_\mathrm{A,out}[k+L-1]
+    \end{bmatrix}^\mathrm{T}
+    \begin{bmatrix}
+        1 & 1 & 1 & ... & 1 \\
+        0 & 1 & 1 & ... & 1\\
+        0 & 0 & 1 & ... & 1\\
+        ... & ... & ... & ... & ... \\
+        0 & 0 & 0 & ... & 1
+    \end{bmatrix}
+    \leq 200 \label{eq:matrix_constraint}
+\end{flalign}
+
+The equality constraints in \autoref{eq:equality} can be used to rewrite the cost function as a function of $Q_\mathrm{G}$, $Q_\mathrm{W}$, $Q_\mathrm{A,in}$ and $Q_\mathrm{A,out}$. This results in \autoref{eq:final_cost}
+%
+\begin{flalign}
+    & \sum_{i=k}^{k+L-1} (P_\mathrm{E}[i] Q_\mathrm{E}[i] - (P_\mathrm{G}[i] Q_\mathrm{G}[i] + P_\mathrm{W}[i] Q_\mathrm{W}[i])) T_\mathrm{s} \\
+    & \sum_{i=k}^{k+L-1} (P_\mathrm{E}[i] (Q_\mathrm{bp}[i] + Q_\mathrm{A,out}[i]) - (P_\mathrm{G}[i] Q_\mathrm{G}[i] + P_\mathrm{W}[i] Q_\mathrm{W}[i])) T_\mathrm{s} \\
+    & \sum_{i=k}^{k+L-1} (P_\mathrm{E}[i] (Q_\mathrm{W}[i] + Q_\mathrm{G}[i] - Q_\mathrm{A,in}[i] + Q_\mathrm{A,out}) - (P_\mathrm{G}[i] Q_\mathrm{G}[i] + P_\mathrm{W}[i] Q_\mathrm{W}[i])) T_\mathrm{s} \\
+    & \sum_{i=k}^{k+L-1} ((P_\mathrm{E}[i] - P_\mathrm{W}[i])Q_\mathrm{G}[i] + (P_\mathrm{E}[i] - P_\mathrm{G}[i])Q_\mathrm{G}[i] + P_\mathrm{E}[i] Q_\mathrm{A,out}[i] - P_\mathrm{E}[i] Q_\mathrm{A,in}[i]) T_\mathrm{s} \label{eq:final_cost}
+\end{flalign}
+
+This expression can also be written in matrix form to be suitable to use with CVX.
+\footnotesize{
+\begin{flalign}
+    \begin{bmatrix}
+        P_\mathrm{E}[k] - P_\mathrm{W}[k] \\
+        P_\mathrm{E}[k+1] - P_\mathrm{W}[k+1] \\
+        ...\\
+        P_\mathrm{E}[k+L-1] -P_\mathrm{W}[k+L-1] \\
+    \end{bmatrix}^\mathrm{T}  
+    \begin{bmatrix}
+        Q_\mathrm{W}[k] \\
+        Q_\mathrm{W}[k+1] \\
+        ...\\
+        Q_\mathrm{W}[k+L-1] \\
+    \end{bmatrix}  
+    +
+    \begin{bmatrix}
+        P_\mathrm{E}[k] - P_\mathrm{G}[k] \\
+        P_\mathrm{E}[k+1] - P_\mathrm{G}[k+1] \\
+        ...\\
+        P_\mathrm{E}[k+L-1] -P_\mathrm{G}[k+L-1] \\
+    \end{bmatrix}^\mathrm{T}  
+    \begin{bmatrix}
+        Q_\mathrm{G}[k] \\
+        Q_\mathrm{G}[k+1] \\
+        ...\\
+        Q_\mathrm{G}[k+L-1] \\
+    \end{bmatrix}
+    + \nonumber\\
+    +
+    \begin{bmatrix}
+        P_\mathrm{E}[k] \\
+        P_\mathrm{E}[k+1]\\
+        ...\\
+        P_\mathrm{E}[k+L-1]\\
+     \end{bmatrix}^\mathrm{T}  
+     \begin{bmatrix}
+         Q_\mathrm{A_out}[k] \\
+         Q_\mathrm{A_out}[k+1] \\
+         ...\\
+         Q_\mathrm{A_out}[k+L-1] \\
+     \end{bmatrix}  
+     -
+     \begin{bmatrix}
+         P_\mathrm{E}[k]\\
+         P_\mathrm{E}[k+1]\\
+         ...\\
+         P_\mathrm{E}[k+L-1]\\
+     \end{bmatrix}^\mathrm{T}  
+     \begin{bmatrix}
+         Q_\mathrm{A_in}[k] \\
+         Q_\mathrm{A_in}[k+1] \\
+         ...\\
+         Q_\mathrm{A_in}[k+L-1] \\
+     \end{bmatrix}\label{eq:matrix_cost}
+\end{flalign}
+}
+
+\subsection*{Implementation}
+The implementation of the optimization problem is shown in \autoref{cvxImplementation}. It includes the inequality constraints in \autoref{eq:inequality} and \ref{eq:matrix_constraint} as well as teh cost defined in \autoref{eq:matrix_cost}.
+%
+\begin{lstlisting}[ language = Matlab,
+					caption  = {Matlab code for the implementation of the problem with CVX},
+					label    = cvxImplementation ]
+cvx_begin quiet % The beginning of the optimization problem
+
+    % Define the variables
+    variable Q_W(L,1);
+    variable Q_G(L,1);
+    variable Q_A_in(L,1);
+    variable Q_A_out(L,1);
+    
+    % Specify the optimization of cost
+    minimize(-(P_E(k:k+L-1)'*Q_A_out+(P_E(k:k+L-1)'-P_G(k:k+L-1)')*Q_G+...
+    (P_E(k:k+L-1)'-P_W(k:k+L-1)')*Q_W-P_E(k:k+L-1)'*Q_A_in)*Ts);
+    
+    % Constraints
+    subject to 
+    Q_W>=Q_W_min;
+    Q_W<=Q_W_max;
+    Q_G>=Q_G_min;
+    Q_G<=Q_G_max;
+    Q_A_in>=Q_A_in_min;
+    Q_A_in<=Q_A_in_max;
+    Q_A_out>=Q_A_out_min;
+    Q_A_out<=Q_A_out_max;
+    (Q_A_in-Q_A_out)'*triu(ones(L,L))>=E_A_min-E_A_sys(k);
+    (Q_A_in-Q_A_out)'*triu(ones(L,L))<=E_A_max-E_A_sys(k);
+    
+cvx_end     % The end of the optimization problem
+\end{lstlisting}
+
+In each iteration of the loop it tries to minimize the cost along the horizon $L$ knowing the corresponding prices and the inequality constraints, by finding the optimal $Q_\mathrm{W}$, $Q_\mathrm{W}$, $Q_\mathrm{A,in}$ and $Q_\mathrm{A,out}$.
+
+\subsection*{Results}
+The results can be seen in the figures below.
+\begin{figure}[H]
+    \captionbox 
+    {
+        \label{fig:E_A}                                  
+    }                                                                 
+    {                                                                 
+        \includegraphics[height=.37\textwidth]{figures/E_A}
+    }                                                                    
+    \hspace{5pt}                                                          
+    \captionbox  
+    {        
+        Comparison of the power production and the price of electricity.    
+        \label{fig:Q_E}                                    
+    }                                                                     
+    {   
+        \includegraphics[height=.37\textwidth]{Q_E}            
+    }                                                                             
+\end{figure}
+\begin{figure}[H]
+    \captionbox
+    {       
+        Comparison of the power produces using waste and the corresponding price of waste burning.          
+        \label{fig:Q_W}                                  
+    }                                                                 
+    {                                                                  
+        \includegraphics[height=.37\textwidth]{figures/Q_W} 
+    }                                                                    
+    \hspace{5pt}                                                          
+    \captionbox  
+    {          
+        Comparison of the power production using gas and the corresponding price of gas.                                                      
+        \label{fig:Q_G}                                     
+    }                                                                     
+    {                                                                     
+        \includegraphics[height=.37\textwidth]{Q_G}            
+    }      
+\end{figure}
+
+\end{document}
