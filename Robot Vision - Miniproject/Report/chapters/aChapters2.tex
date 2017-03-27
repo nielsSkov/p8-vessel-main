@@ -1,12 +1,10 @@
 \chapter{System Description}\label{chap:systemDescription}
 The system is composed by a camera that captures the table that contains the bricks and a robot arm that is charge of picking and placing the brick to build the desired figures. The setup can be seen in \autoref{fig:setup}.
-
-%\begin{figure}
-%    \includegraphics[width=0.4\textwidth]{figures/setup}
-%    \caption{Image of the setup, where the robot cell can be seen. It contains the robot arm, the security fence, the camera and the table that is the base workspace of the system. }
-%    \label{fig:setup}
-%\end{figure}
-
+\begin{figure}
+    \includegraphics[width=0.4\textwidth]{figures/setup}
+    \caption{Image of the setup, where the robot cell can be seen. It contains the robot arm, the security fence, the camera and the table that is the base workspace of the system. }
+    \label{fig:setup}
+\end{figure}
 In this chapter more details about the robot arm and the camera are described, including the definition of the coordinate system used to send references to the robot and the camera calibration. 
 
 \section{Industrial Robot}
@@ -18,7 +16,6 @@ The manipulator is a 6DOF robot arm that is made of six rotation joints. A diagr
     \caption{.\cite{kuka} }
     \label{fig:kuka_axes}
 \end{figure}
-
 In order to pick the bricks, a gripper needs to be designed based of the dimensions of the flange and the bricks. A drawing of the bottom view of the flange, where the gripper is attached can be seen in \autoref{fig:holder}, while the Lego brick dimensions can be seen in \autoref{fig:legobrick}.
 
 \begin{figure}[H]
@@ -38,7 +35,6 @@ In order to pick the bricks, a gripper needs to be designed based of the dimensi
         \includegraphics[width=.4\textwidth]{figures/LegoPiece}            
     }                                                                            
 \end{figure}
-
 The design of the gripper is done such that when it is open it has enough space to grab the piece while being able to lead it to the right orientation when it is closed, and it is also able to push the brick in the final position. These features ease the pick and place operations. A drawing of the final design of the gripper can be seen in \autoref{fig:gripper}.
 
 \fxnote{insert figure gripper}
@@ -51,7 +47,6 @@ label    = MatlabFunctions ]
 \end{lstlisting}
 
 \section{Camera}
-
 The position and orientation of the blocks are obtained from images taken with Logitech HD Pro Webcam C920. This device can be seen in \autoref{fig:camera}.
 \begin{figure}[H]
     \includegraphics[width=0.2\textwidth]{figures/camera.png}
@@ -61,9 +56,11 @@ The position and orientation of the blocks are obtained from images taken with L
 The camera has been placed in the robot cell as in \autoref{fig:setup}. In order to use the images, a projection matrix that translates the image points into scene points needs to be found. As all desired goals lay on the same plane, the projection matrix can be found using pairs of points that have correspondence in the scene and in the image.
 
 \autoref{fig:points} shows the points used in the scene, in this case the threaded holes in the table which are 40 mm apart. The hole marked with a red dot has been chosen to be the origin of the workspace and the green dots are the ones used in the projection matrix calculation.
-
-\fxnote{show figure of the projection}
-
+\begin{figure}[H]
+	\includegraphics[width=0.2\textwidth]{figures/dots.png}
+	\caption{Logitech HD Pro Webcam C920 used to locate the Lego bricks.\cite{camera} }
+	\label{fig:camera}
+\end{figure}
 The projection matrix found is
 \begin{flalign}
     \vec{H}=
