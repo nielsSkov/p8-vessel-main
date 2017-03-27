@@ -6,7 +6,7 @@ The system is composed by a camera that captures the table that contains the bri
     \label{fig:setup}
 \end{figure}
 
-The coordinate of the base workspace can be seen in \autoref{setup} and it is aligned with the robot's frame, but it starts at position (411.69,-285.27,340.12) in the robot's world frame, with respect to whom the coordinates need to be sent to the robot. Since all the positions are calculated with respect to the base frame, the offset is added before sending the command to the robot controller.
+The coordinate frame of the base workspace can be seen in \autoref{setup} and it is aligned with the robot's frame, but it starts at position (411.69,-285.27,340.12) in the robot's world frame, with respect to whom the coordinates need to be sent to the robot. Since all the positions are calculated with respect to the base frame, the offset is added before sending the command to the robot controller.
   
 In this chapter more details about the robot arm and the camera are described. 
 
@@ -74,7 +74,7 @@ The position and orientation of the blocks are obtained from images taken with L
 \end{figure}
 The camera has been placed in the robot cell as in \autoref{fig:setup}. In order to use the images, a projection matrix that translates the image points into scene points needs to be found. As all desired goals lay on the same plane, the projection matrix can be found using pairs of points that have correspondence in the scene and in the image.
 
-\autoref{fig:points} shows the points used in the scene, in this case the threaded holes in the table which are 40 mm apart. The black axes define the base coordinate frame and the red dots are the ones used in the projection matrix calculation.
+\autoref{fig:points} shows the points used in the scene, in this case the threaded holes in the table which are 40 mm apart. The black axes define the workspace coordinate frame and the red dots are the ones used in the projection matrix calculation.
 \begin{figure}[H]
 	\includegraphics[width=0.25\textwidth]{figures/dots_cut.pdf}
 	\caption{Image used to find the projection matrix. The black axes define the base coordinate frame and the red dots are the ones used in the projection matrix calculation. }
