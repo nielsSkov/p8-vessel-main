@@ -1,10 +1,149 @@
 \chapter{Algorithm}\label{chap:algorithm}
 The algorithm followed to fulfill the required funcionality for the project is presented in this chapter. The code for the KUKA robot is contained in \lstinline[style=matlabinline]{MiniprojectCodeKUKA.m} whereas the code for the simulation in Robot Studio can be found in \lstinline[style=matlabinline]{MiniprojectCodeRobotStudio.m}. Both of these files show the same algorithm, which can be summarized as
 \begin{enumerate}
-	\item Identification of the Lego blocks in order to obtain its position and orientation.
+	\item Identification of the Lego bricks in order to obtain its position and orientation.
 	\item Check figures required and number of bricks available and number of final locations available. 
 	\item If everything is correct, pick and place the bricks in their destination with subsequent operations.
 \end{enumerate}
+\section{Identification of the Bricks}
+The goal of the brick identification algorithm is to obtain the position and orientation of the bricks so as to generate appropiate commands for the robot.
+
+The algorithm is illustrated with an example image taken in similar conditions as in the workstation, \autoref{fig:RealLego4}. It is based on the the information of value, saturation and color given by the representation on the image in HSV color space.
+
+\begin{figure}[H]
+	\includegraphics[width=0.25\textwidth]{figures/original.png}
+	\caption{Original image that includes the color bricks to identify in random positions.}
+	\label{fig:RealLego4}
+\end{figure}
+
+The first step is to convert the image to HSV color space and split into the three different channels.
+
+The common characteristic of all colored bricks is their high brightness in the saturation channel, see \autoref{fig:saturation} as they are painted with bright colors. For this reason, the saturation channel image is thresholded to find orange, yellow, green and blue bricks. The threshold applied is 0.2 in the range [0,1]. This process gives as a result the binary mask shown in \autoref{fig:colour_mask}, where the white pixel values represent the colored bricks in the original image.
+
+\begin{figure}[H]
+	\captionbox  %<--use captionbox instead if no global caption is needed
+	{ 
+		Saturation channel of the original image in HSV color space.              
+		\label{fig:saturation}                                  
+	}                                                                 
+	{                                                                  
+		\includegraphics[width=.25\textwidth]{figures/saturation.png}         
+	}                                                                    
+	\hspace{5pt}                                                          
+	\captionbox
+	{      
+		Mask for the colored bricks (orange, green, blue and yellow). 
+		\label{fig:colour_mask}                                     
+	}
+	{
+		\includegraphics[width=.25\textwidth]{colour_mask.png}            
+	}                                                                             
+\end{figure}
+
+The black bricks will not be detected using the saturation channel of the image. For these, the value channel is used instead. This is suitable as black has a very low brightness in this channel. This new thresholding operation takes the low value pixels and creates the mask seen in \autoref{fig:black_mask}. The threshold used is 0.2 in the range [0,1].
+\begin{figure}[H]
+	\captionbox  %<--use captionbox instead if no global caption is needed
+	{
+		Value channel of the original image in HSV color space.                
+		\label{fig:value}                                  
+	}                                                                 
+	{       
+		
+		\includegraphics[width=.25\textwidth]{figures/value.png}         
+	}                                                                    
+	\hspace{5pt}                                                          
+	\captionbox
+	{  
+		Mask for the black brick.
+		\label{fig:black_mask}                                     
+	}
+	{
+		\includegraphics[width=.25\textwidth]{black_mask.png}            
+	}                                                                             
+\end{figure}
+The masks for the coloured bricks and for the black bricks are then combined resulting in \autoref{fig:final_mask}. As it is noticeable in the mask, there are holes in some of the blobs and, although noise does not appear in the image, it has a high probability of appearing in order images taken. For solving these two issues, an opening operation, followed by a closed operation removes both noise and holes, respectively. Both processes use a $5\times 5$ square kernel and the after they have been applied on \autoref{fig:final_mask} can be seen in \autoref{fig:final_mask2}. 
+
+\begin{figure}[H]
+	\captionbox  %<--use captionbox instead if no global caption is needed
+	{
+		Combination of both masks before processing.             
+		\label{fig:final_mask}                                  
+	}                                                                 
+	{                                                                  
+		\includegraphics[width=.25\textwidth]{figures/final_mask.png}         
+	}                                                                    
+	\hspace{5pt}                                                          
+	\captionbox
+	{       
+		Enhanced mask after removing noise and filling holes in the objects.
+		\label{fig:final_mask2}                                     
+	}
+	{
+		\includegraphics[width=.25\textwidth]{final_mask2.png}            
+	}                                                                             
+\end{figure}
+
+Once the mask is enhanced, each of the objects can be labeled to be analyzed one by one. It is worth mentioning that only the objects that have an area larger than a threshold of 250 pixels are considered for future processing. This helps removing the effect of any persistent noise blob that survived the morphology operations.
+
+The position of each brick in the picture is then found using the centroid of the pixels corresponding to each object, as seen in \autoref{fig:centroids}.
+
+\begin{figure}[H]
+	\includegraphics[width=0.3\textwidth]{figures/centroids.png}
+	\caption{Centroids of the different objects in the mask (blue marks).}
+	\label{fig:centroids}
+\end{figure}
+
+Once the position of the brick in the image is known, it is necessary to identify its color. This is done by looking at a small region around the center of each brick in the hue channel. The mean hue of the pixels in the region is compared to hue reference values corresponding to yellow, green, blue and orange. The region used in the algorithm is a square centered in the centroid and with 5 pixels on each side. The hue values used were obtained by examining images of the bricks taken in similar conditions leading to 0.12 for yellow, 0.05 for orange, 0.61 for blue, and 0.44 for green. All of them are represented in a [0,1] range.
+
+The color of the object is selected as the one closer to the mean of the region.
+
+The last information that should be extracted by the algorithm is the orientation of the object. It is based on and edge detection followed by a Hough transform for lines. Since the image is already binary, \autoref{fig:object_mask}, the edges can be detected by calculating the difference between the image and a dilation of it. The result can be seen in \autoref{fig:edges}.
+
+\begin{figure}[H]
+	\captionbox  %<--use captionbox instead if no global caption is needed
+	{
+		Mask for one of the objects.              
+		\label{fig:object_mask}                                  
+	}                                                                 
+	{                                                                  
+		\includegraphics[width=.25\textwidth]{figures/object_mask.png}         
+	}                                                                    
+	\hspace{5pt}                                                          
+	\captionbox
+	{       
+		Edges found in the object by the difference of the original mask and a dilated one.
+		\label{fig:edges}                                     
+	}
+	{
+		\includegraphics[width=.25\textwidth]{edges.png}            
+	}                                                                              
+\end{figure}
+
+Once the edges are found, the Hough transform is used to find the lines with a minimum lenght of 20 pixels. The orientation of each brick then is defined as the angle of the longest line found with respect to the horizontal axis, see \autoref{fig:object}.
+
+\begin{figure}[H]
+	\includegraphics[width=0.25\textwidth]{figures/object.png}
+	\caption{Largest line in the object marked in blue.}
+	\label{fig:object}
+\end{figure}
+
+The output of the algorithm is the position, orientation and color of the brick. The two first variables cannot be used by the program as long as they are referred to the image. In order to express position and orientation in the workspace coordinates, the transformation matrix defined in \autoref{sec:camera}. This is straightforward for the position as
+\begin{flalign}
+	\begin{bmatrix}
+		U \\
+		V \\
+		W
+	\end{bmatrix}
+	=H
+	\begin{bmatrix}
+		x \\
+		y \\
+		1
+	\end{bmatrix}
+\end{flalign}
+To translate the orientation, a second point is generated in image coordinates. This point belongs to a line that goes through the centroid and has the orientation found with the Hough transform. The new point is also translated into workspace coordinates and the orientation in the workspace is found by doing the inverse tangent function with the change in y and x directions between the centroid and this newly generated point.
+
+At this point, each brick is identified by its position in the image, its color and its orientation in workspace coordinates.
 
 \section{Pick and Place Movement}
 The strategy for picking a piece and placing it in its final destination is composed by several movements. This operation is programed in the MATLAB function located in \lstinline[style=matlabinline]{PickPlace.m}
@@ -32,147 +171,3 @@ moveLinear(kuka,x,y,z,a,b,c,vel)
 openGrapper(kuka)
 moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
 \end{lstlisting}
-
-
-\section{Recognition of the Bricks}
-The be able to pick the bricks it is needed to recognize them in the picture, as well as find their position and orientation to send them as commands to the robot.
-
-The recognition is based on the the information of value, saturation and color given by the representation on the image in HSV color space.
-
-The algorithm is illustrated with an example image taken in similar conditions as the workstation, \autoref{fig:RealLego4}.
-
-\begin{figure}[H]
-    \includegraphics[width=0.25\textwidth]{figures/original.png}
-    \caption{Original image that include the color bricks to recognize in random positions.}
-    \label{fig:RealLego4}
-\end{figure}
-
-The first step is to convert the image to HSV color space and split the channels different channels.
-
-To find the color blocks (orange, yellow, green and blue) the saturation channel is used combined with a threshold to find the pixels that have a high saturation value (bright colors). This step results in a binary mask, where the white pixels represent the object.
-
-\begin{figure}[H]
-    \captionbox  %<--use captionbox instead if no global caption is needed
-    { 
-        Saturation channel of the original image in HSV color space.              
-        \label{fig:saturation}                                  
-    }                                                                 
-    {                                                                  
-        \includegraphics[width=.25\textwidth]{figures/saturation.png}         
-    }                                                                    
-    \hspace{5pt}                                                          
-    \captionbox
-    {      
-        Mask for the color bricks (orange, green, blue and yellow). 
-        \label{fig:colour_mask}                                     
-    }
-    {
-        \includegraphics[width=.25\textwidth]{colour_mask.png}            
-    }                                                                             
-\end{figure}
-
-To fin the black bricks, the value channel, \autoref{fig:value} can be used to find the pixels with very low value, that results in another mask, as seen in \autoref{fig:black_mask}.
-
-\begin{figure}[H]
-    \captionbox  %<--use captionbox instead if no global caption is needed
-    {
-        Value channel of the original image in HSV color space.                
-        \label{fig:value}                                  
-    }                                                                 
-    {       
-        
-        \includegraphics[width=.25\textwidth]{figures/value.png}         
-    }                                                                    
-    \hspace{5pt}                                                          
-    \captionbox
-    {  
-        Mask for the black brick.
-        \label{fig:black_mask}                                     
-    }
-    {
-        \includegraphics[width=.25\textwidth]{black_mask.png}            
-    }                                                                             
-\end{figure}
-
-Combining the two masks, the final one can be found as seen in \autoref{fig:final_mask}. To enhance the mask, an opening operation to remove some of the noise, followed by a closing operation to fill possible holes in the objects. This operations give the result presented on \autoref{fig:final_mask2}.
-
-\begin{figure}[H]
-    \captionbox  %<--use captionbox instead if no global caption is needed
-    {
-        Combination of both masks before processing.             
-        \label{fig:final_mask}                                  
-    }                                                                 
-    {                                                                  
-        \includegraphics[width=.25\textwidth]{figures/final_mask.png}         
-    }                                                                    
-    \hspace{5pt}                                                          
-    \captionbox
-    {       
-        Enhanced mask after removing noise and filling holes in the objects.
-        \label{fig:final_mask2}                                     
-    }
-    {
-        \includegraphics[width=.25\textwidth]{final_mask2.png}            
-    }                                                                             
-\end{figure}
-
-Once the mask is enhanced, each of the objects can be labeled to be analyzed one by one. It is noticeable that only the objects that have an area larger than a threshold are considered for future processing.
-
-The position of each brick in the picture can be found using the centroid of the pixels corresponding to each object, as seen in \autoref{fig:centroids}.
-
-\begin{figure}[H]
-    \includegraphics[width=0.3\textwidth]{figures/centroids.png}
-    \caption{Centroids of the different objects in the mask (blue marks).}
-    \label{fig:centroids}
-\end{figure}
-
-Once the position of the brick in the image is known, the color can be found looking at a small region around the center of each brick in the hue channel. The mean of the hue of these pixels is compared to four values corresponding to yellow, green, blue and orange. The color of the object is selected as the one closer to the mean of the region.
-
-To be able to relate the position of the bricks with the real one, the transformation matrix defined in \autoref{section} is used as follows
-\begin{flalign}
-    \begin{bmatrix}
-        U \\
-        V \\
-        W
-    \end{bmatrix}
-    =H
-    \begin{bmatrix}
-        x \\
-        y \\
-        1
-    \end{bmatrix}
-\end{flalign}
-To get the orientation is based on and edge detection followed by a Hough line transform. 
-
-Since the image is already binary, \autoref{fig:object_mask}, the edges can be detected by calculating the difference between the image and a dilation of it. The result can be seen in \autoref{fig:edges}.
-
-
-\begin{figure}[H]
-    \captionbox  %<--use captionbox instead if no global caption is needed
-    {
-        Mask for one of the objects.              
-        \label{fig:object_mask}                                  
-    }                                                                 
-    {                                                                  
-        \includegraphics[width=.25\textwidth]{figures/object_mask.png}         
-    }                                                                    
-    \hspace{5pt}                                                          
-    \captionbox
-    {       
-        Edges found in the object by the difference of the original mask and a dilated one.
-        \label{fig:edges}                                     
-    }
-    {
-        \includegraphics[width=.25\textwidth]{edges.png}            
-    }                                                                              
-\end{figure}
-
-Once the edges are found, the Hough transform is used to find the lines. The orientation is defined by the angle of the largest line with respect to the horizontal, see \autoref{fig:object}.
-
-\begin{figure}[H]
-    \includegraphics[width=0.25\textwidth]{figures/object.png}
-    \caption{Largest line in the object marked in blue.}
-    \label{fig:object}
-\end{figure}
-
-At this point, each brick is identified by its position in the image, its color and its orientation, so it is ready for being used in following algorithms.
