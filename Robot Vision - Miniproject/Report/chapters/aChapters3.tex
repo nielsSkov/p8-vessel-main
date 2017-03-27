@@ -7,7 +7,7 @@ The recognition of the bricks is based on the the information of value, saturati
 The algorithm is illustrated with an example image taken in similar conditions as the workstation, \autoref{fig:RealLego4}.
 
 \begin{figure}[H]
-    \includegraphics[width=0.4\textwidth]{figures/original.png}
+    \includegraphics[width=0.25\textwidth]{figures/original.png}
     \caption{Original image that include the color bricks to recognize in random positions.}
     \label{fig:RealLego4}
 \end{figure}
@@ -23,7 +23,7 @@ To find the color blocks (orange, yellow, green and blue) the saturation channel
         \label{fig:saturation}                                  
     }                                                                 
     {                                                                  
-        \includegraphics[width=.4\textwidth]{figures/saturation.png}         
+        \includegraphics[width=.25\textwidth]{figures/saturation.png}         
     }                                                                    
     \hspace{5pt}                                                          
     \captionbox
@@ -32,7 +32,7 @@ To find the color blocks (orange, yellow, green and blue) the saturation channel
         \label{fig:colour_mask}                                     
     }
     {
-        \includegraphics[width=.4\textwidth]{colour_mask.png}            
+        \includegraphics[width=.25\textwidth]{colour_mask.png}            
     }                                                                             
 \end{figure}
 
@@ -46,7 +46,7 @@ To fin the black bricks, the value channel, \autoref{fig:value} can be used to f
     }                                                                 
     {       
                                                                     
-        \includegraphics[width=.4\textwidth]{figures/value.png}         
+        \includegraphics[width=.25\textwidth]{figures/value.png}         
     }                                                                    
     \hspace{5pt}                                                          
     \captionbox
@@ -55,7 +55,7 @@ To fin the black bricks, the value channel, \autoref{fig:value} can be used to f
         \label{fig:black_mask}                                     
     }
     {
-        \includegraphics[width=.4\textwidth]{black_mask.png}            
+        \includegraphics[width=.25\textwidth]{black_mask.png}            
     }                                                                             
 \end{figure}
 
@@ -68,7 +68,7 @@ Combining the two masks, the final one can be found as seen in \autoref{fig:fina
         \label{fig:final_mask}                                  
     }                                                                 
     {                                                                  
-        \includegraphics[width=.4\textwidth]{figures/final_mask.png}         
+        \includegraphics[width=.25\textwidth]{figures/final_mask.png}         
     }                                                                    
     \hspace{5pt}                                                          
     \captionbox
@@ -77,7 +77,7 @@ Combining the two masks, the final one can be found as seen in \autoref{fig:fina
         \label{fig:final_mask2}                                     
     }
     {
-        \includegraphics[width=.4\textwidth]{final_mask2.png}            
+        \includegraphics[width=.25\textwidth]{final_mask2.png}            
     }                                                                             
 \end{figure}
 
@@ -86,7 +86,7 @@ Once the mask is enhanced, each of the objects can be labeled to be analyzed one
 The position of each brick in the picture can be found using the centroid of the pixels corresponding to each object, as seen in \autoref{fig:centroids}.
 
 \begin{figure}[H]
-    \includegraphics[width=0.4\textwidth]{figures/centroids.png}
+    \includegraphics[width=0.3\textwidth]{figures/centroids.png}
     \caption{Centroids of the different objects in the mask (blue marks).}
     \label{fig:centroids}
 \end{figure}
@@ -120,7 +120,7 @@ Since the image is already binary, \autoref{fig:object_mask}, the edges can be d
         \label{fig:object_mask}                                  
     }                                                                 
     {                                                                  
-        \includegraphics[width=.4\textwidth]{figures/object_mask.png}         
+        \includegraphics[width=.25\textwidth]{figures/object_mask.png}         
     }                                                                    
     \hspace{5pt}                                                          
     \captionbox
@@ -129,14 +129,14 @@ Since the image is already binary, \autoref{fig:object_mask}, the edges can be d
         \label{fig:edges}                                     
     }
     {
-        \includegraphics[width=.4\textwidth]{edges.png}            
+        \includegraphics[width=.25\textwidth]{edges.png}            
     }                                                                              
 \end{figure}
 
 Once the edges are found, the Hough transform is used to find the lines. The orientation is defined by the angle of the largest line with respect to the horizontal, see \autoref{fig:object}.
 
 \begin{figure}[H]
-    \includegraphics[width=0.4\textwidth]{figures/object.png}
+    \includegraphics[width=0.25\textwidth]{figures/object.png}
     \caption{Largest line in the object marked in blue.}
     \label{fig:object}
 \end{figure}

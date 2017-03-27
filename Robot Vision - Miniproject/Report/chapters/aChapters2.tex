@@ -1,7 +1,7 @@
 \chapter{System Description}\label{chap:systemDescription}
 The system is composed by a camera that captures the table that contains the bricks and a robot arm that is charge of picking and placing the brick to build the desired figures. The setup can be seen in \autoref{fig:setup}.
 \begin{figure}[H]
-    \includegraphics[width=0.5\textwidth]{figures/setup}
+    \includegraphics[width=0.5\textwidth]{figures/setup_axes.pdf}
     \caption{Image of the setup, where the robot cell can be seen. It contains the robot arm, the security fence, the camera and the table that is the base workspace of the system. }
     \label{fig:setup}
 \end{figure}
@@ -61,10 +61,10 @@ The position and orientation of the blocks are obtained from images taken with L
 \end{figure}
 The camera has been placed in the robot cell as in \autoref{fig:setup}. In order to use the images, a projection matrix that translates the image points into scene points needs to be found. As all desired goals lay on the same plane, the projection matrix can be found using pairs of points that have correspondence in the scene and in the image.
 
-\autoref{fig:points} shows the points used in the scene, in this case the threaded holes in the table which are 40 mm apart. The hole marked with a red dot has been chosen to be the origin of the workspace and the green dots are the ones used in the projection matrix calculation.
+\autoref{fig:points} shows the points used in the scene, in this case the threaded holes in the table which are 40 mm apart. The black axes define the base coordinate frame and the red dots are the ones used in the projection matrix calculation.
 \begin{figure}[H]
-	\includegraphics[width=0.4\textwidth]{figures/dots_cut.pdf}
-	\caption{ }
+	\includegraphics[width=0.25\textwidth]{figures/dots_cut.pdf}
+	\caption{Image used to find the projection matrix. The black axes define the base coordinate frame and the red dots are the ones used in the projection matrix calculation. }
 	\label{fig:points}
 \end{figure}
 The projection matrix found is
