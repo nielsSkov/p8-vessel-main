@@ -217,10 +217,15 @@ cvx_end     % The end of the optimization problem
 In each iteration of the loop it tries to minimize the cost along the horizon $L$ knowing the corresponding prices and the inequality constraints, by finding the optimal $Q_\mathrm{W}$, $Q_\mathrm{W}$, $Q_\mathrm{A,in}$ and $Q_\mathrm{A,out}$.
 
 \subsection*{Results}
-The results can be seen in the figures below.
+The results obtained are presented in \autoref{fig:E_A}, \ref{fig:Q_E}, \ref{fig:Q_W} and \ref{fig:Q_G}.
+
+In \autoref{fig:E_A} it can be seen the state of charge of the accumulator. It shall be noticed that the accumulator charges when the price of electricity is low and discharges when it is high. For this to be seen it is neccesary to look also at \autoref{fig:Q_E}, where the power production and price is depicted. Good examples appear at 90 hours and between 170 and 180 hours. The accumulator also charges when the power production of gas is cheaper, this is shown in \autoref{fig:Q_G}. The clearest example of this occurs between 110 and 120 hours.
+
+From the power production seen in \autoref{fig:Q_E}, it can be said that the power produced is low when electricity is cheap and high otherwise. This is clear in the graph as when the price peaks up, so does the production and vice versa
 \begin{figure}[H]
     \captionbox 
     {
+    	State of charge in the accumulator.
         \label{fig:E_A}                                  
     }                                                                 
     {                                                                 
@@ -236,10 +241,11 @@ The results can be seen in the figures below.
         \includegraphics[height=.37\textwidth]{Q_E}            
     }                                                                             
 \end{figure}
+The information presented in \autoref{fig:Q_W} and \ref{fig:Q_G} shows how the electric power is produced. It can be observed how waste is used in almost all the simulation as its price is negative. The only exception occurs when the price of electricity is also negative. This leads to a stop in the electricity production and from gas and waste and a charging period of the accumulator using electric power from outside the plant. The use of gas is more interesting as it is used as long as its price is lower than that of electricity, else the production of electric power with gas is zero. Examples of this take place between 65 and 70 hours, between 90 and 95 hours and at 160 hours.
 \begin{figure}[H]
     \captionbox
     {       
-        Comparison of the power produces using waste and the corresponding price of waste burning.          
+        Comparison of the power produced using waste and the price of waste burning.          
         \label{fig:Q_W}                                  
     }                                                                 
     {                                                                  
@@ -248,12 +254,12 @@ The results can be seen in the figures below.
     \hspace{5pt}                                                          
     \captionbox  
     {          
-        Comparison of the power production using gas and the corresponding price of gas.                                                      
+        Comparison of the power produced using gas and the price of gas.                                                      
         \label{fig:Q_G}                                     
     }                                                                     
     {                                                                     
         \includegraphics[height=.37\textwidth]{Q_G}            
     }      
 \end{figure}
-
+All the information presented suggest that the plant operates taking into account the different prices and adjusting the power production in order to maximize the profit obtained when running.
 \end{document}
