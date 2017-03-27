@@ -53,9 +53,9 @@ for i=1:1:nobjects
         end
         [~,max_dist]=max(dist);
         
-        xy1_real=MyParameters.K*[lines(max_dist).point1 1]';     % The position of the points that define the line are trasnformed
+        xy1_real=MyParameters.H*[lines(max_dist).point1 1]';     % The position of the points that define the line are trasnformed
         xy1_real=xy1_real(1:2)'/xy1_real(3);        % to real positions using the projection matrix
-        xy2_real=MyParameters.K*[lines(max_dist).point2 1]';
+        xy2_real=MyParameters.H*[lines(max_dist).point2 1]';
         xy2_real=xy2_real(1:2)'/xy2_real(3);
         
         xy_real = [xy1_real; xy2_real];
@@ -70,7 +70,7 @@ for i=1:1:nobjects
         cent_x=round(centroid(i).Centroid(1));
         region_hue=hue(cent_y-MyParameters.MASK_SIDE:cent_y+MyParameters.MASK_SIDE,cent_x-MyParameters.MASK_SIDE:cent_x+MyParameters.MASK_SIDE);
         region_blackmask=black_mask(cent_y-MyParameters.MASK_SIDE:cent_y+MyParameters.MASK_SIDE,cent_x-MyParameters.MASK_SIDE:cent_x+MyParameters.MASK_SIDE);
-        cent_real=MyParameters.K*[cent_x,cent_y,1]';
+        cent_real=MyParameters.H*[cent_x,cent_y,1]';
         cent_real=cent_real(1:2)'/cent_real(3);
         
         % Sort by colour and store centroid position and orientation

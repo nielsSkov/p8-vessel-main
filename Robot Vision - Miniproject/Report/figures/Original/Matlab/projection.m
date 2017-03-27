@@ -1,8 +1,13 @@
-%cam = webcam('Logitech');
-original=snapshot(cam);
-original=original(MyParameters.YMIN:MyParameters.YMAX,...
-    MyParameters.XMIN:MyParameters.XMAX,:);
+clear
+clc
+close all
+
+original=imread('dots.png');
+original=original(MyParameters.YMIN:MyParameters.YMAX,MyParameters.XMIN:MyParameters.XMAX,:);
 imtool(original)
+x=size(original,2);
+y=size(original,1);
+imwrite(original,'dots_cut.png');
 image_points=[336 289;
               57 291;
               335 17;
