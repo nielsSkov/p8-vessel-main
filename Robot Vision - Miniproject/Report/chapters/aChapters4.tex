@@ -1,1 +1,34 @@
-\chapter{Results on the Real Setup}\label{chap:results}
+\chapter{Algorithm}\label{chap:algorithm}
+The algorithm followed to fulfill the required funcionality for the project is presented in this chapter. The code for the KUKA robot is contained in \lstinline[style=Matlabinline]{MiniprojectCodeKUKA.m} whereas the code for the simulation in Robot Studio can be found in \lstinline[style=Matlabinline]{MiniprojectCodeRobotStudio.m}. Both of these files show the same algorithm, which can be summarized as
+\begin{enumerate}
+	\item Identification of the Lego blocks in order to obtain its position and orientation.
+	\item Check figures required and number of bricks available and number of final locations available. 
+	\item If everything is correct, pick and place the bricks in their destination with subsequent operations.
+\end{enumerate}
+
+\section{Pick and Place Movement}
+The strategy for picking a piece and placing it in its final destination is composed by several movements. This operation is programed in the MATLAB function located in \lstinline[style=Matlabinline]{PickPlace.m}
+
+Initially, the robot is placed on top of the brick that is to be picked. This also includes rotating the gripper to the appropiate orientation. Then, the gripper is moved down vertically until the height is correct and the brick can be grasped. Finally, the tool with the brick move up vertically finishing the pick operation. \autoref{list:pick} shows how these sequence looks like when programed in MATLAB.
+\begin{lstlisting}[ language = Matlab,
+caption  = {Matlab code to perform the pick instruction},
+label    = list:pick ]
+% Move to the initial pose with some heigth, go down, grab the brick and go up
+% again
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+moveLinear(kuka,x,y,z,a,b,c,vel)
+closeGrapper(kuka)
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+\end{lstlisting}
+
+After the brick has been picked, it is placed in its final destination following similar movements. The tool moves to the final location with the right orientation, then moves down, releases the brick and moves up vertically, ready to start a new pick operation with another block. In MATLAB, this movements are programed as in \autoref{list:place}
+\begin{lstlisting}[ language = Matlab,
+caption  = {Matlab code to perform the pick instruction},
+label    = list:pick ]
+% Move to the pose with some heigth, go down, release the brick and go up
+% again
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+moveLinear(kuka,x,y,z,a,b,c,vel)
+openGrapper(kuka)
+moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
+\end{lstlisting}
