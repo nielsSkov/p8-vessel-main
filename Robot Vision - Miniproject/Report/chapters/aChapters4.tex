@@ -25,7 +25,7 @@ After the brick has been picked, it is placed in its final destination following
 \begin{lstlisting}[ language = Matlab,
 caption  = {Matlab code to perform the pick instruction},
 label    = list:place ]
-% Move to the pose with some heigth, go down, release the brick and go up
+% Move to the final pose with some heigth, go down, release the brick and go up
 % again
 moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
 moveLinear(kuka,x,y,z,a,b,c,vel)
