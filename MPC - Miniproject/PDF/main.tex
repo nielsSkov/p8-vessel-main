@@ -19,7 +19,7 @@ The objective is to optimize the profit that can be obtained by running the plan
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/powerPlant}
-    \caption{Diagram of the plant, where $Q_\mathrm{G}$ is the power produced by the gas turbine, $Q_\mathrm{W}$ is the power produced by the waste burner, $Q_\mathrm{A,in}$ is the power feed into the accumulator, $Q_\mathrm{bp}$ is the power bypassing the accumulator, $Q_\mathrm{A,out}$ is the power leaving the accumulator, and $Q_\mathrm{E}$ is the power leaving the plant. The units of power are given in megawatt [MW]}
+    \caption{Diagram of the plant, where $Q_\mathrm{G}$ is the power produced by the gas turbine, $Q_\mathrm{W}$ is the power produced by the waste burner, $Q_\mathrm{A,in}$ is the power fed into the accumulator, $Q_\mathrm{bp}$ is the power bypassing the accumulator, $Q_\mathrm{A,out}$ is the power leaving the accumulator, and $Q_\mathrm{E}$ is the power leaving the plant. The units of power are given in megawatt [MW]}
     \label{fig:powerPlant}
 \end{figure}
 
@@ -37,7 +37,7 @@ And the accumulator have some dynamics and some constraints as well
     &0 \leq E_\mathrm{A} \leq 200 \label{eq:inequality_E}
 \end{flalign}
 
-The profit can be optimize by scheduling the power production using the knowledge of the plant and future prices of gas, waste burning and electricity ($P_\mathrm{G}$, $P_\mathrm{W}$ and $P_\mathrm{E}$). The profit is given by
+The profit can be optimized by scheduling the power production using the knowledge of the plant and  the future prices of gas, waste burning and electricity ($P_\mathrm{G}$, $P_\mathrm{W}$ and $P_\mathrm{E}$). The profit is given by
 %
 \begin{flalign}
     \sum_{i=k}^{k+L-1} (P_\mathrm{E}[i] Q_\mathrm{E}[i] - (P_\mathrm{G}[i] Q_\mathrm{G}[i] + P_\mathrm{W}[i] Q_\mathrm{W}[i])) T_\mathrm{s} \label{eq:cost}
@@ -113,7 +113,7 @@ Since there exists a constraint on the amount of charge that can be stored in th
     \leq 200 \label{eq:matrix_constraint}
 \end{flalign}
 
-The equality constraints in \autoref{eq:equality} can be used to rewrite the cost function as a function of $Q_\mathrm{G}$, $Q_\mathrm{W}$, $Q_\mathrm{A,in}$ and $Q_\mathrm{A,out}$. This results in \autoref{eq:final_cost}
+The equality constraints in \autoref{eq:equality} can be used to rewrite the cost function, \autoref{eq:cost}, as a function of $Q_\mathrm{G}$, $Q_\mathrm{W}$, $Q_\mathrm{A,in}$ and $Q_\mathrm{A,out}$. This results in \autoref{eq:final_cost}
 %
 \begin{flalign}
     & \sum_{i=k}^{k+L-1} (P_\mathrm{E}[i] Q_\mathrm{E}[i] - (P_\mathrm{G}[i] Q_\mathrm{G}[i] + P_\mathrm{W}[i] Q_\mathrm{W}[i])) T_\mathrm{s} \\
@@ -179,9 +179,9 @@ This expression can also be written in matrix form to be suitable to use with CV
      \end{bmatrix}\label{eq:matrix_cost}
 \end{flalign}
 }
-
+\normalsize
 \subsection*{Implementation}
-The implementation of the optimization problem is shown in \autoref{cvxImplementation}. It includes the inequality constraints in \autoref{eq:inequality} and \ref{eq:matrix_constraint} as well as teh cost defined in \autoref{eq:matrix_cost}.
+The implementation of the optimization problem is shown in \autoref{cvxImplementation}. It includes the inequality constraints in \autoref{eq:inequality} and \ref{eq:matrix_constraint} as well as the cost defined in \autoref{eq:matrix_cost}.
 %
 \begin{lstlisting}[ language = Matlab,
 					caption  = {Matlab code for the implementation of the problem with CVX},
@@ -219,7 +219,7 @@ In each iteration of the loop it tries to minimize the cost along the horizon $L
 \subsection*{Results}
 The results obtained are presented in \autoref{fig:E_A}, \ref{fig:Q_E}, \ref{fig:Q_W} and \ref{fig:Q_G}.
 
-In \autoref{fig:E_A} it can be seen the state of charge of the accumulator. It shall be noticed that the accumulator charges when the price of electricity is low and discharges when it is high. For this to be seen it is neccesary to look also at \autoref{fig:Q_E}, where the power production and price is depicted. Good examples appear at 90 hours and between 170 and 180 hours. The accumulator also charges when the power production of gas is cheaper, this is shown in \autoref{fig:Q_G}. The clearest example of this occurs between 110 and 120 hours.
+In \autoref{fig:E_A} the state of charge of the accumulator can be seen. It shall be noticed that the accumulator charges when the price of electricity is low and discharges when it is high. For this to be seen it is neccesary to look also at \autoref{fig:Q_E}, where the power production and price is depicted. Good examples appear at 90 hours and between 170 and 180 hours. The accumulator also charges when the power production of gas is cheaper, this is shown in \autoref{fig:Q_G}. The clearest example of this occurs between 110 and 120 hours.
 
 From the power production seen in \autoref{fig:Q_E}, it can be said that the power produced is low when electricity is cheap and high otherwise. This is clear in the graph as when the price peaks up, so does the production and vice versa
 \begin{figure}[H]
@@ -261,5 +261,5 @@ The information presented in \autoref{fig:Q_W} and \ref{fig:Q_G} shows how the e
         \includegraphics[height=.37\textwidth]{Q_G}            
     }      
 \end{figure}
-All the information presented suggest that the plant operates taking into account the different prices and adjusting the power production in order to maximize the profit obtained when running.
+All the information presented suggests that the plant operates taking into account the different prices and adjusting the power production in order to maximize the profit obtained when running.
 \end{document}
