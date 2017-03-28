@@ -112,17 +112,17 @@ yyaxis left
 stairs(Q_W_sys)
 yyaxis right
 stairs(P_W)
-FigureLatex2Axis('Comparing Power Consumption using Waste with its Price',...
-    'Sample [hour]','Power [MWh]','Price [DKK/MWh]',0,0,0,0,0,12,13,0)
+FigureLatex2Axis('Power Consumption using Waste',...
+    'Sample [hour]','Power [MWh]','Price [DKK/MWh]',0,0,0,[-45 45],[-45 45],12,13,0)
 
 figure
 hold on
 yyaxis left
 stairs(Q_G_sys)
 yyaxis right
-stairs(P_G)
-FigureLatex2Axis('Comparing Power Consumption using Gas with its Price',...
-    'Sample [hour]','Power [MWh]','Price [DKK/MWh]',0,0,0,[-5 150],[-5 180],12,13,0)
+stairs(P_E-P_G)
+FigureLatex2Axis('Power Consumption using Gas',...
+    'Sample [hour]','Power [MWh]','Electricty Price - Gas Price [DKK/MWh]',0,0,0,[-25 25],[-220 220],12,13,0)
 
 figure
 hold on
@@ -130,6 +130,6 @@ yyaxis left
 stairs(Q_E_sys)
 yyaxis right
 stairs(P_E)
-FigureLatex2Axis('Comparing Power Production with its Price',...
+FigureLatex2Axis('Power Production',...
     'Sample [hour]','Power [MWh]','Price [DKK/MWh]',0,0,0,[-100 350],[-100 350],12,13,0)
 
