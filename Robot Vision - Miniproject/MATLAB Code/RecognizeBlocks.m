@@ -53,7 +53,7 @@ for i=1:1:nobjects
         end
         [~,max_dist]=max(dist);
         
-        xy1_real=MyParameters.H*[lines(max_dist).point1 1]';     % The position of the points that define the line are trasnformed
+        xy1_real=MyParameters.H*[lines(max_dist).point1 1]';     % The position of the points that define the line are transformed
         xy1_real=xy1_real(1:2)'/xy1_real(3);        % to real positions using the projection matrix
         xy2_real=MyParameters.H*[lines(max_dist).point2 1]';
         xy2_real=xy2_real(1:2)'/xy2_real(3);
