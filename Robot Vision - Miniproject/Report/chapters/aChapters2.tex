@@ -31,7 +31,7 @@ obj = RobotConnectorKUKA(hostAddress_,hostPort_);
 moveLinear(obj,x,y,z,w,p,r,speed);
 % Open gripper
 openGrapper(obj);
-% CLose gripper
+% Close gripper
 closeGrapper(obj);
 \end{lstlisting}
 
@@ -72,7 +72,7 @@ The position and orientation of the blocks are obtained from images taken with L
     \caption{Logitech HD Pro Webcam C920 used to locate the Lego bricks.\cite{camera} }
     \label{fig:camera}
 \end{figure}
-The camera has been placed in the robot cell as in \autoref{fig:setup}. In order to use the images, a projection matrix that translates the image points into scene points needs to be found. As all desired goals lay on the same plane, the projection matrix can be found using pairs of points that have correspondence in the scene and in the image.
+The camera is placed in the robot cell as in \autoref{fig:setup}. In order to use the images, a projection matrix that translates the image points into scene points needs to be found. As all desired goals lay on the same plane, the projection matrix can be found using pairs of points that have correspondence in the scene and in the image.
 
 \autoref{fig:points} shows the points used in the scene, in this case the threaded holes in the table which are 40 mm apart. The black axes define the workspace coordinate frame and the red dots are the ones used in the projection matrix calculation.
 \begin{figure}[H]
