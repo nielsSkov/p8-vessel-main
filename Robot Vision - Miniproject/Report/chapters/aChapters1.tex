@@ -1,4 +1,22 @@
 \chapter{Introduction}\label{chap:introduction}
+The aim of this project is to automate an industrial robot to produce the characters of The Simpsons family using Lego Duplo bricks. The possible characters that are produced by the robot include Homer, Marge, Bart, Lisa and Maggie. Each character was made using a specific order of the bricks as given by:
+
+\begin{itemize}
+	\item Homer: blue, black and yellow
+	\item Marge: green, yellow and blue
+	\item Bart: blue, orange, yellow
+	\item Lisa: yellow, orange, yellow
+	\item Maggie: blue, yellow
+\end{itemize}
+
+Automation plays a key roll in production and manufacturing. Automating certain production lines may reduce costs, while improving product quality and reducing the production time. Industrial robots are generally used for repetitive tasks thus the motivation to automate the manufacturing of Lego Simpsons characters.
+
+To fulfill these requirements the bricks located on the table need to be identified and classified by its color, location and orientation. These properties are extracted from an image taken using a camera placed directly above the bricks. Image processing techniques are used to classify the bricks and the orientation and location of the bricks are translated from the image's coordinate frame to the robot's coordinate frame.
+
+To pick up the Lego bricks a specific gripper was designed such that the robot would grab the bricks with two opposite corners, thus ensuring the orientation of the brick in the gripper is precisely known.
+
+The number of each character is determined and the robot is then given instructions to pick each block individually and create the characters on a green Lego grid.
+
 
 This involves among other things:
 \begin{itemize}
