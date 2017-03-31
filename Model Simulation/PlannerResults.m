@@ -1,5 +1,5 @@
 %% Script to check the performance of the trajectory following.
-run ControllerLQR.m
+%run ControllerLQR.m
 sim PathFollowingModel.slx
 
 plot(xn_3DOF.Data,yn_3DOF.Data,'-r')
@@ -7,7 +7,7 @@ hold on
 plot(wps(:,1),wps(:,2),'--xk');
 
 FigureLatex('Performance of the Path Follower Algorithm','Position in $x_\mathrm{n}$ axis [m]',...
-    'Position in $y_\mathrm{n}$ axis [m]',1,{'Vessel Position','Path'},[-5 45],[-15 115],12,13,1.2)
+    'Position in $y_\mathrm{n}$ axis [m]',1,{'Vessel Position','Path'},0,0,12,13,1.2)
 
 % 
 %xlim([-150 200])

@@ -25,8 +25,8 @@ Tpitch=131.8316;   % [N/m]
 
 Ts=0.05;
 % Path controller parameters
-r=5;
-AcceptRadius=3;
+r=2.5;
+AcceptRadius=1;
 wps=[0 0;
     0 20;
     0 40;
@@ -57,3 +57,22 @@ wps=[0 0;
     60 100;];
 % global index
 % index=1;
+
+%% Waypoints for max xdot test
+
+wps = [0 0;
+    10 0;
+    10+sqrt(11) 1;
+    10+sqrt(20) 2;
+    10+sqrt(27) 3;
+    10+sqrt(32) 4;
+    10+sqrt(35) 5;
+    16 6;
+    10+sqrt(35) 7;
+    10+sqrt(32) 8;
+    10+sqrt(27) 9;
+    10+sqrt(20) 10;
+    10+sqrt(11) 11;
+    10 12;
+    9 12;
+    0 12];
