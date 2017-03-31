@@ -19,7 +19,7 @@ The algorithm is illustrated with an example image taken in similar conditions a
 The first step is to convert the image to HSV color space and split into the three different channels, as seen in \autoref{list:hsv}.
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the pick instruction},
+caption  = {Matlab code to split the image in the three HSV channels.},
 label    = list:hsv ]
 % Transform into HSV and separate in the different channels
 hsv=rgb2hsv(original);
@@ -96,7 +96,7 @@ The masks for the colored bricks and for the black bricks are then combined resu
 The code for getting the mask and processing it can be seen below.
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the pick instruction},
+caption  = {Matlab code to get the mask that contains the blocks.},
 label    = list:mask ]
 % Find the blocks in the image
 saturation=imgaussfilt(saturation,'FilterSize',9);  % First, find coloured blocks using the saturation channel
@@ -122,7 +122,7 @@ The position of each brick in the picture is then found using the centroid of th
 The object and it properties are identified using the following commands in MATLAB:
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the pick instruction},
+caption  = {Matlab code to get the objects and their properties.},
 label    = list:centroid ]
 % Identifying objects and their properties
 objects = bwconncomp(final_mask);           % Label the objects
@@ -137,7 +137,7 @@ Once the position of the brick in the image is known, it is necessary to identif
 The color identification code can be seen below:
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the pick instruction},
+caption  = {MATLAB code find the color of the brick.},
 label    = list:color ]
 % Get a mask of the object in the hue channel and on the black mask
 cent_y=round(centroid(i).Centroid(2));
@@ -193,7 +193,7 @@ Once the edges are found, the Hough transform is used to find the lines with a m
 	\label{fig:object}
 \end{figure}
 
-Since the orientation need to be express in workspace coordinate the two points that defines that line are transformed to scene coordinates using the transformation matrix defined in \autoref{sec:camera}. This is straightforward for the position as
+Since the orientation need to be express in workspace coordinates, the two points that defines that line are transformed to scene coordinates using the transformation matrix defined in \autoref{sec:camera}. This is straightforward for the position as
 %
 \begin{flalign}
 	\begin{bmatrix}
@@ -207,11 +207,15 @@ Since the orientation need to be express in workspace coordinate the two points 
 		y \\
 		1
 	\end{bmatrix}
+    ; \ \ \ \
+    X_\mathrm{s}=\frac{U}{W}; \ \ \ \
+    Y_\mathrm{s}=\frac{V}{W}
 \end{flalign}
 
-The algorithm for getting the position and orientation can be seen in\autoref{}
+The algorithm for getting the position and orientation can be seen in \autoref{lis:pos}.
+%
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the pick instruction},
+caption  = {MATLAB code to get the position and orientation.},
 label    = list:pos ]
 cent_real=MyParameters.H*[cent_x,cent_y,1]'; % Transform the position to real coordinates
 cent_real=cent_real(1:2)'/cent_real(3);
@@ -243,7 +247,7 @@ The strategy for picking a piece and placing it in its final destination is comp
 Initially, the robot is placed on top of the brick that is to be picked. This also includes rotating the gripper to the appropiate orientation. Then, the gripper is moved down vertically until the height is correct and the brick can be grasped. Finally, the tool with the brick move up vertically finishing the pick operation. \autoref{list:pick} shows how these sequence looks like when programed in MATLAB.
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the pick instruction},
+caption  = {MATLAB code to perform the pick instruction.},
 label    = list:pick ]
 % Move to the initial pose with some heigth, go down, grab the brick and go up
 % again
@@ -256,7 +260,7 @@ moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
 After the brick is picked, it is placed in its final destination following similar movements. The tool moves to the final location with the right orientation, then moves down, releases the brick and moves up vertically, ready to start a new pick operation with another block. In MATLAB, this movements are programed as in \autoref{list:place}.
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the pick instruction},
+caption  = {Matlab code to perform the place instruction.},
 label    = list:place ]
 % Move to the pose with some heigth, go down, release the brick and go up
 % again

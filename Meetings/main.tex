@@ -8,71 +8,42 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 22nd of March 2017}
-<<<<<<< HEAD
-\subsection{Status}
-\begin{itemize}
-	\item 
-	\item
-	\item
-	\item
-\end{itemize}	
-\subsection{LQR and Integral Control}
-\begin{itemize}
-	\item 
-	\item 
-	\item 
-\end{itemize}	
-\subsection{Path Following Algorithm}
-\begin{itemize}
-	\item 
-	\item  
-	\item 
-	\item 
-=======
-\subsection{LQR Controller}
-\begin{itemize}
-	\item Test the step independently on each variable, the dynamics are not the same when turning if you are stationary, with constant speed or accelerating.
-    \item The motors have some dynamics that we could include in the simulation because they are fast but not instantaneous.
-    \item A first order model should be sufficient for describing the motors.
-    \item Maybe it is a good idea to do a test in water (step). Use a tachometer on the coupling inside the boat to read the speed.
-    \item It could be interesting to change the limits in the motors, for example allowing only forward movement or with different maxima.
-\end{itemize}
-\subsection{Kalman Filter Implementation}
-\begin{itemize}
-	\item Maybe the estimator is not a Kalman filter in the implementation, Jesper will talk with Nick about it.
->>>>>>> 10433bcac9d34bd6a23c264439b363747ee52eb6
-\end{itemize}
-\subsection{Path Following Algorithm}
-\begin{itemize}
-<<<<<<< HEAD
-	\item 
-	\item 
-\end{itemize}
-\subsection{Kalman Filter Code}
-\begin{itemize}
-	\item 
-	\item 
-=======
-	\item Path following algorithm without taking wind into account gives an offset.
-    \item The offset is corrected a bit measuring the real speed of the boat.
-    \item Looking at the perpendicular distance in the path to the waypoint is good for going from one point to another.
-    \item If you have a strict path you need to follow maybe it is a good idea to ensure that we pass through the waypoints.
-    \item We could have a look at Helmsman's controller.
->>>>>>> 10433bcac9d34bd6a23c264439b363747ee52eb6
-\end{itemize}
-\subsection{Exam Date}
-\begin{itemize}
-<<<<<<< HEAD
-	\item 
-\end{itemize}
-\subsection{Next Supervisor Meeting}
-Wednesday, 29th of March at 13:00
-=======
-    \item 22nd or 23rd of June if possible. Jesper will find a censor and figure it out for next time.
-\end{itemize}
-\subsection{Next Supervisor Meeting}
-Wednesday, 29th of March at 13:00
+\section*{Supervisor meeting\\ \small Wednesday, 29th of March 2017}
 
->>>>>>> 10433bcac9d34bd6a23c264439b363747ee52eb6
+\subsection{Use Case}
+\begin{itemize}
+    \item We could design to measure the effect of shifting sands between Aalborg and the sea. Then the measurements can be done more frequently.
+    \item Design for multibeam sonar (same as they use in Aalborg port). The one that is placed currently on the boat is not designed for mapping, just for helping in the navigation.
+    \item The aim is to show that with the navigation and the control it is possible to perform the operation successfully.
+    \item Trajectories will depend on the cone of the sonar and on the mean depth.
+    \item We could include one page about the sonar and which considerations we need to take into account in the design process.
+\end{itemize}
+
+\subsection{Requirements}
+\begin{itemize}
+    \item 10cm precision in position should be fine, that is what we aim for. 
+    \item With a mapping operation the minimum is 30cm, but if you have 10cm you can also monitor parameters in the water.
+\end{itemize}
+
+\subsection{Feedback on Reading Material}
+\begin{itemize}
+    \item Explain the meaning of $x_\mathrm{max}$ and $u_\mathrm{max}$, clarify particularly the values chosen.
+    \item Remember to include plots of the performance of the control design.    
+    \item In the outer loop we should also analyze stability, convergence and time characteristics.
+    \item We should explain what disturbances we consider in the design and which ones are put just to check the controller performance.
+    \item There is a range and a frequency span where the wind and wave disturbances are placed and we can use that to design a robust controller.
+    \item For simulation, we could do different simulations with forces coming from different directions and magnitudes and get a probability distribution of how well we follow the path.  
+\end{itemize}
+
+\subsection{Miscellaneous}
+\begin{itemize}
+    \item The controller code has been tested with a  node that simulates the behavior of the plant.
+    \item Check the base station for the RTK GPS, Mathias on 6th semester is working with that one. Jesper will find it out.
+    \item If we need some help with the hardware or implementation we can talk to Jesper and he will contact Nick.
+    \item Maybe prepare the system so we can ask the professor when we have the lectures about robust control.
+\end{itemize}
+
+\subsection{Next Supervisor Meeting}
+Wednesday, 5th of April at 13:00
+
 \end{document}
