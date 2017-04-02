@@ -46,7 +46,7 @@ The profit can be optimized by scheduling the power production using the knowled
 \subsection*{Problem Formulation in CVX Form}
 Once the problem has been described, the constraints, the dynamic equation and the cost function need to be rewritten in a suitable way to be able to optimize the problem using CVX.
 
-The dynamic equation, \autoref{eq:dynamics}, of the accumulator can be rewritten by substituting backwards each $E_\mathrm{A}[k]$ until it depends only on the inputs and the initial state.
+The dynamic equation of the accumulator, \autoref{eq:dynamics}, can be rewritten by substituting backwards each $E_\mathrm{A}[k]$ until it depends only on the inputs and the initial state.
 %
 \begin{flalign}
     E_\mathrm{A}[k+1] = E_\mathrm{A}[k] + &(Q_\mathrm{A,in}[k] - Q_\mathrm{A,out}[k]) T_\mathrm{s} \\
@@ -113,7 +113,7 @@ Since there exists a constraint on the amount of charge that can be stored in th
     \leq 200 \label{eq:matrix_constraint}
 \end{flalign}
 
-The equality constraints in \autoref{eq:equality} can be used to rewrite the cost function, \autoref{eq:cost}, as a function of $Q_\mathrm{G}$, $Q_\mathrm{W}$, $Q_\mathrm{A,in}$ and $Q_\mathrm{A,out}$. This results in \autoref{eq:final_cost}
+The equality constraints in \autoref{eq:equality} can be used to rewrite the cost function, \autoref{eq:cost}, as a function of $Q_\mathrm{G}$, $Q_\mathrm{W}$, $Q_\mathrm{A,in}$ and $Q_\mathrm{A,out}$. It results in \autoref{eq:final_cost}.
 %
 \begin{flalign}
     & \sum_{i=k}^{k+L-1} (P_\mathrm{E}[i] Q_\mathrm{E}[i] - (P_\mathrm{G}[i] Q_\mathrm{G}[i] + P_\mathrm{W}[i] Q_\mathrm{W}[i])) T_\mathrm{s} \\
@@ -184,7 +184,7 @@ This expression can also be written in matrix form to be suitable to use with CV
 The implementation of the optimization problem is shown in \autoref{cvxImplementation}. It includes the inequality constraints in \autoref{eq:inequality} and \ref{eq:matrix_constraint} as well as the cost defined in \autoref{eq:matrix_cost}.
 %
 \begin{lstlisting}[ language = Matlab,
-					caption  = {MATLAB code for the implementation of the problem with CVX},
+					caption  = {MATLAB code for the implementation of the problem with CVX.},
 					label    = cvxImplementation ]
 cvx_begin quiet % The beginning of the optimization problem
 
@@ -221,7 +221,8 @@ The results obtained are presented in \autoref{fig:E_A}, \ref{fig:Q_E}, \ref{fig
 
 In \autoref{fig:E_A} the state of charge of the accumulator can be seen. It shall be noticed that the accumulator charges when the price of electricity is low and discharges when it is high. For this to be seen it is neccesary to look also at \autoref{fig:Q_E}, where the power production and price is depicted. Good examples appear at 90 hours and between 170 and 180 hours. The accumulator also charges when the power production of gas is cheaper, this is shown in \autoref{fig:Q_G}. The clearest example of this occurs between 110 and 120 hours.
 
-From the power production seen in \autoref{fig:Q_E}, it can be said that the power produced is low when electricity is cheap and high otherwise. This is clear in the graph as when the price peaks up, so does the production and vice versa
+From the power production seen in \autoref{fig:Q_E}, it can be said that the power produced is low when electricity is cheap and high otherwise. This is clear in the graph as when the price peaks up, so does the production and vice versa.
+%
 \begin{figure}[H]
     \captionbox 
     {
