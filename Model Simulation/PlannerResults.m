@@ -1,5 +1,6 @@
 %% Script to check the performance of the trajectory following.
-%run ControllerLQR.m
+run ControllerLQR.m
+run windModel.m
 sim PathFollowingModel.slx
 
 plot(xn_3DOF.Data,yn_3DOF.Data,'-r')

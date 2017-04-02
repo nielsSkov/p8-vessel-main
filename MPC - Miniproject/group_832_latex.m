@@ -32,12 +32,10 @@ hold on
 stairs(P_E)
 stairs(P_G,'r')
 stairs(P_W,'g')
-title('Price Data')
-legend('Price of Electricity','Price of Gas','Price of Burning Waste')
+title('price data')
+legend('Price Electricity','Price for gas','Price of burning waste')
 ylabel('[DKK/MWh]')
 xlabel('Sample [hour]')
-grid on
-grid minor
 
 %%
 
@@ -105,13 +103,8 @@ end
 % I got you started! Make some more plots and investigate the results
 close all
 figure
-hold on
 stairs(E_A_sys)
-title('State of Charge in the Accumulator')
-xlabel('Sample [hour]')
-ylabel('Power [MWh]')
-grid on
-grid minor
+FigureLatex('State of Charge in the Accumulator','Sample [hour]','Power [MWh]',0,0,0,0,12,13,0)
 
 figure
 hold on
@@ -128,33 +121,24 @@ xlabel('Sample [hour]')
 grid on
 grid minor
 
-figure
-hold on
-title('Power Consumption using Gas')
-yyaxis left
-stairs(Q_G_sys)
-ylim([-25 25])
-ylabel('Power [MWh]')
-yyaxis right
-stairs(P_E-P_G)
-ylim([-220 220])
-ylabel('Electricity Price - Gas Price [DKK/MWh]')
-xlabel('Sample [hour]')
-grid on
-grid minor
+FigureLatex2Axis('Power Consumption using Waste',...
+    'Sample [hour]','Power [MWh]','Price [DKK/MWh]',0,0,0,[-45 45],[-45 45],12,13,0)
 
 figure
 hold on
-title('Power Production')
+yyaxis left
+stairs(Q_G_sys)
+yyaxis right
+stairs(P_E-P_G)
+FigureLatex2Axis('Power Consumption using Gas',...
+    'Sample [hour]','Power [MWh]','Electricty Price - Gas Price [DKK/MWh]',0,0,0,[-25 25],[-220 220],12,13,0)
+
+figure
+hold on
 yyaxis left
 stairs(Q_E_sys)
-ylim([-100 350])
-ylabel('Power [MWh]')
 yyaxis right
 stairs(P_E)
-ylim([-100 350])
-ylabel('Price [DKK/MWh]')
-xlabel('Sample [hour]')
-grid on
-grid minor
+FigureLatex2Axis('Power Production',...
+    'Sample [hour]','Power [MWh]','Price [DKK/MWh]',0,0,0,[-100 350],[-100 350],12,13,0)
 
