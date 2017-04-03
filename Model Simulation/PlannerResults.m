@@ -1,5 +1,6 @@
 %% Script to check the performance of the trajectory following.
 run ControllerLQR.m
+%run robustModel.m
 run windModel.m
 sim PathFollowingModel.slx
 

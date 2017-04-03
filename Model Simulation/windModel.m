@@ -3,7 +3,7 @@
 % In Aalborg avg wind speeds of 11 knots = 6 m/s
 % Design for max wind of 6 m/s
 
-Vmax = 6;
+Vmax = 1;
 Vmin = 0;
 
 psi = 0;
