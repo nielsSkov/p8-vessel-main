@@ -114,21 +114,24 @@ n=size(A_kal,1);
 nu=size(B_kal,2);
 nz=size(C_kal,1);
 
-biasacc=0*ones(2,n_samples);%[randn(2,1).*sqrt(0.01) zeros(2,n_samples-1)];
-
+% biasacc=0*ones(2,n_samples);%[randn(2,1).*sqrt(0.01) zeros(2,n_samples-1)];
 % for i=2:1:n_samples
 %     biasacc(:,i)=biasacc(:,i-1)+randn(2,1).*sqrt(0.01);
 % end
-
 % data_dot_noise=data_dot+randn(n_samples,2).*sqrt(5);
 % data_ddot_noise=data_ddot+randn(n_samples,2).*sqrt(0.01)+biasacc';
 
-att_noise=att_data+diag([sigma2_mag_roll,sigma2_mag_pitch,sigma2_mag_yaw])*...
+att_noise=att_data+diag(sqrt([0,0,sigma2_mag_yaw]))*...
     randn(3,n_samples);
-attdot_noise=attdot_data+diag([sigma2_gyro_roll,sigma2_gyro_pitch,...
-    sigma2_gyro_yaw])*randn(3,n_samples);
-x_noise=x_data+diag([sigma2_gps_xn,sigma2_gps_yn])*randn(2,n_samples);
-xddot_noise=xddot_data+diag([sigma2_acc_xbddot,sigma2_acc_ybddot])*randn(2,n_samples);
+attdot_noise=attdot_data+diag(sqrt([sigma2_gyro_roll,sigma2_gyro_pitch,...
+    sigma2_gyro_yaw]))*randn(3,n_samples);
+x_noise=x_data+diag(sqrt([sigma2_gps_xn,sigma2_gps_yn]))*randn(2,n_samples);
+xddot_noise=xddot_data+diag(sqrt([sigma2_acc_xbddot,sigma2_acc_ybddot]))*randn(2,n_samples);
+
+% Not a good way to get roll and pitch
+att_noise(1,:)=atan(xddot_noise(1,:)./sqrt(xddot_noise(2,:).^2+9.81.^2));
+att_noise(2,:)=atan(xddot_noise(2,:)./sqrt(xddot_noise(1,:).^2+9.81.^2));
+
 
 meas=[att_noise;
     attdot_noise;
@@ -188,9 +191,9 @@ end
 % Yaw
 figure
 hold on
-plot(att.Time,meas(3,:))
-plot(att.Time,x_kal(3,:))
-plot(att.Time,att.Data(:,3))
+plot(att.Time,meas(1,:))
+plot(att.Time,x_kal(1,:))
+plot(att.Time,att.Data(:,1))
 FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
 
 % Yaw velocity
@@ -230,6 +233,3 @@ plot(att.Time,meas(9,:))
 plot(att.Time,x_kal(14,:))
 plot(att.Time,xddot.Data(:,1))
 FigureLatex('$\ddot{x_\mathrm{b}}$','Time [s]','Acceleration [m s$^{-2}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
-
-
-
