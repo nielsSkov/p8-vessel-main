@@ -232,4 +232,4 @@ plot(att.Time,xddot.Data(:,1))
 FigureLatex('$\ddot{x_\mathrm{b}}$','Time [s]','Acceleration [m s$^{-2}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
 
 
-
+%% 
