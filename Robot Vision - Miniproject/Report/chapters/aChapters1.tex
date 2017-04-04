@@ -1,12 +1,12 @@
 \chapter{Introduction}\label{chap:introduction}
-In this project an industrial robot is automated to manufacture certain characters from The Simpsons family using Lego Duplo bricks. The choice of characters that are produced by the robot include Homer, Marge, Bart, Lisa and Maggie. Each character is made using a specific order and color of the bricks. Each character is produced using three Duplo bricks besides Maggie, which is produced using only two Duplo bricks. The specifications of each character is given below and shown in \autoref{fig:lego_simpsons}.:
+In this project an industrial robot is automated to manufacture certain characters from The Simpsons family using Lego Duplo bricks \cite{duplo}. The choice of characters that are produced by the robot include Homer, Marge, Bart, Lisa and Maggie. Each character is made using a specific order and color of the bricks. Each character is produced using three Duplo bricks besides Maggie, which is produced using only two Duplo bricks. The specifications of each character is given below and shown in \autoref{fig:lego_simpsons}.:
 
 \begin{itemize}
-	\item Homer: blue, black and yellow
-	\item Marge: green, yellow and blue
-	\item Bart: blue, orange, yellow
-	\item Lisa: yellow, orange, yellow
-	\item Maggie: blue, yellow
+	\item Homer: blue, black and yellow.
+	\item Marge: green, yellow and blue.
+	\item Bart: blue, orange, yellow.
+	\item Lisa: yellow, orange, yellow.
+	\item Maggie: blue, yellow.
 \end{itemize}
 
 \begin{figure}[H]
@@ -15,7 +15,7 @@ In this project an industrial robot is automated to manufacture certain characte
     \label{fig:lego_simpsons}
 \end{figure}
 
-The task presented is an ideal example of a process that should be automated. Automation plays a key role in production and manufacturing as it contributes to reducing production costs while improving product quality and reducing production time. Generally, industrial robots are used for repetitive tasks, such as the one presented. The robot chosen for this task is the KUKA KR6 700.
+The task presented is an ideal example of a process that should be automated. Automation plays a key role in production and manufacturing as it contributes to reducing production costs while improving product quality and reducing production time. Generally, industrial robots are used for repetitive tasks, such as the one presented. The robot chosen for this task is the KUKA KR6 700 \cite{kuka}.
 
 In order to automate this procedure, the task is broken down into two main sections, namely, computer vision and robot manipulation. Computer vision is needed to identify and classify the bricks in the workspace. The properties that define a brick are its color, location and orientation. A USB camera is placed above the bricks' workspace and image processing techniques are used to classify the bricks' properties. The algorithm also translates the orientation and location of the bricks from the image's coordinate frame to the robot's coordinate frame.
 
