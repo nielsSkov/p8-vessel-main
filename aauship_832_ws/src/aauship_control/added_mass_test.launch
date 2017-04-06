@@ -1,6 +1,6 @@
 <launch>
   <node cwd="node" name="rosbag_node" pkg="rosbag" type="record"
-	output="screen" args="-o $(find aauship_control)/bags /kf_states /imu /gps1 /lli_input"/>
+	output="screen" args="-o $(find aauship_control) /imu"/>
 
   <node cwd="node" name="lli_node" pkg="aauship_control" type="lli-node.py" output="screen"/>
   

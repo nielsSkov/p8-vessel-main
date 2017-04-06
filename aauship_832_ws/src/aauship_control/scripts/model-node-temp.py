@@ -23,12 +23,15 @@ class modelSim(object):
         self.n = 3; # number of states
         self.m = 2; # number of inputs, also outputs
         # init ss matrices
+        #self.A = np.zeros([self.n,self.n]);
         self.A = np.matrix([[ 1, 0.0497, 0],
             [ 0, 0.9882, 0],
             [ 0, 0, 0.9891]])
+        #self.B = np.zeros([self.n,self.m]);
         self.B = np.matrix([[0.0001, -0.0001],
             [0.0022, -0.0022],
             [0.0038, 0.0038]])
+        #self.C = np.zeros([self.m,self.n]);
         # init states
         self.x = np.zeros([self.n])
         self.x_old = self.x
@@ -37,8 +40,8 @@ class modelSim(object):
         self.pubmsg = KFStates()
 
         # variables to convert PWM2force
-        self.m = 0.26565
-        self.c = 24.835
+        self.m 0.26565
+        self.c 24.835
 
 
         # Variables for the thrusters
@@ -47,9 +50,8 @@ class modelSim(object):
 
         rospy.init_node('kalmanfilter_node')
         rate = rospy.Rate(20)
-        before = 0;
         while not rospy.is_shutdown():
-            # print after - before
+            self.pub.publish(self.pubmsg)
             # Calculates new states
             #print self.x
             for i in range(0,self.n):
@@ -57,26 +59,18 @@ class modelSim(object):
                 self.x_old = self.x
                 self.x[i] = (self.A[i,0]*self.x_old[0] + self.A[i,1]*self.x_old[1] + self.A[i,2]*self.x_old[2]) \
                     + (self.B[i,0]*self.leftthruster + self.B[i,1]*self.rightthruster)
-            # self.pubmsg.r = rospy.get_time()
-            self.pub.publish(self.pubmsg)
-            print self.x[2]
             rate.sleep()
-            # before = after
 
     def llicb(self, data):
         # Get inputs from controller
         if data.MsgID == 3:
-            if self.rightthruster<100:
-                self.rightthruster = 0
-            self.rightthruster = (float(data.Data)*self.m)-self.c
-
+            print float(data.Data)
+            self.rightthruster = (float(data.Data)-self.c)/m
 
         if data.MsgID == 5:
-            if self.leftthruster<100:
-                self.leftthruster = 0
-            self.leftthruster = (float(data.Data)*self.m)-self.c
-        #print "Data: ", float(data.Data)
-        #print "Left Thruster: ", self.leftthruster, " Right Thruster: ", self.rightthruster
+            self.leftthruster = (float(data.Data)-self.c)/m
+        print "Data: ", float(data.Data)
+        print "Left Thruster: ", self.leftthruster, " Right Thruster: ", self.rightthruster
         #print self.leftthruster
         #print self.rightthruster
 
@@ -94,8 +88,8 @@ class modelSim(object):
         self.pubmsg.psi = self.x[0]
         self.pubmsg.p = self.x[1]
         self.pubmsg.u = self.x[2]
-        #print "Yaw: ", self.x[0]," YawDot: ", self.x[1], " Xdot: ", self.x[2]
-        #print self.x[2]
+        print "Yaw: ", self.x[0], " YawDot: ", self.x[1], " Xdot: ", self.x[2]
+
         #self.pub.publish(self.pubmsg)
 
     def run(self):

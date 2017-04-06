@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stdint.h>
 #include <string>
+
 //Controller rate (hz)
 #define CONTROLLER_RATE 20.0
 #define PRINT_DELTA_TIME false
@@ -15,17 +16,17 @@
 
 
 //State Feedback values
-#define f11  5.1053//*10e3
-#define f12  0.2773//*10e3
-#define f13  0.2595//*10e3
-#define f21  -5.1053//*10e3
-#define f22  -0.2773//*10e3
-#define f23  0.2595//*10e3
-//Intergral Feedback values
-#define fi11 -1.5833//*10e3
-#define fi12 -0.1303//*10e3
-#define fi21  1.5833//*10e3
-#define fi22 -0.1303//*10e3
+#define f11  5.1053*1e3
+#define f12  0.2773*1e3
+#define f13  0.2595*1e3
+#define f21  -5.1053*1e3
+#define f22  -0.2773*1e3
+#define f23  0.2595*1e3
+//Integral Feedback values
+#define fi11 -1.5833*1e3
+#define fi12 -0.1303*1e3
+#define fi21  1.5833*1e3
+#define fi22 -0.1303*1e3
 //Define Dimensions
 #define Fn 2
 #define Fm 3
@@ -45,7 +46,7 @@ void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
   x[0] = KFStates->psi;
   x[1] = KFStates->r;
   x[2]=KFStates->u;
-  std::cout<<"[LQR] X states: "<<x[0]<<" "<<x[1]<<" "<<x[2]<<"\n";
+  //std::cout<<"[LQR] X states: "<<x[0]<<" "<<x[1]<<" "<<x[2]<<"\n";
   y[0] = KFStates->psi;
   y[1] = KFStates->u;
 
@@ -54,17 +55,14 @@ void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
 
 void multiply_state_fb(float F[Fn][Fm], float x[Fm], float *u_state)
 {
-  float u_tmp[Fn];
+  float u_tmp[Fn] = {0,0};
   //std::cout<<u_state[0]<<std::endl;
-  for (int i = 0; i < Fn; i++)
-  {
-    u_tmp[i] = u_state[i];
-  }
   for(int i=0;i<Fn;i++)
   {
     for(int j=0;j<Fm;j++)
     {
-      u_state[i] = u_tmp[i]+F[i][j]*x[j];
+      u_state[i] = F[i][j]*x[j];
+      //std::cout<<i<< " "<<j<<" "<<u_state[i]<<std::endl;
     }
   }
   //std::cout<<"u_state[0]: "<<u_state[0]<<"\n u_state[1]: "<<u_state[1]<<std::endl;
@@ -83,7 +81,7 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
   {
     for(int j=0;j<Fn;j++)
     {
-      u_integral[i] = u_integral[i]+F_int[i][j]*x_int[j];
+      u_integral[i] = F_int[i][j]*x_int[j];
     }
   }
 
@@ -92,16 +90,21 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
 int16_t force2PWM(float u)
 {
   //std::cout<<"u: "<<u<<std::endl;
-  int pwm = ((m*u)-c);
+  int pwm = (u+c)/m;
+  return pwm;     //only for model-node
   //std::cout<<"PWM: "<<pwm<<std::endl;
-  if (pwm < 100)
-  {
-    return 0;
-  }
-  else
-  {
-    return pwm;
-  }
+
+  /////////// USED TO SEND PWM TO BOAT\\\\\\\\
+  /////////// NOT FOR TESTING WITH MODEL NODE\\\\\\\\\\
+
+  // if (pwm < 100)
+  // {
+  //   return 0;
+  // }
+  // else
+  // {
+  //   return pwm;
+  // }
 }
 
 
@@ -131,11 +134,11 @@ int main(int argc, char **argv)
     {f11,f12,f13},
     {f21,f22,f23}
   };
-  float u_state[Fn]={0,0};
+  // float u_state[Fn]={0,0};
   //////////Integrator Feedback Variables\\\\\\\\\\\
 
   float x_int[Fn]={0,0};
-  float u_integral[Fn]={0,0};
+  // float u_integral[Fn]={0,0};
   float F_int[Fn][Fn] = {
     {fi11,fi12},
     {fi21,fi22}
@@ -143,11 +146,17 @@ int main(int argc, char **argv)
 
   ////////Extended Feedback Variables\\\\\\\\\\\\
 
-  float u[Fn] = {0,0};
+  // float u[Fn] = {0,0};
 
 
   while(ros::ok)
   {	
+    // inputs
+    ros::spinOnce();//gets the newest values
+    float u_state[Fn]={0,0};
+    float u_integral[Fn]={0,0};
+    float u[Fn] = {0,0};
+
     old_time = current_time;
     current_time = ros::Time::now().toSec();
     delta_t = current_time - old_time;
@@ -160,15 +169,15 @@ int main(int argc, char **argv)
     for (int i = 0; i < Fn; i++)
     {
       u[i] = -(u_state[i] + u_integral[i]);
-      if (u[i]<-25)
+      if (u[i]<-0)
       {
-        u[i] = -25;
+        u[i] = 0;
       }
       else if (u[i]>40)
       {
         u[i] = 40;
       }
-      std::cout<<"u["<<i<<"]: "<<u[i]<<std::endl;
+      //std::cout<<"u["<<i<<"]: "<<u[i]<<std::endl;
     }
     if(PRINT_DELTA_TIME && counter%100 == 0){
       std::cout<<"Time Delta: "<<delta_t<<"\n";
@@ -194,7 +203,6 @@ int main(int argc, char **argv)
       "\n Left Motor: "<<u[1]<<", PWM: "<<force2PWM(u[1])<<std::endl;
     }
 
-    ros::spinOnce();//gets the newest values
     lqr_rate.sleep();//Ensures the timing of the loop
   }
   return 0;

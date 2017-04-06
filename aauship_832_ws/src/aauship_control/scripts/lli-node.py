@@ -6,7 +6,7 @@ import roslib; roslib.load_manifest('aauship_control')
 
 import rospy
 from std_msgs.msg import String
-from aauship.msg import *
+from aauship_control.msg import *
 
 import serial
 import struct

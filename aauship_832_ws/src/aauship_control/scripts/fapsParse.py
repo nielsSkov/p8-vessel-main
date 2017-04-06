@@ -62,7 +62,7 @@ class packetParser():
         self.accconst = 0.003333333333333
         self.gyroconst = 0.05*pi/180
 
-        #self.pub_bm = rospy.Publisher('bm', BatteryMonitor, queue_size=1)
+        self.pub_bm = rospy.Publisher('bm', BatteryMonitor, queue_size=1)
         self.pub_gps = rospy.Publisher('gps1', GPS, queue_size=1)
 
         self.gpsmsg = GPS()
@@ -101,22 +101,19 @@ class packetParser():
                     self.bank2[1] = self.bank2[1]+130.67
                     self.bank2[2] = self.bank2[2]+143.67
                     self.bank2[3] = self.bank2[3]+111.33
+					
+					# if min(self.bank1) < 3600.0:
+                        # self.bank1 = [3600.0, 3600.0, 3600.0, 3600.0]
 
+                    # if min(self.bank2) < 3600.0:
+                        # self.bank2 = [3600.0, 3600.0, 3600.0, 3600.0]
 
+                    # if max(self.bank1) > 4200.0:
+                        # self.bank1 = [4200.0, 4200.0, 4200.0, 4200.0]
 
-                    '''
-                    if min(self.bank1) < 3600.0:
-                        self.bank1 = [3600.0, 3600.0, 3600.0, 3600.0]
-
-                    if min(self.bank2) < 3600.0:
-                        self.bank2 = [3600.0, 3600.0, 3600.0, 3600.0]
-
-                    if max(self.bank1) > 4200.0:
-                        self.bank1 = [4200.0, 4200.0, 4200.0, 4200.0]
-
-                    if max(self.bank2) > 4200.0:
-                        self.bank2 = [4200.0, 4200.0, 4200.0, 4200.0]
-                    '''
+                    # if max(self.bank2) > 4200.0:
+                        # self.bank2 = [4200.0, 4200.0, 4200.0, 4200.0]
+                    
                     if not rospy.is_shutdown():
                         self.pub_bm.publish(self.bank1,self.bank2)
 
