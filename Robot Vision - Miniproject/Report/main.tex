@@ -1,4 +1,4 @@
-\input{setup/preamble.tex}% package inclusion and set up of the document
+\input{setup/preamble2.tex}% package inclusion and set up of the document
 
 \input{setup/macros.tex}% my new macros
 
@@ -27,7 +27,7 @@
     %\cleardoublepage
     %\input{formalities/preface.tex}
     
-    \pdfbookmark[0]{Table of Contents}{label: tableOfCentents}
+    \pdfbookmark[0]{Table of Contents}{label: tableOfContents}
     \tableofcontents
     \cleardoublepage
     
@@ -38,28 +38,28 @@
     \fancyhead[RE,LO]{}
     \fancyhead[RE,LO]{\color{aaublue}\small\nouppercase\leftmark} %even page - chapter title
     \pagestyle{fancy}
-    
-   
-    \input{chapters/chapter1/aChapters1.tex}
-    \input{chapters/chapter2/aChapters2.tex}
-    \input{chapters/chapter3/aChapters3.tex}
-    
+       
+    \input{chapters/aChapters1.tex}
+    \input{chapters/aChapters2.tex}
+    \input{chapters/aChapters3.tex}
+    \input{chapters/aChapters4.tex}
+    \input{chapters/aChapters5.tex}
     
     %%% APPENDIX %%%
     % Setup for Appendix and Bibliography
-    \bookmarksetup{startatroot}
+    %\bookmarksetup{startatroot}
     \addtocontents{toc}{\bigskip}
     \newpage
     \fancyhead[RO]{\color{aaublue}\small Appendix \nouppercase\rightmark} %even page
     \fancyhead[LE]{\color{aaublue}\small Appendix \nouppercase\rightmark} %uneven page
     \fancyhead[RE,LO]{}
 
-
-
     %%% BIBLIOGRAPHY %%%
     % Remove header so it does not say Appendix Bibliography
     \printbibliography
     \fancyhead[LE,RO]{}
+    
+\listoffixmes
        
 
 \end{document}
