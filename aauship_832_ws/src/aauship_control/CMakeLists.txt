@@ -57,6 +57,7 @@ pkg_check_modules( gsl REQUIRED gsl )
 add_message_files(
   FILES
   Faps.msg
+  ref.msg
   ADIS16405.msg
   LLIinput.msg
 #  testSetpoints.msg
@@ -64,7 +65,7 @@ add_message_files(
   Attitude.msg
   GPS.msg
 #  controlTest.msg
-#  BatteryMonitor.msg
+  BatteryMonitor.msg
   KFStates.msg
 )
 
@@ -156,6 +157,19 @@ target_link_libraries(ahrs-mahony-node aauship_control ${gsl_LIBRARIES}  ${catki
 add_executable(lqr_node src/LQR.cpp)
 add_dependencies(lqr_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(lqr_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(path_following_node src/path_follower_node.cpp)
+add_dependencies(path_following_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(path_following_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+
+# add_executable(gps_data_node src/gps_get_data.cpp)
+# add_dependencies(gps_data_node ${catkin_EXPORTED_TARGETS})
+# target_link_libraries(gps_data_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(KF_attitude_node src/KF-att-node.cpp)
+add_dependencies(KF_attitude_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(KF_attitude_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
