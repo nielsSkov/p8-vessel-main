@@ -1,9 +1,9 @@
 %% Design of Robust Model
-% close all
-% clear
-% clc
+close all
+clear
+clc
 
-%run Parameters
+run Parameters
 
 %%
 % State Space Model - states=[yaw yaw_dot xb_dot]'
@@ -28,6 +28,7 @@ nz = ny + nu;
 nd = nu;    % number of input disturbance states
 nw = ny;    % number of output noise states
 
+
 %% Integral Action
 % Extended ss model with integral states
 
@@ -50,18 +51,66 @@ B1 = [Bdist zeros(nx,nw) zeros(nx,ny);
 B2 = Bi;
 
 C1 = [Ci;
+    -Ci;
     zeros(nu,nx+ny)];
 
-D11 = zeros(nz, nd+nw+ny);
+D11 = [zeros(ny, nd) zeros(ny, nw) zeros(ny, ny);
+    zeros(ny, nd) zeros(ny, nw) eye(ny, ny);
+    zeros(nu, nd) zeros(nu, nw) zeros(nu, ny)];
+
+D12 = [zeros(2*ny,nu);
+    eye(nu,nu)];
+
+C2 = [Ci;
+    -Ci];
+
+D21 = [zeros(ny,nd) eye(ny, nw) zeros(ny,ny);
+    zeros(ny,nd) zeros(ny, nw) eye(ny,ny)];
+
+D22 = zeros(2*ny,nu);
+
+N = [Ai B1 B2;
+    C1 D11 D12;
+    C2 D21 D22];
+
+Ah = Ai;
+
+Bh = [B1 B2];
+
+Ch = [C1;
+    C2];
+
+Dh = [D11 D12;
+    D21 D22];
+
+sysN = ss(Ah,Bh,Ch,Dh);
+[k,g,gfin, info] = hinfsyn(sysN,2*ny,nu)
+info.KFI
+
+%F = -info.KFI(1:2,1:3);
+
+%% Hinf 2
+
+%A1 = A;
+
+%B1 = [Bdist zeros(nx,nw) zeros(nx,ny)];
+
+%B2 = B;
+
+%C1 = [Ci;
+%    zeros(nu,nx)];
+
+D11 = [zeros(ny,nd) zeros(ny,nw) eye(ny,ny);
+    zeros(nu,nd) zeros(nu,nw) zeros(nu,ny)];
 
 D12 = [zeros(ny,nu);
     eye(nu,nu)];
 
-C2 = Ci;
+%C2 = C;
 
-D21 = [zeros(ny,nd) eye(ny, nw) zeros(ny,ny)];
+%D21 = [zeros(ny,nd) eye(ny, nw) zeros(ny,ny)];
 
-D22 = zeros(ny,nu);
+%D22 = zeros(ny,nu);
 
 N = [Ai B1 B2;
     C1 D11 D12;
@@ -81,7 +130,7 @@ sysN = ss(Ah,Bh,Ch,Dh);
 [k,g,gfin, info] = hinfsyn(sysN,ny,nu);
 info.KFI
 
-%F = -info.KFI(1:2,1:3);
+
 %%
 
 [numG1, denG1] = ss2tf(A,B,C,D,1);
