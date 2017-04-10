@@ -172,6 +172,10 @@ add_executable(KF_attitude_node src/KF-att-node.cpp)
 add_dependencies(KF_attitude_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(KF_attitude_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
 
+add_executable(KF_position_node src/KF-pos-node.cpp)
+add_dependencies(KF_position_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(KF_position_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
