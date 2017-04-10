@@ -67,6 +67,8 @@ add_message_files(
 #  controlTest.msg
   BatteryMonitor.msg
   KFStates.msg
+  AttitudeStates.msg
+  PositionStates.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -169,6 +171,10 @@ target_link_libraries(path_following_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 add_executable(KF_attitude_node src/KF-att-node.cpp)
 add_dependencies(KF_attitude_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(KF_attitude_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+
+add_executable(KF_position_node src/KF-pos-node.cpp)
+add_dependencies(KF_position_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(KF_position_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
 
 #############
 ## Install ##

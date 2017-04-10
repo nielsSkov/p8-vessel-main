@@ -8,42 +8,39 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 29th of March 2017}
+\section*{Supervisor meeting\\ \small Wednesday, 5th of April 2017}
 
-\subsection{Use Case}
+\subsection{Status}
 \begin{itemize}
-    \item We could design to measure the effect of shifting sands between Aalborg and the sea. Then the measurements can be done more frequently.
-    \item Design for multibeam sonar (same as they use in Aalborg port). The one that is placed currently on the boat is not designed for mapping, just for helping in the navigation.
-    \item The aim is to show that with the navigation and the control it is possible to perform the operation successfully.
-    \item Trajectories will depend on the cone of the sonar and on the mean depth.
-    \item We could include one page about the sonar and which considerations we need to take into account in the design process.
+    \item We are working on the GPS implementation, robust control and sensor fusion.
+    \item We have also look at the use case and the design considerations.
 \end{itemize}
 
-\subsection{Requirements}
+\subsection{RTK GPS}
 \begin{itemize}
-    \item 10cm precision in position should be fine, that is what we aim for. 
-    \item With a mapping operation the minimum is 30cm, but if you have 10cm you can also monitor parameters in the water.
+    \item It needs to be connection between the two GPS.
+    \item We could use a 3G USB dongle.
+    \item For the base location we need the exact location, we should do a long test (maybe two days).
+    \item There used to be an antenna in the roof that we can use and then the module inside.
+    \item Both GPSs need to have the same satellites inside.
+    \item Accept all the satellites that the GPS can connect to at the beginning.
+    \item We can also use one NTRIP as base station if there is one near available.
+    \item There are ways to have more than one base stations: virtual base station.
+    \item Figure out the best way to do it and then we will find how to do it.
 \end{itemize}
 
-\subsection{Feedback on Reading Material}
+\subsection{Robust Control}
 \begin{itemize}
-    \item Explain the meaning of $x_\mathrm{max}$ and $u_\mathrm{max}$, clarify particularly the values chosen.
-    \item Remember to include plots of the performance of the control design.    
-    \item In the outer loop we should also analyze stability, convergence and time characteristics.
-    \item We should explain what disturbances we consider in the design and which ones are put just to check the controller performance.
-    \item There is a range and a frequency span where the wind and wave disturbances are placed and we can use that to design a robust controller.
-    \item For simulation, we could do different simulations with forces coming from different directions and magnitudes and get a probability distribution of how well we follow the path.  
+    \item We have done a first mdoel for Hinf design.
+    \item We need to think to what the controller should be robust to, for example model uncertainties (added mass, aerodynamics).
 \end{itemize}
 
 \subsection{Miscellaneous}
 \begin{itemize}
-    \item The controller code has been tested with a  node that simulates the behavior of the plant.
-    \item Check the base station for the RTK GPS, Mathias on 6th semester is working with that one. Jesper will find it out.
-    \item If we need some help with the hardware or implementation we can talk to Jesper and he will contact Nick.
-    \item Maybe prepare the system so we can ask the professor when we have the lectures about robust control.
+    \item Send status by email with some documentation and some questions if we have them. If need it we can also agree on a Skype meeting.
 \end{itemize}
 
 \subsection{Next Supervisor Meeting}
-Wednesday, 5th of April at 13:00
+Wednesday, 19th of April at 13:00
 
 \end{document}

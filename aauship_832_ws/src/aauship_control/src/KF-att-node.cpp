@@ -1,5 +1,5 @@
 #include "ros/ros.h"
-#include "aauship_control/Attitude.h"
+#include "aauship_control/AttitudeStates.h"
 #include "aauship_control/ADIS16405.h"
 #include "aauship_control/LLIinput.h"
 
@@ -33,22 +33,30 @@
 #define L1 0.05
 #define L2 0.05
 //State variances
-#define SIGMA2_ROLL 1
-#define SIGMA2_PITCH 1
-#define SIGMA2_YAW 1
-#define SIGMA2_ROLLD 1
-#define SIGMA2_PITCHD 1
-#define SIGMA2_YAWD 1
-#define SIGMA2_ROLLDD 1
-#define SIGMA2_PITCHDD 1
-#define SIGMA2_YAWDD 1
+#define SIGMA2_ROLL 0.0025
+#define SIGMA2_PITCH 0.0025
+#define SIGMA2_YAW 0.0025
+#define SIGMA2_ROLLD 0.005
+#define SIGMA2_PITCHD 0.005
+#define SIGMA2_YAWD 0.005
+#define SIGMA2_ROLLDD 0.001
+#define SIGMA2_PITCHDD 0.001
+#define SIGMA2_YAWDD 0.001
 //Sensor variances
-#define SIGMA2_ACCROLL 1
-#define SIGMA2_ACCPITCH 1
-#define SIGMA2_MAGYAW 1
-#define SIGMA2_GYROX 1
-#define SIGMA2_GYROY 1
-#define SIGMA2_GYROZ 1
+#define SIGMA2_ACCROLL 0.1
+#define SIGMA2_ACCPITCH 0.1
+#define SIGMA2_MAGYAW 0.1
+#define SIGMA2_GYROX 0.1
+#define SIGMA2_GYROY 0.1
+#define SIGMA2_GYROZ 0.1
+//Gyro biases
+#define BIAS_GYROX 0
+#define BIAS_GYROY 0
+#define BIAS_GYROZ 0
+
+//Values for first order curve to fit Force vs PWM
+#define M 0.26565
+#define N 24.835
 
 
 //Global variables
@@ -58,33 +66,34 @@ float inputs[N_INPUTS] = {0,0};
 
 
 //Callback functions
-void imu_callback(const aauship_control::ADIS16405::ConstPtr& sensor)
+void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
-	float acc[3] = {sensor->xaccl,0,0};
-	float gyro[3] = {0,0,0};
-	float mag[3] = {0,0,0};
 	float magxh = 0;
 	float magyh = 0;
 
 	//Calculate roll and pitch from the accelerometer measurements
 	//Roll = atan(yacc / sqrt(xacc^2 + zacc^2)) and pitch = atan(xacc / sqrt(yacc^2 + zacc^2))
-	meas[0] = atan((sensor->yaccl)/sqrt((sensor->xaccl)*(sensor->xaccl)+(sensor->zaccl)*(sensor->zaccl)));
-	meas[1] = atan((sensor->xaccl)/sqrt((sensor->yaccl)*(sensor->yaccl)+(sensor->zaccl)*(sensor->zaccl)));
+	meas[0] = atan((imu_msg->yaccl)/sqrt((imu_msg->xaccl)*(imu_msg->xaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));
+	meas[1] = atan((imu_msg->xaccl)/sqrt((imu_msg->yaccl)*(imu_msg->yaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));
 
 	//Calculate yaw using the meagnetometer data
-	magxh = (sensor->xmagn) * cos(states[1]) + (sensor->ymagn) * sin(states[0]) * sin(states[1]) + (sensor->zmagn) * cos(states[0]) * sin(states[1]);
-	magyh = (sensor->ymagn) * cos(states[0]) + (sensor->zmagn) * sin(states[0]);
+	magxh = (imu_msg->xmagn) * cos(states[1]) + (imu_msg->ymagn) * sin(states[0]) * sin(states[1]) + (imu_msg->zmagn) * cos(states[0]) * sin(states[1]);
+	magyh = (imu_msg->ymagn) * cos(states[0]) + (imu_msg->zmagn) * sin(states[0]);
 	meas[2] = atan(magyh/magxh);
 
 	//Store the gyro measurements
-	meas[3] = sensor->xgyro;
-	meas[4] = sensor->ygyro;
-	meas[5] = sensor->zgyro;
+	meas[3] = imu_msg->xgyro - BIAS_GYROX;
+	meas[4] = imu_msg->ygyro - BIAS_GYROY;
+	meas[5] = imu_msg->zgyro - BIAS_GYROZ;
 }
 
-void lli_callback(const aauship_control::LLIinput::ConstPtr& commands)
+void lli_callback(const aauship_control::LLIinput::ConstPtr& lli_msg)
 {
-
+	//Calculate forces as M * PWM - N
+	if (lli_msg->DevID == 10 && lli_msg->MsgID == 5)
+		inputs[0] = M * lli_msg->Data - N;
+	if (lli_msg->DevID == 10 && lli_msg->MsgID == 3)
+		inputs[1] = M * lli_msg->Data - N;
 }
 
 
@@ -93,7 +102,7 @@ void matrix_multiplication(gsl_matrix * a,gsl_matrix * b,gsl_matrix * result)
 {
 	int n = a->size1;	//Rows of a
 	int m = a->size2;	//Columns of a a and rows of b
-	int p = b->size2;	//Rows of b
+	int p = b->size2;	//Columns of b
 	float mult = 0;
 
 	for (int i = 0; i < n; i++)
@@ -102,10 +111,9 @@ void matrix_multiplication(gsl_matrix * a,gsl_matrix * b,gsl_matrix * result)
 		{
 			mult = 0;
 			for(int k = 0; k < m; k++)
-				mult = mult + gsl_matrix_get(a,i,k) * gsl_matrix_get(b,j,k);
+				mult = mult + gsl_matrix_get(a,i,k) * gsl_matrix_get(b,k,j);
 			gsl_matrix_set(result,i,j,mult);
 		}
-
 	}
 }
 
@@ -132,7 +140,7 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 	ros::Subscriber imu_update = n.subscribe("/imu",1000,imu_callback);
 	ros::Subscriber lli_update = n.subscribe("/lli_input",1000,lli_callback);
-	ros::Publisher att_pub = n.advertise<aauship_control::Attitude>("/kf_attitude", 1);
+	ros::Publisher att_pub = n.advertise<aauship_control::AttitudeStates>("/kf_attitude", 1);
 	ros::Rate KF_attitude_rate(KF_ATTITUDE_RATE);
 	std::cout<<std::endl<<"######ATTITUDE KF RUNNING######"<<std::endl;
 
@@ -236,6 +244,12 @@ int main(int argc, char **argv)
 	{	
 		ros::spinOnce();
 
+		// std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,6,6)<<" "<<gsl_matrix_get(P,7,7)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,8,8)<<std::endl;
+
 		//////Update step//////
 		//Calculate K as P*C'/(C*P*C'+R)
 		matrix_multiplication(C,P,TEMP_6x9);
@@ -256,7 +270,6 @@ int main(int argc, char **argv)
 		matrix_multiplication(K,C,TEMP_9x9);
 		gsl_matrix_scale (TEMP_9x9, -1.0);
 		gsl_matrix_add(TEMP_9x9,I_9x9);
-		matrix_multiplication(TEMP_9x9,P,P);
 
 		//////Prediction step//////
 		//Predict states as states = A * states + B * inputs
@@ -269,8 +282,37 @@ int main(int argc, char **argv)
 		matrix_multiplication(TEMP_9x9,Atrans,P);
 		gsl_matrix_add (P,Q); 	
 
+		//Publish the states
+		aauship_control::AttitudeStates att_msg;
+		att_msg.roll = states[0];
+		att_msg.pitch = states[1];
+		att_msg.yaw = states[2];
+		att_msg.rolld = states[3];
+		att_msg.pitchd = states[4];
+		att_msg.yawd = states[5];
+		att_msg.rolldd = states[6];
+		att_msg.pitchdd = states[7];
+		att_msg.yawdd = states[8];
+		att_pub.publish(att_msg);
+
+		//Ensures the timing of the loop
 		KF_attitude_rate.sleep();
 	}
 
+	//Free the allocated matrices
+	gsl_matrix_free (A);
+	gsl_matrix_free (B);
+	gsl_matrix_free (C);
+	gsl_matrix_free (Atrans);
+	gsl_matrix_free (Ctrans);
+	gsl_matrix_free (P);
+	gsl_matrix_free (K);
+	gsl_matrix_free (Q);
+	gsl_matrix_free (R);
+	gsl_matrix_free (TEMP_9x9);
+	gsl_matrix_free (TEMP_6x6);
+	gsl_matrix_free (TEMP_9x6);
+	gsl_matrix_free (TEMP_6x6);
+	gsl_matrix_free (I_9x9);
 	return 0;
 }
