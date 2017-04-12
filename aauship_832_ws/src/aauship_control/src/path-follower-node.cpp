@@ -139,7 +139,7 @@ int main(int argc, char **argv)
 		//std::cout<<"YawRef: "<<reference.yaw<<std::endl;
 		//std::cout<<"Yaw: "<<heading<<std::endl;
 		//Ensures the timing of the loop
-		std::cout<<reference.yaw<<","<<heading<<","<<current_position.x<<","<<current_position.y<<","<<cross.x<<","<<cross.y<<std::endl;
+		//std::cout<<reference.yaw<<","<<heading<<","<<current_position.x<<","<<current_position.y<<","<<cross.x<<","<<cross.y<<","<<intersect.x<<","<<intersect.y<<std::endl;
 		path_follower_rate.sleep();
 	}
 	wptFile.close();
@@ -219,6 +219,7 @@ double distance2line(point curr_pos, point old_waypoint, point next_waypoint)
 	distx = x - curr_pos.x;
 	disty = y - curr_pos.y;
 	dist = sqrt(distx * distx + disty * disty);
+	std::cout<<x<<","<<y<<std::endl;
 	return dist;
 }
 
