@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 	ros::Subscriber lli_update = n.subscribe("/lli_input",1000,lli_callback);
 	ros::Publisher att_pub = n.advertise<aauship_control::AttitudeStates>("/kf_attitude", 1);
 	ros::Rate KF_attitude_rate(KF_ATTITUDE_RATE);
-	std::cout<<std::endl<<"######ATTITUDE KF RUNNING######"<<std::endl;
+	//std::cout<<std::endl<<"######ATTITUDE KF RUNNING######"<<std::endl;
 
 	//Temporary matrices
 	gsl_matrix * TEMP_9x9 = gsl_matrix_alloc(N_STATES,N_STATES);
@@ -240,7 +240,7 @@ int main(int argc, char **argv)
 	// std::cout<<" "<<states[0]<<" "<<std::endl;
 	// std::cout<<" "<<states[1]<<" "<<std::endl;
 
-	while(ros::ok)
+	while(ros::ok())
 	{	
 		ros::spinOnce();
 

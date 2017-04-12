@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 	// std::cout<<" "<<states[0]<<" "<<std::endl;
 	// std::cout<<" "<<states[1]<<" "<<std::endl;
 
-	while(ros::ok)
+	while(ros::ok())
 	{	
 		ros::spinOnce();
 
