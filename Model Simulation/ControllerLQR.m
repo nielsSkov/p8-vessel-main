@@ -54,10 +54,10 @@ Di = Dd;
 %% LQR weights
 
 % For Q Matrix
-maxYaw = 1000;          %[rad]
+maxYaw = 10;          %[rad]
 maxYawDot = 10;          %[rad/s]
-maxXDot = 1000;             %[m/s]
-Q = diag([maxYaw maxYawDot maxXDot 0.01 0.01]);
+maxXDot = 10;             %[m/s]
+Q = diag([maxYaw maxYawDot maxXDot 0.001 0.001]);
 Q = 1./(Q.^2);
 Q(Q==Inf)=0;
 
@@ -89,7 +89,7 @@ sys_cl = ss(Acl,Bcl,Ccl,Dcl, Ts);
 
 % Split Fe into state feedback gain and integral state gain 
 F = Fe(1:2,1:3);
-Fi = Fe(1:2,4:5);
+FI = Fe(1:2,4:5);
 
 
 refYaw = 1;      % [rad]
