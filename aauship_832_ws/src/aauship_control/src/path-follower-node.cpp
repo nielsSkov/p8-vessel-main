@@ -215,7 +215,7 @@ double distance2line(point curr_pos, point old_waypoint, point next_waypoint)
 	del_wpt.x = next_waypoint.x-old_waypoint.x;
 	del_wpt.y = next_waypoint.y-old_waypoint.y;
 	x = (del_wpt.y * del_wpt.y * old_waypoint.x + del_wpt.x * del_wpt.x * curr_pos.x + del_wpt.x * del_wpt.y * (curr_pos.y - old_waypoint.y)) / (del_wpt.y * del_wpt.y + del_wpt.x * del_wpt.x);
-	y = (del_wpt.y * (curr_pos.x - old_waypoint.x)) / del_wpt.x + old_waypoint.y;
+	y = (del_wpt.y * (x - old_waypoint.x)) / del_wpt.x + old_waypoint.y;
 	distx = x - curr_pos.x;
 	disty = y - curr_pos.y;
 	dist = sqrt(distx * distx + disty * disty);
@@ -235,7 +235,7 @@ double dist2wpt(point curr_pos, point old_waypoint, point next_waypoint)
 	del_wpt.x = next_waypoint.x-old_waypoint.x;
 	del_wpt.y = next_waypoint.y-old_waypoint.y;
 	x = (del_wpt.y * del_wpt.y * old_waypoint.x + del_wpt.x * del_wpt.x * curr_pos.x + del_wpt.x * del_wpt.y * (curr_pos.y - old_waypoint.y)) / (del_wpt.y * del_wpt.y + del_wpt.x * del_wpt.x);
-	y = (del_wpt.y * (curr_pos.x - old_waypoint.x)) / del_wpt.x + old_waypoint.y;
+	y = (del_wpt.y * (x - old_waypoint.x)) / del_wpt.x + old_waypoint.y;
 	distx = x - next_waypoint.x;
 	disty = y - next_waypoint.y;
 	dist = sqrt(distx * distx + disty * disty);
