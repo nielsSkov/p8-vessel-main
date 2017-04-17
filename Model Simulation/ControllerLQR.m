@@ -62,7 +62,7 @@ Q = 1./(Q.^2);
 Q(Q==Inf)=0;
 
 % For R Matrix
-maxF1 = 60;             %[N]
+maxF1 = 0.9;             %[N]
 maxF2 = maxF1;          %[N]
 
 R = diag([maxF1 maxF2]);
@@ -88,8 +88,8 @@ sys_cl = ss(Acl,Bcl,Ccl,Dcl, Ts);
 % step(sys_cl);
 
 % Split Fe into state feedback gain and integral state gain 
-F = Fe(1:2,1:3);
-FI = Fe(1:2,4:5);
+F = Fe(1:2,1:3)
+Fi = Fe(1:2,4:5)
 
 
 refYaw = 1;      % [rad]

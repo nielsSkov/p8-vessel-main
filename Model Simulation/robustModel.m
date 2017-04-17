@@ -148,7 +148,7 @@ sysN = ss(Ah,Bh,Ch,Dh);
 [k,g,gfin, info] = hinfsyn(sysN,2*ny,nu,'GMIN',1,'GMAX',5,'DISPLAY','on','TOLGAM',0.01);
 %info.GAMFI
 
-F  = -info.KFI(1:2,1:3);git 
+F  = -info.KFI(1:2,1:3);
 FI = -info.KFI(1:2,4:5);
 Fd = -info.KFI(1:2,6:7);
 
