@@ -5,7 +5,7 @@ clc
 
 run Parameters
 
-% State Space Model - states=[yaw yaw_dot xb_dot]'
+%% State Space Model - states=[yaw yaw_dot xb_dot]'
 A=[0 1 0;
     0 -dyaw/Iz 0;
     0 0 -dx/m];
@@ -51,19 +51,25 @@ Bi = [Bd;
 Ci = [Cd zeros(ny,ny)];
 Di = Dd;
 
+Aicont=[A zeros(n,ny);
+    -Cd zeros(ny,ny)];
+Bicont = [B; 
+    zeros(ny,nu)];
 %% LQR weights
 
 % For Q Matrix
-maxYaw = 10;          %[rad]
-maxYawDot = 10;          %[rad/s]
-maxXDot = 10;             %[m/s]
-Q = diag([maxYaw maxYawDot maxXDot 0.001 0.001]);
+maxYaw = 0.1;          %[rad]
+maxYawDot = 0.1;          %[rad/s]
+maxXDot = 0.1;            %[m/s]
+maxYawInt= 0.05;
+maxXdotInt= 0.02;
+Q = diag([maxYaw maxYawDot maxXDot maxYawInt maxXdotInt]);
 Q = 1./(Q.^2);
 Q(Q==Inf)=0;
 
 % For R Matrix
-maxF1 = 0.9;             %[N]
-maxF2 = maxF1;          %[N]
+maxF1 = 200;        %[N]
+maxF2 = maxF1;       %[N]
 
 R = diag([maxF1 maxF2]);
 R = 1./(R.^2);
@@ -71,7 +77,8 @@ R(R==Inf)=0;
 
 % LQR Controller
 
-Fe = dlqr(Ai,Bi,Q,R);
+[Fe,~,E] = dlqr(Ai,Bi,Q,R);
+[Fecont,~,~] = lqrd(Aicont,Bicont,Q,R,zeros(size(Bicont)),Ts);
 
 eig(Ai-Bi*Fe);
 
@@ -81,7 +88,7 @@ Bcl = [zeros(n,ny);
 Ccl = Ci;
 Dcl = Di;
 
-sys_cl = ss(Acl,Bcl,Ccl,Dcl, Ts);
+sys_cl = ss(Acl,Bcl,Ccl,Dcl,Ts);
 
 % step(d_sys);
 % figure;
@@ -89,7 +96,10 @@ sys_cl = ss(Acl,Bcl,Ccl,Dcl, Ts);
 
 % Split Fe into state feedback gain and integral state gain 
 F = Fe(1:2,1:3)
-Fi = Fe(1:2,4:5)
+FI = Fe(1:2,4:5)
+
+F = Fecont(1:2,1:3)
+FI = Fecont(1:2,4:5)
 
 
 refYaw = 1;      % [rad]
@@ -97,6 +107,12 @@ refXdot = 1;        % [m/s]
 
 %% Plot Outputs of Simulation
 
+sim InnerController.slx
 
-% plot(xn_3DOF.Data,yn_3DOF.Data)
-% axis equal
+figure(10)
+hold on
+plot(xbdot.Time,xbdot.Data)
+
+figure(20)
+hold on
+plot(yaw.Time,yaw.Data)
