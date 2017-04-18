@@ -57,7 +57,7 @@ pkg_check_modules( gsl REQUIRED gsl )
 add_message_files(
   FILES
   Faps.msg
-  ref.msg
+  Ref.msg
   ADIS16405.msg
   LLIinput.msg
 #  testSetpoints.msg
@@ -129,7 +129,7 @@ include_directories(
 # )
 add_library(aauship_control
   src/MahonyAHRS.cpp
-  src/LQR.cpp
+#  src/lqr-controller-node.cpp
 #  src/MadgwickAHRS.cpp
 # scripts/kalmanfilter-node.py
   src/KalmanFilter.cpp
@@ -156,13 +156,13 @@ add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
 add_dependencies(ahrs-mahony-node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(ahrs-mahony-node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
 
-add_executable(lqr_node src/LQR.cpp)
+add_executable(lqr_node src/lqr-controller-node.cpp)
 add_dependencies(lqr_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(lqr_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
-add_executable(path_following_node src/path_follower_node.cpp)
-add_dependencies(path_following_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(path_following_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+add_executable(path_follower_node src/path-follower-node.cpp)
+add_dependencies(path_follower_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(path_follower_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
 # add_executable(gps_data_node src/gps_get_data.cpp)
 # add_dependencies(gps_data_node ${catkin_EXPORTED_TARGETS})

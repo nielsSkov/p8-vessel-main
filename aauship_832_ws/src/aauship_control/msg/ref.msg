@@ -1,4 +1,3 @@
-# Kalman filter states
-Header header
+# References to inner controller
 float32 speed
-float32 psi
+float32 yaw

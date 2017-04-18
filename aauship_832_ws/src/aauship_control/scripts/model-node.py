@@ -12,7 +12,7 @@ import tf
 # import kalmanfilterfoo as kfoo # temporary implementation for the simulation
 # import gpsfunctions as geo
 import numpy as np
-# from math import pi, sqrt, atan2, acos, sin, fmod, cos
+from math import pi, sqrt, atan2, acos, sin, fmod, cos
 # import scipy.linalg as linalg
 import time
 import os
@@ -20,8 +20,9 @@ import os
 class modelSim(object):
     """docstring for modelSim"""
     def __init__(self):
-        self.n = 3; # number of states
-        self.m = 2; # number of inputs, also outputs
+        self.n = 3 # number of states
+        self.p = 2 # number of inputs, also outputs
+        self.Ts = 0.05 # sampling time
         # init ss matrices
         self.A = np.matrix([[ 1, 0.0497, 0],
             [ 0, 0.9882, 0],
@@ -32,6 +33,12 @@ class modelSim(object):
         # init states
         self.x = np.zeros([self.n])
         self.x_old = self.x
+        # position in NED
+        self.pos = np.zeros([2])
+        self.pos_old = self.pos
+        # components of the rotaton matrix
+        self.a = np.zeros([2])
+        # 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb,queue_size=1000)
         self.pub = rospy.Publisher('kf_statesnew', KFStates, queue_size=1000)
         self.pubmsg = KFStates()
@@ -40,26 +47,42 @@ class modelSim(object):
         self.m = 0.26565
         self.c = 24.835
 
-
         # Variables for the thrusters
         self.leftthruster = 0.0
         self.rightthruster = 0.0
 
-        rospy.init_node('kalmanfilter_node')
+        rospy.init_node('model_node')
         rate = rospy.Rate(20)
         before = 0;
         while not rospy.is_shutdown():
             # print after - before
             # Calculates new states
-            #print self.x
+            # print self.x
+            self.x_old = self.x
             for i in range(0,self.n):
-                # Check this implementation in LQR-node
-                self.x_old = self.x
+                # Check this implementation in LQR-node   
                 self.x[i] = (self.A[i,0]*self.x_old[0] + self.A[i,1]*self.x_old[1] + self.A[i,2]*self.x_old[2]) \
                     + (self.B[i,0]*self.leftthruster + self.B[i,1]*self.rightthruster)
             # self.pubmsg.r = rospy.get_time()
+            # Convert yaw to range [-pi,pi]
+            self.x[0] = (self.x[0] % (2 * pi))
+            if self.x[0] > pi:
+            	self.x[0] = self.x[0] - 2 * pi
+            # Calculate new position
+            self.a[0] = cos(self.x[0])
+            self.a[1] = sin(self.x[0])
+            self.pos_old = self.pos
+            for i in range(0,2):
+            	self.pos[i] = self.Ts / 2 * self.a[i] * (self.x_old[2] + self.x[2]) + self.pos_old[i]
+            # Publish
+            self.pubmsg.psi = self.x[0]
+            self.pubmsg.p = self.x[1]
+            self.pubmsg.u = self.x[2]
+            self.pubmsg.x = self.pos[0]
+            self.pubmsg.y = self.pos[1]
             self.pub.publish(self.pubmsg)
-            print self.x[2]
+            # print "XnModel", self.pos[0]
+            # print "YnModel", self.pos[1]
             rate.sleep()
             # before = after
 
@@ -69,12 +92,14 @@ class modelSim(object):
             if self.rightthruster<100:
                 self.rightthruster = 0
             self.rightthruster = (float(data.Data)*self.m)-self.c
+            # print "F2Model", self.rightthruster
 
 
         if data.MsgID == 5:
             if self.leftthruster<100:
                 self.leftthruster = 0
             self.leftthruster = (float(data.Data)*self.m)-self.c
+            # print "F1Model", self.leftthruster
         #print "Data: ", float(data.Data)
         #print "Left Thruster: ", self.leftthruster, " Right Thruster: ", self.rightthruster
         #print self.leftthruster
@@ -91,9 +116,10 @@ class modelSim(object):
         # elif self.leftthruster < -25:
         #     self.leftthruster = -25
 
-        self.pubmsg.psi = self.x[0]
-        self.pubmsg.p = self.x[1]
-        self.pubmsg.u = self.x[2]
+        # self.pubmsg.psi = self.x[0]
+        # self.pubmsg.p = self.x[1]
+        # self.pubmsg.u = self.x[2]
+
         #print "Yaw: ", self.x[0]," YawDot: ", self.x[1], " Xdot: ", self.x[2]
         #print self.x[2]
         #self.pub.publish(self.pubmsg)
