@@ -1,5 +1,5 @@
-function FigureLatex(titletext,xlab,ylab,enablelegend,legendtext,xlimit,ylimit,font,titlefont,linewidth)
-%FigureLatex(titletext,xlab,ylab,enablelegend,legendtext,xlimit,ylimit,font,titlefont,linewidth)
+function FigureLatex(titletext,xlab,ylab,enablelegend,legendtext,labellocation,xlimit,ylimit,font,titlefont,linewidth)
+%FigureLatex(titletext,xlab,ylab,enablelegend,legendtext,labellocation,xlimit,ylimit,font,titlefont,linewidth)
 % Function that modifies the characteristics of the last figure with the
 % parameters set by the user. Just call the function after ploting the
 % figure.
@@ -45,7 +45,11 @@ end
 
 % Write legend and set font size and interpreter to Latex
 if enablelegend
-    h = legend(legendtext,'Location','SouthEast');
+    if labellocation
+        h = legend(legendtext,'Location',labellocation);
+    else
+        h = legend(legendtext,'Location','SouthEast');
+    end
     set(h,'FontSize',font,'Interpreter','Latex');
 end
 
