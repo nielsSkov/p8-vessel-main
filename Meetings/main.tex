@@ -8,39 +8,46 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 5th of April 2017}
+\section*{Supervisor meeting\\ \small Wednesday, 19th of April 2017}
 
-\subsection{Status}
+\subsection{GPS Status}
 \begin{itemize}
-    \item We are working on the GPS implementation, robust control and sensor fusion.
-    \item We have also look at the use case and the design considerations.
+    \item We got the GPS base working and we walked on a line to test it. It follows $\pm$0.5 m.
+    \item The GPS has some delays, around 3 seconds. Where the delay comes from we do not exactly know.
+    \item If the data is at 5 Hz, the delay seems to be big. We think it is because we have done the forwarding in a quick way. 
+    \item We thought that the packages may arrive unordered, but the TCP orders the packages for you. Besides, different routes are unlikely because there are only few hops.
+    \item 3G connection may give around hundred miliseconds delay.
+    \item Maybe we should find a standard package that can forward information between a serial port and a TCP port.
+    \item We get a better signal using the antenna in the C1 building.
 \end{itemize}
-
-\subsection{RTK GPS}
+\subsection{USB Modem}
 \begin{itemize}
-    \item It needs to be connection between the two GPS.
-    \item We could use a 3G USB dongle.
-    \item For the base location we need the exact location, we should do a long test (maybe two days).
-    \item There used to be an antenna in the roof that we can use and then the module inside.
-    \item Both GPSs need to have the same satellites inside.
-    \item Accept all the satellites that the GPS can connect to at the beginning.
-    \item We can also use one NTRIP as base station if there is one near available.
-    \item There are ways to have more than one base stations: virtual base station.
-    \item Figure out the best way to do it and then we will find how to do it.
+    \item We do not have one right now.
+    \item Jesper will look into it. 
 \end{itemize}
-
-\subsection{Robust Control}
+\subsection{Path following}
 \begin{itemize}
-    \item We have done a first mdoel for Hinf design.
-    \item We need to think to what the controller should be robust to, for example model uncertainties (added mass, aerodynamics).
+	\item The boat can more or less follow a square.
 \end{itemize}
-
+\subsection{Robust Control Simulation}
+\begin{itemize}
+    \item The motors will not be able to do what they do in the simulations.
+    \item We should look into why the control actions are like that.
+\end{itemize}
+\subsection{Reading material}
+\begin{itemize}
+	\item How is the path generated. Explain it in the report.
+	\item Functional requirements Storing the data is not the focus of our project. We could say that we store our sensor data for post-processing.
+	\item Normally you verify the GPS by processing to find out what the actual position of the boat was. But we do not need to do it.
+	\item We should show graphs of the results of the Kalman filter.
+	\item The model for the magnetometer, we need to get either the model for the magnetic field of Aalborg or just project the components to get the direction.
+	\item In Aalborg the magnetic field strength is $[16.5,0.7,47.7]^\mathrm{T}$. We should look into this.
+\end{itemize}
 \subsection{Miscellaneous}
 \begin{itemize}
-    \item Send status by email with some documentation and some questions if we have them. If need it we can also agree on a Skype meeting.
+    \item We should plan to sail now. 
 \end{itemize}
 
 \subsection{Next Supervisor Meeting}
-Wednesday, 19th of April at 13:00
-
+Wednesday, 26th of April at 13:00
 \end{document}
