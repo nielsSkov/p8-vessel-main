@@ -205,7 +205,7 @@ hold on
 plot(att.Time,meas(3,:))
 plot(att.Time,x_kal(3,:))
 plot(att.Time,att.Data(:,3))
-FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % Yaw velocity
 figure
@@ -213,14 +213,14 @@ hold on
 plot(att.Time,meas(6,:))
 plot(att.Time,x_kal(6,:))
 plot(att.Time,attdot.Data(:,3))
-FigureLatex('$\dot{\psi}$','Time [s]','Angular Velocity [rad $^{-1}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\dot{\psi}$','Time [s]','Angular Velocity [rad $^{-1}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % Yaw acceleration
 figure
 hold on
 plot(att.Time,x_kal(9,:))
 plot(att.Time,attddot.Data(:,3))
-FigureLatex('$\ddot{\psi}$','Time [s]','Angular Acceleration [rad s$^{-2}$]',1,{'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\ddot{\psi}$','Time [s]','Angular Acceleration [rad s$^{-2}$]',1,{'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % X position
 figure
@@ -228,14 +228,14 @@ hold on
 plot(x.Time,meas(7,:))
 plot(x.Time,x_kal(10,:))
 plot(x.Time,x.Data(:,1))
-FigureLatex('$x_\mathrm{n}$','Time [s]','Position [m]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$x_\mathrm{n}$','Time [s]','Position [m]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % X velocity
 figure
 hold on
 plot(x.Time,x_kal(12,:))
 plot(x.Time,xbdot.Data(:,1))
-FigureLatex('$\dot{x_\mathrm{n}}$','Time [s]','Velocity [m s$^{-1}$]',1,{'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\dot{x_\mathrm{n}}$','Time [s]','Velocity [m s$^{-1}$]',1,{'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % X accleration
 figure
@@ -243,7 +243,7 @@ hold on
 plot(att.Time,meas(9,:))
 plot(att.Time,x_kal(14,:))
 plot(att.Time,xddot.Data(:,1))
-FigureLatex('$\ddot{x_\mathrm{b}}$','Time [s]','Acceleration [m s$^{-2}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\ddot{x_\mathrm{b}}$','Time [s]','Acceleration [m s$^{-2}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
 %% Complementary filter for the attitude
 %run Parameters.m
 %sim('KalmanModelSim.slx')
@@ -304,4 +304,4 @@ hold on
 plot(att.Time,final_att(3,:))
 plot(att.Time,x_kal(3,:))
 plot(att.Time,att_data(3,:))
-FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Estimation', 'Real'},0,0,0,12,14,1.2)
