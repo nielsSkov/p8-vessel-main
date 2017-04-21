@@ -133,9 +133,8 @@ int main(int argc, char **argv)
   ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,KF_callback);
   ros::Subscriber ref_update = n.subscribe("/control_reference",1000,ref_callback);
   ros::Publisher lli_pub = n.advertise<aauship_control::LLIinput>("/lli_input", 1);
-  
   ros::Rate lqr_rate(CONTROLLER_RATE);
-  //std::cout<<std::endl<<"######LQR CONTROLLER RUNNING######"<<std::endl;
+  std::cout<<std::endl<<"######LQR CONTROLLER RUNNING######"<<std::endl;
   //Used for measuring loop time
   aauship_control::LLIinput lli_msg;
   double current_time = ros::Time::now().toSec();

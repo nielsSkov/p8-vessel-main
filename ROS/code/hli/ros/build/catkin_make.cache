@@ -1,1 +1,2 @@
 aauship:rqt_bm:rqt_log_annotate:rqt_mypkg
+-DCATKIN_DEVEL_PREFIX=/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel -DCMAKE_INSTALL_PREFIX=/home/aauship/p8-vessel-main/ROS/code/hli/ros/install -G Unix Makefiles

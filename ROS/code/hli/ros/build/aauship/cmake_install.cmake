@@ -1,8 +1,8 @@
-# Install script for directory: /home/aauship/aauship-formation/code/hli/ros/src/aauship
+# Install script for directory: /home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "/home/aauship/aauship-formation/code/hli/ros/install")
+  SET(CMAKE_INSTALL_PREFIX "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,55 +34,55 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship/msg" TYPE FILE FILES
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
-    "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship/cmake" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/aauship/catkin_generated/installspace/aauship-msg-paths.cmake")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship/cmake" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/aauship/catkin_generated/installspace/aauship-msg-paths.cmake")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/aauship/aauship-formation/code/hli/ros/devel/include/aauship")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel/include/aauship")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/aauship/aauship-formation/code/hli/ros/devel/share/common-lisp/ros/aauship")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel/share/common-lisp/ros/aauship")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/aauship/aauship-formation/code/hli/ros/devel/lib/python2.7/dist-packages/aauship")
+  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel/lib/python2.7/dist-packages/aauship")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/aauship/aauship-formation/code/hli/ros/devel/lib/python2.7/dist-packages/aauship")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel/lib/python2.7/dist-packages/aauship")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/aauship/catkin_generated/installspace/aauship.pc")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/aauship/catkin_generated/installspace/aauship.pc")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship/cmake" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/aauship/catkin_generated/installspace/aauship-msg-extras.cmake")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship/cmake" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/aauship/catkin_generated/installspace/aauship-msg-extras.cmake")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship/cmake" TYPE FILE FILES
-    "/home/aauship/aauship-formation/code/hli/ros/build/aauship/catkin_generated/installspace/aaushipConfig.cmake"
-    "/home/aauship/aauship-formation/code/hli/ros/build/aauship/catkin_generated/installspace/aaushipConfig-version.cmake"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/aauship/catkin_generated/installspace/aaushipConfig.cmake"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/aauship/catkin_generated/installspace/aaushipConfig-version.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/src/aauship/package.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/aauship" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/package.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

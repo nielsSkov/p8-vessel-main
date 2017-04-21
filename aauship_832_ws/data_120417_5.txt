@@ -1,5 +1,0 @@
-... logging to /home/aauship/.ros/log/05c67d36-1f96-11e7-99af-00248c681181/roslaunch-aauship-26475.log
-Checking log directory for disk usage. This may take awhile.
-Press Ctrl-C to interrupt
-Done checking log file disk usage. Usage is <1GB.
-]2;/home/aauship/p8-vessel-main/aauship_832_ws/src/aauship_control/path_controller_model_test.launch

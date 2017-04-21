@@ -60,15 +60,16 @@ add_message_files(
   Ref.msg
   ADIS16405.msg
   LLIinput.msg
-#  testSetpoints.msg
-#  PID.msg
   Attitude.msg
   GPS.msg
-#  controlTest.msg
   BatteryMonitor.msg
   KFStates.msg
   AttitudeStates.msg
   PositionStates.msg
+#  testSetpoints.msg
+#  PID.msg
+#  controlTest.msg
+  gps_msg.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -148,13 +149,13 @@ add_library(aauship_control
 # )
 #catkin_install_python(PROGRAMS scripts/kalmanfilter-node.py
 #DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-add_executable(joy-teleop-node src/joy-teleop-node.cpp)
-add_dependencies(joy-teleop-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy-teleop-node ${catkin_LIBRARIES})
+add_executable(joy_teleop_node src/joy-teleop-node.cpp)
+add_dependencies(joy_teleop_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(joy_teleop_node ${catkin_LIBRARIES})
 
-add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
-add_dependencies(ahrs-mahony-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ahrs-mahony-node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+add_executable(ahrs_mahony_node src/ahrs-mahony-node.cpp)
+add_dependencies(ahrs_mahony_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ahrs_mahony_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
 
 add_executable(lqr_node src/lqr-controller-node.cpp)
 add_dependencies(lqr_node ${catkin_EXPORTED_TARGETS})

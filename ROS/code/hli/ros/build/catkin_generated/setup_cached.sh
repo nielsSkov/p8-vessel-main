@@ -7,6 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export LD_LIBRARY_PATH="/home/aauship/aauship-formation/code/hli/ros/devel/lib/i386-linux-gnu:/opt/ros/indigo/lib/i386-linux-gnu:/home/aauship/aauship-formation/code/hli/ros/devel/lib:/opt/ros/indigo/lib"
-export PKG_CONFIG_PATH="/home/aauship/aauship-formation/code/hli/ros/devel/lib/i386-linux-gnu/pkgconfig:/opt/ros/indigo/lib/i386-linux-gnu/pkgconfig:/home/aauship/aauship-formation/code/hli/ros/devel/lib/pkgconfig:/opt/ros/indigo/lib/pkgconfig"
-export PWD="/home/aauship/aauship-formation/code/hli/ros/build"
+export CMAKE_PREFIX_PATH="/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel:$CMAKE_PREFIX_PATH"
+export PWD="/home/aauship/p8-vessel-main/ROS/code/hli/ros/build"
+export ROSLISP_PACKAGE_DIRECTORIES="/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel/share/common-lisp"
+export ROS_PACKAGE_PATH="/home/aauship/p8-vessel-main/ROS/code/hli/ros/src:$ROS_PACKAGE_PATH"

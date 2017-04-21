@@ -166,7 +166,8 @@ private:
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "teleop_node");
+  ros::init(argc, argv, "joy_teleop_node");
+  std::cout<<std::endl<<"######JOY TELEOP NODE RUNNING######"<<std::endl;
   //Create an object of class JoyTeleOperation that will take care of everything
   JoyTeleOperation JTOObject;
   ros::spin();

@@ -1,0 +1,22 @@
+<launch>
+  <!--node cwd="node" name="rosbag_node" pkg="rosbag" type="record"
+  output="screen" args="-o $(find aauship_control) /imu /gps /KF_attitude /KF_position /lli_input"/-->
+
+  <node cwd="node" name="lli_node" pkg="aauship_control" type="lli-node.py" output="screen"/>
+
+  <node cwd="node" name="sensor_node" pkg="aauship_control" type="sensor-node.py" output="screen"/>
+
+  <!--node cwd="node" name="gps_node" pkg="aauship_control" type="gps-node.py" output="screen"/-->
+
+  <!--node respawn="true" pkg="joy" type="joy_node" name="joy" output="screen">
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.000001" />
+    <param name="coalesce_interval" value="0.1" />
+  </node-->
+ 
+  <node cwd="node" name="joy_teleop_node" pkg="aauship_control" type="joy_teleop_node" output="screen"/> 
+
+  <node cwd="node" name="KF_attitude_node" pkg="aauship_control" type="KF_attitude_node" output="screen"/>
+
+  <node cwd="node" name="KF_position_node" pkg="aauship_control" type="KF_position_node" output="screen"/>
+</launch>

@@ -60,16 +60,16 @@
 
 
 //Global variables
-float meas[N_MEAS] = {0,0,0,0,0,0};
-float states[N_STATES] = {0,0,0,0,0,0,0,0,0};
-float inputs[N_INPUTS] = {0,0};
+double meas[N_MEAS] = {0,0,0,0,0,0};
+double states[N_STATES] = {0,0,0,0,0,0,0,0,0};
+double inputs[N_INPUTS] = {0,0};
 
 
 //Callback functions
 void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
-	float magxh = 0;
-	float magyh = 0;
+	double magxh = 0;
+	double magyh = 0;
 
 	//Calculate roll and pitch from the accelerometer measurements
 	//Roll = atan(yacc / sqrt(xacc^2 + zacc^2)) and pitch = atan(xacc / sqrt(yacc^2 + zacc^2))
@@ -103,7 +103,7 @@ void matrix_multiplication(gsl_matrix * a,gsl_matrix * b,gsl_matrix * result)
 	int n = a->size1;	//Rows of a
 	int m = a->size2;	//Columns of a a and rows of b
 	int p = b->size2;	//Columns of b
-	float mult = 0;
+	double mult = 0;
 
 	for (int i = 0; i < n; i++)
 	{
@@ -118,11 +118,11 @@ void matrix_multiplication(gsl_matrix * a,gsl_matrix * b,gsl_matrix * result)
 }
 
 //Matrix vector multiplication function
-void matrix_vector_multiplication(gsl_matrix * a, float * b, float * result)
+void matrix_vector_multiplication(gsl_matrix * a, double * b, double * result)
 {
 	int n = a->size1;	//Rows of a
 	int m = a->size2;	//Columns of a
-	float mult = 0;
+	double mult = 0;
 
 	for (int i = 0; i < n; i++)
 	{
@@ -142,19 +142,22 @@ int main(int argc, char **argv)
 	ros::Subscriber lli_update = n.subscribe("/lli_input",1000,lli_callback);
 	ros::Publisher att_pub = n.advertise<aauship_control::AttitudeStates>("/kf_attitude", 1);
 	ros::Rate KF_attitude_rate(KF_ATTITUDE_RATE);
-	//std::cout<<std::endl<<"######ATTITUDE KF RUNNING######"<<std::endl;
+	std::cout<<std::endl<<"######ATTITUDE KF NODE RUNNING######"<<std::endl;
 
 	//Temporary matrices
 	gsl_matrix * TEMP_9x9 = gsl_matrix_alloc(N_STATES,N_STATES);
+	gsl_matrix * TEMP2_9x9 = gsl_matrix_alloc(N_STATES,N_STATES);
 	gsl_matrix * TEMP_6x9 = gsl_matrix_alloc(N_MEAS,N_STATES);
 	gsl_matrix * TEMP_9x6 = gsl_matrix_alloc(N_STATES,N_MEAS);
 	gsl_matrix * TEMP_6x6 = gsl_matrix_alloc(N_MEAS,N_MEAS);
 	//Identity matrix
 	gsl_matrix * I_9x9 = gsl_matrix_alloc(N_STATES,N_STATES);
 	gsl_matrix_set_identity(I_9x9);  
+	gsl_matrix * I_6x6 = gsl_matrix_alloc(N_MEAS,N_MEAS);
+	gsl_matrix_set_identity(I_6x6);  
 
 	//////System matrices//////
-	float Ainit[N_STATES][N_STATES] = {
+	double Ainit[N_STATES][N_STATES] = {
 		{1,0,0,TS,0,0,0,0,0},
 		{0,1,0,0,TS,0,0,0,0},
 		{0,0,1,0,0,TS,0,0,0},
@@ -165,7 +168,7 @@ int main(int argc, char **argv)
 		{0,0,0,0,-DPITCH/IY,0,0,-TS*DPITCH/IY,0},
 		{0,0,0,0,0,-DYAW/IZ,0,0,-TS*DYAW/IZ}
 	};
-	float Binit[N_STATES][N_INPUTS] = {
+	double Binit[N_STATES][N_INPUTS] = {
 		{0,0},
 		{0,0},
 		{0,0},
@@ -176,7 +179,7 @@ int main(int argc, char **argv)
 		{0,0},
 		{L1/IZ,-L2/IZ},
 	};
-	float Cinit[N_MEAS][N_STATES] = {
+	double Cinit[N_MEAS][N_STATES] = {
 		{1,0,0,0,0,0,0,0,0},
 		{0,1,0,0,0,0,0,0,0},
 		{0,0,1,0,0,0,0,0,0},
@@ -208,8 +211,8 @@ int main(int argc, char **argv)
 	gsl_matrix * K = gsl_matrix_calloc(N_STATES,N_MEAS);    //Initialize as zeros
 
 	//////Weight matrices//////
-	float Qinit[N_STATES] = {SIGMA2_ROLL,SIGMA2_PITCH,SIGMA2_YAW,SIGMA2_ROLLD,SIGMA2_PITCHD,SIGMA2_YAWD,SIGMA2_ROLLDD,SIGMA2_PITCHDD,SIGMA2_YAWDD};
-	float Rinit[N_MEAS] = {SIGMA2_ACCROLL,SIGMA2_ACCPITCH,SIGMA2_MAGYAW,SIGMA2_GYROX,SIGMA2_GYROY,SIGMA2_GYROZ};
+	double Qinit[N_STATES] = {SIGMA2_ROLL,SIGMA2_PITCH,SIGMA2_YAW,SIGMA2_ROLLD,SIGMA2_PITCHD,SIGMA2_YAWD,SIGMA2_ROLLDD,SIGMA2_PITCHDD,SIGMA2_YAWDD};
+	double Rinit[N_MEAS] = {SIGMA2_ACCROLL,SIGMA2_ACCPITCH,SIGMA2_MAGYAW,SIGMA2_GYROX,SIGMA2_GYROY,SIGMA2_GYROZ};
 	//Store the matrices in gsl form
 	gsl_matrix * Q = gsl_matrix_calloc(N_STATES,N_STATES);
 	gsl_matrix * R = gsl_matrix_calloc(N_MEAS,N_MEAS);
@@ -220,9 +223,9 @@ int main(int argc, char **argv)
 
 	//////First prediction//////
 	//Predict states  as states = A * states + B * inputs
-	float temp_states[N_STATES];
-	float temp_states2[N_STATES];
-	float temp_meas[N_MEAS];
+	double temp_states[N_STATES];
+	double temp_states2[N_STATES];
+	double temp_meas[N_MEAS];
 	matrix_vector_multiplication(A, states, temp_states);
 	matrix_vector_multiplication(B, inputs, temp_states2);
 	for(int i = 0 ; i < N_STATES ; i++)
@@ -244,11 +247,12 @@ int main(int argc, char **argv)
 	{	
 		ros::spinOnce();
 
-		// std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,6,6)<<" "<<gsl_matrix_get(P,7,7)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,8,8)<<std::endl;
+		std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
+		std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
+		std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
+		std::cout<<gsl_matrix_get(P,6,6)<<" "<<gsl_matrix_get(P,7,7)<<" "<<std::endl;
+		std::cout<<gsl_matrix_get(P,8,8)<<std::endl;
+		std::cout<<"---------------------------------"<<std::endl;
 
 		//////Update step//////
 		//Calculate K as P*C'/(C*P*C'+R)
@@ -261,7 +265,7 @@ int main(int argc, char **argv)
 		matrix_multiplication(P,TEMP_9x6,K);
 		//Correct the states as states = states + K * (meas - C * states)
 		matrix_vector_multiplication(C, states, temp_meas);
-		for(int i = 0 ; i < N_STATES ; i++)
+		for(int i = 0 ; i < N_MEAS ; i++)
 			temp_meas[i] = meas[i] - temp_meas[i];
 		matrix_vector_multiplication(K,temp_meas,temp_states);
 		for(int i = 0 ; i < N_STATES ; i++)
@@ -270,6 +274,8 @@ int main(int argc, char **argv)
 		matrix_multiplication(K,C,TEMP_9x9);
 		gsl_matrix_scale (TEMP_9x9, -1.0);
 		gsl_matrix_add(TEMP_9x9,I_9x9);
+		matrix_multiplication(TEMP_9x9,P,TEMP2_9x9);
+		gsl_matrix_memcpy(P,TEMP2_9x9);
 
 		//////Prediction step//////
 		//Predict states as states = A * states + B * inputs
@@ -310,6 +316,7 @@ int main(int argc, char **argv)
 	gsl_matrix_free (Q);
 	gsl_matrix_free (R);
 	gsl_matrix_free (TEMP_9x9);
+	gsl_matrix_free (TEMP2_9x9);
 	gsl_matrix_free (TEMP_6x6);
 	gsl_matrix_free (TEMP_9x6);
 	gsl_matrix_free (TEMP_6x6);

@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home/aauship/aauship-formation/code/hli/ros/src
-# Build directory: /home/aauship/aauship-formation/code/hli/ros/build
+# Source directory: /home/aauship/p8-vessel-main/ROS/code/hli/ros/src
+# Build directory: /home/aauship/p8-vessel-main/ROS/code/hli/ros/build
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

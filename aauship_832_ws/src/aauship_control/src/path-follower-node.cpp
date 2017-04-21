@@ -12,17 +12,16 @@
 #include "aauship_control/KFStates.h"
 #include "aauship_control/Ref.h"
 
-///#define _USE_MATH_DEFINES //Ensures compatibility with math library
+#define _USE_MATH_DEFINES //Ensures compatibility with math library
 #define WAYPOINT_RADIUS 5 //[m]
-#define BOAT_RADIUS 10 //[m]
+#define BOAT_RADIUS 8 //[m]
 #define PATH_FOLLOWING_RATE 2 //[Hz]
-#define ENABLE_LOOP true
-#define DISABLE_LOOP false
-#define SPEED 0.3 //[m/s]
+#define SPEED 1 //[m/s]
+#define TOL 0.001 //[m] Minimum value to consider a number == 0
 
 struct point{
-	double x;
-	double y;
+	float x;
+	float y;
 }prev_wpt,next_wpt;
 
 float heading = 1;
@@ -45,15 +44,14 @@ void kf_callback(const aauship_control::KFStates::ConstPtr& kf_msg)
 	heading =  kf_msg->psi;
 	current_position.x = kf_msg->x;
 	current_position.y = kf_msg->y;
-// 	std::cout<<"xn: "<<current_position.x<<std::endl;
-// 	std::cout<<"yn: "<<current_position.y<<std::endl;
 }
 
 
 aauship_control::Ref computeRef(point curr_pos, point reference_point);
-point circleIntersection(point curr_pos,point old_waypoint,point next_waypoint,double dist);
-double distance2line(point curr_pos, point old_waypoint, point next_waypoint);
-double dist2wpt(point curr_pos, point old_waypoint, point next_waypoint);
+point circleIntersection(point curr_pos,point old_waypoint,point next_waypoint,float dist);
+float distance2line(point curr_pos, point old_waypoint, point next_waypoint);
+float dist2wpt(point curr_pos, point old_waypoint, point next_waypoint);
+point perpIntersection(point curr_pos, point old_waypoint, point next_waypoint);
 point getWaypoint (std::string line);
 
 
@@ -68,7 +66,7 @@ int main(int argc, char **argv)
 	//
 	ros::Publisher ref_pub = n.advertise<aauship_control::Ref>("/control_reference", 1);
 	ros::Rate path_follower_rate(PATH_FOLLOWING_RATE);
-	//std::cout<<std::endl<<"######PATH FOLLOWING NODE RUNNING######"<<std::endl;
+	std::cout<<std::endl<<"######PATH FOLLOWING NODE RUNNING######"<<std::endl;
 
   	//Open txt file that contains the waypoints and read the first two
 	std::string line;	
@@ -80,8 +78,6 @@ int main(int argc, char **argv)
 		prev_wpt = getWaypoint (line);
 		std::getline(wptFile,line,'\n');
 		next_wpt = getWaypoint (line);	
-		// std::cout<<"Prev point is: "<<prev_wpt.x<<","<<prev_wpt.y<<std::endl;
-		// std::cout<<"Next point is: "<<next_wpt.x<<","<<next_wpt.y<<std::endl;
 	}
 
 	float dist = 1000;
@@ -92,8 +88,10 @@ int main(int argc, char **argv)
 
 	while(ros::ok())
 	{
+		// std::cout<<"Prev: "<<prev_wpt.x<<","<<prev_wpt.y<<std::endl;
+		// std::cout<<"Next: "<<next_wpt.x<<","<<next_wpt.y<<std::endl;
 		ros::spinOnce();
-		// std::cout<<"dist2wpt: "<<dist2wpt(current_position, prev_wpt, next_wpt)<<std::endl;
+		//Check if we need to change waypoint
 		if (dist2wpt(current_position, prev_wpt, next_wpt)<WAYPOINT_RADIUS)
 		{
 			if (std::getline(wptFile,line)) //If there is a new waypoint
@@ -102,12 +100,8 @@ int main(int argc, char **argv)
 				prev_wpt.x = next_wpt.x;
 				prev_wpt.y = next_wpt.y;
 				next_wpt = getWaypoint (line);
-				//std::cout<<"Prev point is: "<<prev_wpt.x<<","<<prev_wpt.y<<std::endl;
-				//std::cout<<"Next point is: "<<next_wpt.x<<","<<next_wpt.y<<std::endl;
-
 				//Check if there is a crossing point with the line
 				dist = distance2line(current_position,prev_wpt,next_wpt);
-				//std::cout<<"dist: "<<dist<<std::endl;
 				if(dist < BOAT_RADIUS)
 				{
 					cross = circleIntersection(current_position,prev_wpt,next_wpt,dist);
@@ -124,7 +118,6 @@ int main(int argc, char **argv)
 		{
   			//Check if there is a crossing point with the line
 			dist = distance2line(current_position,prev_wpt,next_wpt);
-			// std::cout<<"dist2: "<<dist<<std::endl;
 			if(dist < BOAT_RADIUS)
 			{
 				cross = circleIntersection(current_position,prev_wpt,next_wpt,dist);
@@ -133,22 +126,24 @@ int main(int argc, char **argv)
 			else 
 				reference = computeRef(current_position,next_wpt);
 		}
-		reference.yaw = M_PI / 4;
+		//Publish the reference on the topic
 		ref_pub.publish(reference);
-		//std::cout<<"SpeedRef: "<<reference.speed<<std::endl;
-		//std::cout<<"YawRef: "<<reference.yaw<<std::endl;
-		//std::cout<<"Yaw: "<<heading<<std::endl;
-		//Ensures the timing of the loop
-		//std::cout<<reference.yaw<<","<<heading<<","<<current_position.x<<","<<current_position.y<<","<<cross.x<<","<<cross.y<<","<<intersect.x<<","<<intersect.y<<std::endl;
+		//Print some infor (debug)
+		//std::cout<<reference.yaw<<","<<heading<<","<<current_position.x<<","<<current_position.y<<","<<cross.x<<","<<cross.y<<std::endl;
+		// std::cout<<reference.speed<<std::endl;
+		//Ensure the timing of the loop
 		path_follower_rate.sleep();
 	}
 	wptFile.close();
 	return 1;
 }
 
-point circleIntersection(point curr_pos,point old_waypoint,point next_waypoint,double dist)
+point circleIntersection(point curr_pos,point old_waypoint,point next_waypoint,float dist)
 {
-	point ol_wpt_boat, new_wpt_boat, del_wpt; 				//Convert to boat frame to get center point in 0,0 
+	point del_wpt, intersection, cross_pt[2]; 	
+	float theta, B;
+	float dist2_0, dist2_1;
+	//Convert to boat frame to get center point in 0,0 
 	// ol_wpt_boat.x = old_waypoint.x-curr_pos.x;
 	// ol_wpt_boat.y = old_waypoint.y-curr_pos.y;
 	// new_wpt_boat.x = next_waypoint.x-curr_pos.x;
@@ -163,23 +158,38 @@ point circleIntersection(point curr_pos,point old_waypoint,point next_waypoint,d
 	//The actual line will be perpendicular to the point described
 	//This description is used to avoid infinite slopes on vertical lines (Ax+B have inf A for vertical lines) 
 	//See:  http://docs.opencv.org/2.4/doc/tutorials/imgproc/imgtrans/hough_lines/hough_lines.html for a better description
-	float theta =  (M_PI/2) + atan2(del_wpt.y,del_wpt.x); //Note! This is not the angle of the line between waypoints but perpendicular to it (See hough line transform)
-	point intersect; 										//Intersection point of a line perpendicular to the "waypoint"line, which goes through the center of the circle
-	intersect.x = cos(theta) * dist + curr_pos.x;
-	intersect.y = sin(theta) * dist + curr_pos.y;
-	point cross_pt[2]; //This will contain the intersection points between the line and the circle
+	theta =  (M_PI/2) + atan2(del_wpt.y,del_wpt.x); //Note! This is not the angle of the line between waypoints but perpendicular to it (See hough line transform)									//Intersection point of a line perpendicular to the "waypoint"line, which goes through the center of the circle
+	intersection = perpIntersection(curr_pos, old_waypoint, next_waypoint);
 
-	float B = sqrt(BOAT_RADIUS*BOAT_RADIUS-dist*dist);		//B = distance from perpendicular crossing of line to the intersection point of the circle
-																//Pythagoras theorem is used
-	//Compute crossing points in NED coordinates
-	cross_pt[0].x = intersect.x + cos(theta-M_PI/2) * B;  //sin/cos(theta-M_PI)*B creates a vector of length B
-	cross_pt[0].y = intersect.y + sin(theta-M_PI/2) * B;  //Pi is subtracted to get the angle of the line
-	cross_pt[1].x = intersect.x - cos(theta-M_PI/2) * B;
-	cross_pt[1].y = intersect.y - sin(theta-M_PI/2) * B;
+	//Compute distance from perpendicular crossing of line to the intersection point of the circle
+	B = sqrt(BOAT_RADIUS*BOAT_RADIUS-dist*dist);		
+
+	//Compute crossing points in NED coordinates															
+	if (del_wpt.x<=TOL) 		//If the line is vertical
+	{
+		cross_pt[0].x = intersection.x;  
+		cross_pt[0].y = intersection.y + B;
+		cross_pt[1].x = intersection.x;
+		cross_pt[1].y = intersection.y - B;
+	}
+	else if (del_wpt.y<=TOL)	//If the line is horizontal
+	{
+		cross_pt[0].x = intersection.x + B;  
+		cross_pt[0].y = intersection.y;
+		cross_pt[1].x = intersection.x - B;
+		cross_pt[1].y = intersection.y;
+	}
+	else						//Otherwise
+	{	
+		cross_pt[0].x = intersection.x + cos(theta-M_PI/2) * B;  //sin/cos(theta-M_PI)*B creates a vector of length B
+		cross_pt[0].y = intersection.y + sin(theta-M_PI/2) * B;  //Pi is subtracted to get the angle of the line
+		cross_pt[1].x = intersection.x - cos(theta-M_PI/2) * B;
+		cross_pt[1].y = intersection.y - sin(theta-M_PI/2) * B;
+	}
 
 	//Return the point closest to the waypoint we try to reach (new waypoint)
-	double dist2_0 = (cross_pt[0].x-next_waypoint.x) * (cross_pt[0].x-next_waypoint.x) + (cross_pt[0].y-next_waypoint.y) * (cross_pt[0].y-next_waypoint.y);
-	double dist2_1 = (cross_pt[1].x-next_waypoint.x) * (cross_pt[1].x-next_waypoint.x) + (cross_pt[1].y-next_waypoint.y) * (cross_pt[1].y-next_waypoint.y);
+	dist2_0 = (cross_pt[0].x-next_waypoint.x) * (cross_pt[0].x-next_waypoint.x) + (cross_pt[0].y-next_waypoint.y) * (cross_pt[0].y-next_waypoint.y);
+	dist2_1 = (cross_pt[1].x-next_waypoint.x) * (cross_pt[1].x-next_waypoint.x) + (cross_pt[1].y-next_waypoint.y) * (cross_pt[1].y-next_waypoint.y);
 	if (dist2_0 < dist2_1)
 	{
 		//std::cout<<"Int: "<<cross_pt[0].x<<","<<cross_pt[0].y<<std::endl;
@@ -203,43 +213,56 @@ aauship_control::Ref computeRef(point curr_pos, point reference_point)
 	return reference;
 }
 
-double distance2line(point curr_pos, point old_waypoint, point next_waypoint)
+float distance2line(point curr_pos, point old_waypoint, point next_waypoint)
 {
 	//Find  the perpendicular distance to the line
-	double dist;
-	float distx, disty, k, x, y;
-	point del_wpt;
-	// k = ((next_waypoint.y-old_waypoint.y) * (curr_pos.x-old_waypoint.x) - (next_waypoint.x-old_waypoint.x) * (curr_pos.y-old_waypoint.y)) / ((next_waypoint.y-old_waypoint.y)*(next_waypoint.y-old_waypoint.y) + (next_waypoint.x-old_waypoint.x)*(next_waypoint.x-old_waypoint.x));
-	// x = curr_pos.x - k * (next_waypoint.y-old_waypoint.y); 		//Intersection of the perpendicular with the line between waypoints
-	// y = curr_pos.y + k * (next_waypoint.x-old_waypoint.x);
-	del_wpt.x = next_waypoint.x-old_waypoint.x;
-	del_wpt.y = next_waypoint.y-old_waypoint.y;
-	x = (del_wpt.y * del_wpt.y * old_waypoint.x + del_wpt.x * del_wpt.x * curr_pos.x + del_wpt.x * del_wpt.y * (curr_pos.y - old_waypoint.y)) / (del_wpt.y * del_wpt.y + del_wpt.x * del_wpt.x);
-	y = (del_wpt.y * (x - old_waypoint.x)) / del_wpt.x + old_waypoint.y;
-	distx = x - curr_pos.x;
-	disty = y - curr_pos.y;
+	float dist, distx, disty;
+	point intersection;
+	intersection = perpIntersection(curr_pos, old_waypoint, next_waypoint);
+	distx = intersection.x - curr_pos.x;
+	disty = intersection.y - curr_pos.y;
 	dist = sqrt(distx * distx + disty * disty);
-	std::cout<<x<<","<<y<<std::endl;
+	//std::cout<<intersection.x<<","<<intersection.y<<",";
 	return dist;
 }
 
-double dist2wpt(point curr_pos, point old_waypoint, point next_waypoint)
+float dist2wpt(point curr_pos, point old_waypoint, point next_waypoint)
 {
 	//Find  the perpendicular distance to the next waypoint
-	double dist;
-	float distx, disty, k, x, y;
-	point del_wpt;
+	float dist, distx, disty;
+	point intersection;
+	intersection = perpIntersection(curr_pos, old_waypoint, next_waypoint);
+	distx = intersection.x - next_waypoint.x;
+	disty = intersection.y - next_waypoint.y;
+	dist = sqrt(distx * distx + disty * disty);
+	return dist;
+}
+
+point perpIntersection(point curr_pos, point old_waypoint, point next_waypoint)
+{
+	//Find the crossing point between the two waypoints and the perpendicular line that passes through the position
+	point del_wpt, intersection;
 	// k = ((next_waypoint.y-old_waypoint.y) * (curr_pos.x-old_waypoint.x) - (next_waypoint.x-old_waypoint.x) * (curr_pos.y-old_waypoint.y)) / ((next_waypoint.y-old_waypoint.y)*(next_waypoint.y-old_waypoint.y) + (next_waypoint.x-old_waypoint.x)*(next_waypoint.x-old_waypoint.x));
 	// x = curr_pos.x - k * (next_waypoint.y-old_waypoint.y);		//Intersection of the perpendicular with the line between waypoints
 	// y = curr_pos.y + k * (next_waypoint.x-old_waypoint.x);
 	del_wpt.x = next_waypoint.x-old_waypoint.x;
 	del_wpt.y = next_waypoint.y-old_waypoint.y;
-	x = (del_wpt.y * del_wpt.y * old_waypoint.x + del_wpt.x * del_wpt.x * curr_pos.x + del_wpt.x * del_wpt.y * (curr_pos.y - old_waypoint.y)) / (del_wpt.y * del_wpt.y + del_wpt.x * del_wpt.x);
-	y = (del_wpt.y * (x - old_waypoint.x)) / del_wpt.x + old_waypoint.y;
-	distx = x - next_waypoint.x;
-	disty = y - next_waypoint.y;
-	dist = sqrt(distx * distx + disty * disty);
-	return dist;
+	if (del_wpt.x<=TOL)			//If the line is vertical
+	{
+		intersection.x = old_waypoint.x;
+		intersection.y = curr_pos.y;
+	}
+	else if (del_wpt.y<=TOL)	//If the line is horizontal
+	{
+		intersection.x = curr_pos.x;
+		intersection.y = old_waypoint.y;
+	}
+	else						//Otherwise
+	{
+		intersection.x = (del_wpt.y * del_wpt.y * old_waypoint.x + del_wpt.x * del_wpt.x * curr_pos.x + del_wpt.x * del_wpt.y * (curr_pos.y - old_waypoint.y)) / (del_wpt.y * del_wpt.y + del_wpt.x * del_wpt.x);
+		intersection.y = (del_wpt.y * (intersection.x - old_waypoint.x)) / del_wpt.x + old_waypoint.y;
+	}
+	return intersection;
 }
 
 point getWaypoint (std::string line)

@@ -1,0 +1,10 @@
+<launch>
+  <!--node cwd="node" name="rosbag_node" pkg="rosbag" type="record"
+	output="screen" args="-o $(find aauship_control) /imu /KF_attitude /lli_input"/-->
+
+  <node cwd="node" name="lli_node" pkg="aauship_control" type="lli-node.py" output="screen"/>
+
+  <node cwd="node" name="sensor_node" pkg="aauship_control" type="sensor-node.py" output="screen"/>
+
+  <node cwd="node" name="KF_attitude_node" pkg="aauship_control" type="KF_attitude_node" output="screen"/>
+</launch>

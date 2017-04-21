@@ -1,0 +1,18 @@
+<launch>
+  <!--node cwd="node" name="rosbag_node" pkg="rosbag" type="record"
+	output="screen" args="-o $(find aauship_control) /imu /gps /KF_attitude /KF_position /lli_input /control_reference"/-->
+
+  <node cwd="node" name="lli_node" pkg="aauship_control" type="lli-node.py" output="screen"/>
+
+  <node cwd="node" name="sensor_node" pkg="aauship_control" type="sensor-node.py" output="screen"/>
+
+  <!--node cwd="node" name="gps_node" pkg="aauship_control" type="gps-node.py" output="screen"/-->
+
+  <node cwd="node" name="KF_attitude_node" pkg="aauship_control" type="KF_attitude_node" output="screen"/>
+
+  <node cwd="node" name="KF_position_node" pkg="aauship_control" type="KF_position_node" output="screen"/>
+
+  <node cwd="node" name="lqr_node" pkg="aauship_control" type="lqr_node" output="screen"/>
+
+  <node cwd="node" name="path_follower_node" pkg="aauship_control" type="path_follower_node" output="screen"/>
+</launch>
