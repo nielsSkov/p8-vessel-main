@@ -43,16 +43,16 @@
 #define SIGMA2_PITCHDD 0.001
 #define SIGMA2_YAWDD 0.001
 //Sensor variances
-#define SIGMA2_ACCROLL 0.1
-#define SIGMA2_ACCPITCH 0.1
-#define SIGMA2_MAGYAW 0.1
-#define SIGMA2_GYROX 0.1
-#define SIGMA2_GYROY 0.1
-#define SIGMA2_GYROZ 0.1
+#define SIGMA2_ACCROLL 0.00001165
+#define SIGMA2_ACCPITCH 0.00002264
+#define SIGMA2_MAGYAW 0.00779021
+#define SIGMA2_GYROX 0.01033425
+#define SIGMA2_GYROY 3.98414543
+#define SIGMA2_GYROZ 0.03143791
 //Gyro biases
-#define BIAS_GYROX 0
-#define BIAS_GYROY 0
-#define BIAS_GYROZ 0
+#define BIAS_GYROX 0.03753197
+#define BIAS_GYROY 4.49556388
+#define BIAS_GYROZ 0.16183876
 
 //Values for first order curve to fit Force vs PWM
 #define M 0.26565
@@ -73,18 +73,18 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 
 	//Calculate roll and pitch from the accelerometer measurements
 	//Roll = atan(yacc / sqrt(xacc^2 + zacc^2)) and pitch = atan(xacc / sqrt(yacc^2 + zacc^2))
-	meas[0] = atan((imu_msg->yaccl)/sqrt((imu_msg->xaccl)*(imu_msg->xaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));
-	meas[1] = atan((imu_msg->xaccl)/sqrt((imu_msg->yaccl)*(imu_msg->yaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));
+	meas[0] = atan2((imu_msg->yaccl),sqrt((imu_msg->xaccl)*(imu_msg->xaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));	 
+	meas[1] = -atan2((imu_msg->xaccl),sqrt((imu_msg->yaccl)*(imu_msg->yaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));
 
-	//Calculate yaw using the meagnetometer data
+	//Calculate yaw using the megnetometer data
 	magxh = (imu_msg->xmagn) * cos(states[1]) + (imu_msg->ymagn) * sin(states[0]) * sin(states[1]) + (imu_msg->zmagn) * cos(states[0]) * sin(states[1]);
 	magyh = (imu_msg->ymagn) * cos(states[0]) + (imu_msg->zmagn) * sin(states[0]);
-	meas[2] = atan(magyh/magxh);
+	meas[2] = atan2(magyh,magxh);
 
 	//Store the gyro measurements
-	meas[3] = imu_msg->xgyro - BIAS_GYROX;
-	meas[4] = imu_msg->ygyro - BIAS_GYROY;
-	meas[5] = imu_msg->zgyro - BIAS_GYROZ;
+	meas[3] = imu_msg->xgyro + BIAS_GYROX;	//Negative bias
+	meas[4] = -imu_msg->ygyro - BIAS_GYROY;	//Positive bias
+	meas[5] = -imu_msg->zgyro + BIAS_GYROZ;	//Negative bias
 }
 
 void lli_callback(const aauship_control::LLIinput::ConstPtr& lli_msg)
@@ -235,24 +235,16 @@ int main(int argc, char **argv)
 	matrix_multiplication(TEMP_9x9,Atrans,P);
 	gsl_matrix_add (P,Q);
 
-	//Debug
-	//gsl_linalg_cholesky_decomp(Ptemp);
-	//gsl_linalg_cholesky_invert (Ptemp);
-	//std::cout<<gsl_matrix_get(Ptemp,0,0)<<" "<<gsl_matrix_get(Ptemp,0,1)<<" "<<std::endl;
-	//std::cout<<gsl_matrix_get(Ptemp,1,0)<<" "<<gsl_matrix_get(Ptemp,1,1)<<" "<<std::endl;
-	// std::cout<<" "<<states[0]<<" "<<std::endl;
-	// std::cout<<" "<<states[1]<<" "<<std::endl;
-
 	while(ros::ok())
 	{	
 		ros::spinOnce();
 
-		std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
-		std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
-		std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
-		std::cout<<gsl_matrix_get(P,6,6)<<" "<<gsl_matrix_get(P,7,7)<<" "<<std::endl;
-		std::cout<<gsl_matrix_get(P,8,8)<<std::endl;
-		std::cout<<"---------------------------------"<<std::endl;
+		// std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,6,6)<<" "<<gsl_matrix_get(P,7,7)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,8,8)<<std::endl;
+		// std::cout<<"---------------------------------"<<std::endl;
 
 		//////Update step//////
 		//Calculate K as P*C'/(C*P*C'+R)

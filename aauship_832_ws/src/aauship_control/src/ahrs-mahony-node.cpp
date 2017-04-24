@@ -37,8 +37,8 @@ public:
     tf::Quaternion q(u.getQuaternions(1),u.getQuaternions(2),u.getQuaternions(3),u.getQuaternions(0));
 
     /* Debug output */
-    //u.calculateEulerAngles();
-    //ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
+    u.calculateEulerAngles();
+    ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
 
     // It seems like the filter computes the attitude in ENU not in NED, so we rotate.
     tf::Quaternion v(0,0,0,1);
