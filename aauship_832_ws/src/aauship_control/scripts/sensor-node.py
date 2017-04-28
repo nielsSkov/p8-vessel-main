@@ -66,7 +66,7 @@ class Estimator(object):
         self.stat = self.stat + 1 # Used for callback debugging
         if self.stat > 1:     
             print("WARNING: This could be bad; Estimator gets a callback before it has finished the last one.")
-            print("self.stat = " + str(self.stat))
+            # print("self.stat = " + str(self.stat))
 
         #print "Running parser"
         ### if IMU device ###
@@ -143,6 +143,7 @@ class Estimator(object):
         #print(self.imulog.name)
 
         rospy.init_node('sensor_node')
+        print ("######SENSOR DECODE NODE RUNNING######")
         rospy.Subscriber('samples', Faps, self.callback)
         self.pub_imu = rospy.Publisher('imu', ADIS16405, queue_size=10)
         #self.pub_attitude = rospy.Publisher('attitude',Attitude, queue_size=10) # We use the cpp ahrs methods insted

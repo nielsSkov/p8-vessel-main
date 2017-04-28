@@ -53,17 +53,19 @@ float inputs[N_INPUTS] = {0,0};
 float att[3] = {0,0,0};
 
 
-//Callback functions
-void gps_callback(const aauship_control::ADIS16405::ConstPtr& gps_msg)
-{
-
-}
+// //Callback functions
+// void gps_callback(const aauship_control::ADIS16405::ConstPtr& gps_msg)
+// {
+// 	//Store GPS position
+// 	meas[0] = gps_msg->xn;
+// 	meas[1] = gps_msg->yn;
+// }
 
 void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
 	//Store the accelerometr data in xb and yb
-	meas[2] = imu_msg->xaccl;
-	meas[3] = imu_msg->yaccl;
+	meas[2] = -imu_msg->xaccl;
+	meas[3] = -imu_msg->yaccl;
 }
 
 void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
@@ -125,16 +127,17 @@ int main(int argc, char **argv)
 {
 	ros::init(argc,argv,"KF_position_node");
 	ros::NodeHandle n;
-	ros::Subscriber gps_update = n.subscribe("/gps",1000,gps_callback);
+	// ros::Subscriber gps_update = n.subscribe("/gps",1000,gps_callback);
 	ros::Subscriber imu_update = n.subscribe("/imu",1000,imu_callback);
 	ros::Subscriber lli_update = n.subscribe("/lli_input",1000,lli_callback);
 	ros::Subscriber att_update = n.subscribe("/kf_attitude",1000,att_callback);
 	ros::Publisher pos_pub = n.advertise<aauship_control::PositionStates>("/kf_position", 1);
 	ros::Rate KF_position_rate(KF_POSITION_RATE);
-	std::cout<<std::endl<<"######POSITION KF RUNNING######"<<std::endl;
+	std::cout<<std::endl<<"######POSITION KF NODE RUNNING######"<<std::endl;
 
 	//Temporary matrices
 	gsl_matrix * TEMP_6x6 = gsl_matrix_alloc(N_STATES,N_STATES);
+	gsl_matrix * TEMP2_6x6 = gsl_matrix_alloc(N_STATES,N_STATES);
 	gsl_matrix * TEMP_4x6 = gsl_matrix_alloc(N_MEAS,N_STATES);
 	gsl_matrix * TEMP_6x4 = gsl_matrix_alloc(N_STATES,N_MEAS);
 	gsl_matrix * TEMP_4x4 = gsl_matrix_alloc(N_MEAS,N_MEAS);
@@ -231,11 +234,10 @@ int main(int argc, char **argv)
 	{	
 		ros::spinOnce();
 
-		// std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,6,6)<<" "<<gsl_matrix_get(P,7,7)<<" "<<std::endl;
-		// std::cout<<gsl_matrix_get(P,8,8)<<std::endl;
+		std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
+		std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
+		std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
+		std::cout<<"---------------------------------"<<std::endl;
 
 		//////Update step//////
 		//Calculate K as P*C'/(C*P*C'+R)
@@ -244,11 +246,11 @@ int main(int argc, char **argv)
 		gsl_matrix_add (TEMP_4x4,R);
 		gsl_linalg_cholesky_decomp(TEMP_4x4);
 		gsl_linalg_cholesky_invert (TEMP_4x4);	
-		matrix_multiplication(Ctrans,TEMP_4x4,TEMP_4x6);
-		matrix_multiplication(P,TEMP_4x6,K);
+		matrix_multiplication(Ctrans,TEMP_4x4,TEMP_6x4);
+		matrix_multiplication(P,TEMP_6x4,K);
 		//Correct the states as states = states + K * (meas - C * states)
 		matrix_vector_multiplication(C, states, temp_meas);
-		for(int i = 0 ; i < N_STATES ; i++)
+		for(int i = 0 ; i < N_MEAS ; i++)
 			temp_meas[i] = meas[i] - temp_meas[i];
 		matrix_vector_multiplication(K,temp_meas,temp_states);
 		for(int i = 0 ; i < N_STATES ; i++)
@@ -257,6 +259,8 @@ int main(int argc, char **argv)
 		matrix_multiplication(K,C,TEMP_6x6);
 		gsl_matrix_scale (TEMP_6x6, -1.0);
 		gsl_matrix_add(TEMP_6x6,I_6x6);
+		matrix_multiplication(TEMP_6x6,P,TEMP2_6x6);	
+		gsl_matrix_memcpy(P,TEMP2_6x6);
 
 		//////Update A matrix//////
 		a1 = cos(att[1]) * cos(att[2]);
@@ -304,7 +308,8 @@ int main(int argc, char **argv)
 	gsl_matrix_free (Q);
 	gsl_matrix_free (R);
 	gsl_matrix_free (TEMP_6x6);
-	gsl_matrix_free (TEMP_6x6);
+	gsl_matrix_free (TEMP2_6x6);
+	gsl_matrix_free (TEMP_6x4);
 	gsl_matrix_free (TEMP_4x6);
 	gsl_matrix_free (TEMP_4x4);
 	gsl_matrix_free (I_6x6);

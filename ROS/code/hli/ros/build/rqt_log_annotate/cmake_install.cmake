@@ -1,8 +1,8 @@
-# Install script for directory: /home/aauship/aauship-formation/code/hli/ros/src/rqt_log_annotate
+# Install script for directory: /home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_log_annotate
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "/home/aauship/aauship-formation/code/hli/ros/install")
+  SET(CMAKE_INSTALL_PREFIX "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,29 +33,29 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/rqt_log_annotate/catkin_generated/installspace/rqt_log_annotate.pc")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_log_annotate/catkin_generated/installspace/rqt_log_annotate.pc")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_log_annotate/cmake" TYPE FILE FILES
-    "/home/aauship/aauship-formation/code/hli/ros/build/rqt_log_annotate/catkin_generated/installspace/rqt_log_annotateConfig.cmake"
-    "/home/aauship/aauship-formation/code/hli/ros/build/rqt_log_annotate/catkin_generated/installspace/rqt_log_annotateConfig-version.cmake"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_log_annotate/catkin_generated/installspace/rqt_log_annotateConfig.cmake"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_log_annotate/catkin_generated/installspace/rqt_log_annotateConfig-version.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_log_annotate" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_log_annotate/package.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_log_annotate" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_log_annotate/package.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_log_annotate" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_log_annotate/plugin.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_log_annotate" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_log_annotate/plugin.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_log_annotate" TYPE DIRECTORY FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_log_annotate/resource")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_log_annotate" TYPE DIRECTORY FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_log_annotate/resource")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rqt_log_annotate" TYPE PROGRAM FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_log_annotate/scripts/rqt_mypkg")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rqt_log_annotate" TYPE PROGRAM FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_log_annotate/scripts/rqt_mypkg")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

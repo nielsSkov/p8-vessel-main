@@ -1,8 +1,8 @@
-# Install script for directory: /home/aauship/aauship-formation/code/hli/ros/src
+# Install script for directory: /home/aauship/p8-vessel-main/ROS/code/hli/ros/src
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "/home/aauship/aauship-formation/code/hli/ros/install")
+  SET(CMAKE_INSTALL_PREFIX "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -44,91 +44,83 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unsp
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/aauship/aauship-formation/code/hli/ros/install/_setup_util.py")
+   "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install/_setup_util.py")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/home/aauship/aauship-formation/code/hli/ros/install" TYPE PROGRAM FILES "/home/aauship/aauship-formation/code/hli/ros/build/catkin_generated/installspace/_setup_util.py")
+FILE(INSTALL DESTINATION "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install" TYPE PROGRAM FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/catkin_generated/installspace/_setup_util.py")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/aauship/aauship-formation/code/hli/ros/install/env.sh")
+   "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install/env.sh")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/home/aauship/aauship-formation/code/hli/ros/install" TYPE PROGRAM FILES "/home/aauship/aauship-formation/code/hli/ros/build/catkin_generated/installspace/env.sh")
+FILE(INSTALL DESTINATION "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install" TYPE PROGRAM FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/catkin_generated/installspace/env.sh")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/aauship/aauship-formation/code/hli/ros/install/setup.bash")
+   "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install/setup.bash")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/home/aauship/aauship-formation/code/hli/ros/install" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/catkin_generated/installspace/setup.bash")
+FILE(INSTALL DESTINATION "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/catkin_generated/installspace/setup.bash")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/aauship/aauship-formation/code/hli/ros/install/setup.sh")
+   "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install/setup.sh")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/home/aauship/aauship-formation/code/hli/ros/install" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/catkin_generated/installspace/setup.sh")
+FILE(INSTALL DESTINATION "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/catkin_generated/installspace/setup.sh")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/aauship/aauship-formation/code/hli/ros/install/setup.zsh")
+   "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install/setup.zsh")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/home/aauship/aauship-formation/code/hli/ros/install" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/catkin_generated/installspace/setup.zsh")
+FILE(INSTALL DESTINATION "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/catkin_generated/installspace/setup.zsh")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/aauship/aauship-formation/code/hli/ros/install/.rosinstall")
+   "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install/.rosinstall")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/home/aauship/aauship-formation/code/hli/ros/install" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/catkin_generated/installspace/.rosinstall")
-ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-
-IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/etc/catkin/profile.d" TYPE FILE FILES "/opt/ros/indigo/share/catkin/cmake/env-hooks/05.catkin_make.bash")
-ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-
-IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/etc/catkin/profile.d" TYPE FILE FILES "/opt/ros/indigo/share/catkin/cmake/env-hooks/05.catkin_make_isolated.bash")
+FILE(INSTALL DESTINATION "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/catkin_generated/installspace/.rosinstall")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/aauship/aauship-formation/code/hli/ros/build/gtest/cmake_install.cmake")
-  INCLUDE("/home/aauship/aauship-formation/code/hli/ros/build/aauship/cmake_install.cmake")
-  INCLUDE("/home/aauship/aauship-formation/code/hli/ros/build/rqt_bm/cmake_install.cmake")
-  INCLUDE("/home/aauship/aauship-formation/code/hli/ros/build/rqt_log_annotate/cmake_install.cmake")
-  INCLUDE("/home/aauship/aauship-formation/code/hli/ros/build/rqt_mypkg/cmake_install.cmake")
+  INCLUDE("/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/gtest/cmake_install.cmake")
+  INCLUDE("/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/aauship/cmake_install.cmake")
+  INCLUDE("/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_bm/cmake_install.cmake")
+  INCLUDE("/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_log_annotate/cmake_install.cmake")
+  INCLUDE("/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_mypkg/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -138,7 +130,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/aauship/aauship-formation/code/hli/ros/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/aauship/aauship-formation/code/hli/ros/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

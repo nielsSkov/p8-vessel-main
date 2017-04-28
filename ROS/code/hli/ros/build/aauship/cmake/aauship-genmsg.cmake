@@ -2,7 +2,7 @@
 
 message(STATUS "aauship: 10 messages, 0 services")
 
-set(MSG_I_FLAGS "-Iaauship:/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg;-Istd_msgs:/opt/ros/indigo/share/std_msgs/cmake/../msg;-Isensor_msgs:/opt/ros/indigo/share/sensor_msgs/cmake/../msg;-Igeometry_msgs:/opt/ros/indigo/share/geometry_msgs/cmake/../msg")
+set(MSG_I_FLAGS "-Iaauship:/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg;-Istd_msgs:/opt/ros/indigo/share/std_msgs/cmake/../msg;-Isensor_msgs:/opt/ros/indigo/share/sensor_msgs/cmake/../msg;-Igeometry_msgs:/opt/ros/indigo/share/geometry_msgs/cmake/../msg")
 
 # Find all generators
 find_package(gencpp REQUIRED)
@@ -15,54 +15,54 @@ add_custom_target(aauship_generate_messages ALL)
 
 
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg" "std_msgs/Header"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg" ""
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg" ""
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg" "std_msgs/Header"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg" ""
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" ""
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg" "aauship/PID:aauship/testSetpoints"
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg" "std_msgs/Header"
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg" "std_msgs/Header"
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg" ""
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg" "aauship/testSetpoints:aauship/PID"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg" ""
 )
 
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
 add_custom_target(_aauship_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "aauship" "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg" ""
 )
 
 #
@@ -72,61 +72,61 @@ add_custom_target(_aauship_generate_messages_check_deps_${_filename}
 ### Section generating for lang: gencpp
 ### Generating Messages
 _generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
+)
+_generate_msg_cpp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
+)
+_generate_msg_cpp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg"
+  "${MSG_I_FLAGS}"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg;/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
+)
+_generate_msg_cpp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
+)
+_generate_msg_cpp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
+)
+_generate_msg_cpp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
 )
 _generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
-)
-_generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
-)
-_generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
-)
-_generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
-)
-_generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
 )
 _generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
 )
 _generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
 )
 _generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg"
-  "${MSG_I_FLAGS}"
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg;/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg"
-  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
-)
-_generate_msg_cpp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aauship
@@ -146,25 +146,25 @@ add_custom_target(aauship_generate_messages_cpp
 add_dependencies(aauship_generate_messages aauship_generate_messages_cpp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_cpp _aauship_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -177,61 +177,61 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS aauship_generate_messages_cpp)
 ### Section generating for lang: genlisp
 ### Generating Messages
 _generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
+)
+_generate_msg_lisp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
+)
+_generate_msg_lisp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg"
+  "${MSG_I_FLAGS}"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg;/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
+)
+_generate_msg_lisp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
+)
+_generate_msg_lisp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
+)
+_generate_msg_lisp(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
 )
 _generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
-)
-_generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
-)
-_generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
-)
-_generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
-)
-_generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
 )
 _generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
 )
 _generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
 )
 _generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg"
-  "${MSG_I_FLAGS}"
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg;/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg"
-  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
-)
-_generate_msg_lisp(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship
@@ -251,25 +251,25 @@ add_custom_target(aauship_generate_messages_lisp
 add_dependencies(aauship_generate_messages aauship_generate_messages_lisp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_lisp _aauship_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -282,61 +282,61 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS aauship_generate_messages_lisp)
 ### Section generating for lang: genpy
 ### Generating Messages
 _generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
+)
+_generate_msg_py(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
+)
+_generate_msg_py(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg"
+  "${MSG_I_FLAGS}"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg;/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
+)
+_generate_msg_py(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
+)
+_generate_msg_py(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
+)
+_generate_msg_py(aauship
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
 )
 _generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
-)
-_generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
-)
-_generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
-)
-_generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg"
-  "${MSG_I_FLAGS}"
-  ""
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
-)
-_generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg"
   "${MSG_I_FLAGS}"
   "/opt/ros/indigo/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
 )
 _generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
 )
 _generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
 )
 _generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg"
-  "${MSG_I_FLAGS}"
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg;/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg"
-  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
-)
-_generate_msg_py(aauship
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship
@@ -356,25 +356,25 @@ add_custom_target(aauship_generate_messages_py
 add_dependencies(aauship_generate_messages aauship_generate_messages_py)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/testSetpoints.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Attitude.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/BatteryMonitor.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/GPS.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/KFStates.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/LLIinput.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/controlTest.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/ADIS16405.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/aauship/aauship-formation/code/hli/ros/src/aauship/msg/PID.msg" NAME_WE)
+get_filename_component(_filename "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/msg/Faps.msg" NAME_WE)
 add_dependencies(aauship_generate_messages_py _aauship_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -393,8 +393,12 @@ if(gencpp_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/aa
     DESTINATION ${gencpp_INSTALL_DIR}
   )
 endif()
-add_dependencies(aauship_generate_messages_cpp std_msgs_generate_messages_cpp)
-add_dependencies(aauship_generate_messages_cpp sensor_msgs_generate_messages_cpp)
+if(TARGET std_msgs_generate_messages_cpp)
+  add_dependencies(aauship_generate_messages_cpp std_msgs_generate_messages_cpp)
+endif()
+if(TARGET sensor_msgs_generate_messages_cpp)
+  add_dependencies(aauship_generate_messages_cpp sensor_msgs_generate_messages_cpp)
+endif()
 
 if(genlisp_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/aauship)
   # install generated code
@@ -403,8 +407,12 @@ if(genlisp_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/
     DESTINATION ${genlisp_INSTALL_DIR}
   )
 endif()
-add_dependencies(aauship_generate_messages_lisp std_msgs_generate_messages_lisp)
-add_dependencies(aauship_generate_messages_lisp sensor_msgs_generate_messages_lisp)
+if(TARGET std_msgs_generate_messages_lisp)
+  add_dependencies(aauship_generate_messages_lisp std_msgs_generate_messages_lisp)
+endif()
+if(TARGET sensor_msgs_generate_messages_lisp)
+  add_dependencies(aauship_generate_messages_lisp sensor_msgs_generate_messages_lisp)
+endif()
 
 if(genpy_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship)
   install(CODE "execute_process(COMMAND \"/usr/bin/python\" -m compileall \"${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aauship\")")
@@ -414,5 +422,9 @@ if(genpy_INSTALL_DIR AND EXISTS ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/aaus
     DESTINATION ${genpy_INSTALL_DIR}
   )
 endif()
-add_dependencies(aauship_generate_messages_py std_msgs_generate_messages_py)
-add_dependencies(aauship_generate_messages_py sensor_msgs_generate_messages_py)
+if(TARGET std_msgs_generate_messages_py)
+  add_dependencies(aauship_generate_messages_py std_msgs_generate_messages_py)
+endif()
+if(TARGET sensor_msgs_generate_messages_py)
+  add_dependencies(aauship_generate_messages_py sensor_msgs_generate_messages_py)
+endif()
