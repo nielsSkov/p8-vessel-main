@@ -46,7 +46,7 @@ void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
 {
   x[0] = KFStates->psi;
   x[1] = KFStates->r;
-  x[2]=KFStates->u;
+  x[2] = KFStates->u;
   //std::cout<<"[LQR] X states: "<<x[0]<<" "<<x[1]<<" "<<x[2]<<"\n";
   y[0] = KFStates->psi;
   y[1] = KFStates->u;
@@ -57,7 +57,7 @@ void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
 void ref_callback(const aauship_control::Ref::ConstPtr& Ref)
 {
   r[0] = Ref -> yaw;
-  r[1] = Ref-> speed;
+  r[1] = Ref -> speed;
 //   std::cout<<"SpeedRefLQR: "<<r[1]<<std::endl;
 //   std::cout<<"YawRefLQR: "<<r[0]<<std::endl;
 }

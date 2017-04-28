@@ -53,17 +53,19 @@ float inputs[N_INPUTS] = {0,0};
 float att[3] = {0,0,0};
 
 
-//Callback functions
+// //Callback functions
 // void gps_callback(const aauship_control::ADIS16405::ConstPtr& gps_msg)
 // {
-
+// 	//Store GPS position
+// 	meas[0] = gps_msg->xn;
+// 	meas[1] = gps_msg->yn;
 // }
 
 void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
 	//Store the accelerometr data in xb and yb
-	meas[2] = imu_msg->xaccl;
-	meas[3] = imu_msg->yaccl;
+	meas[2] = -imu_msg->xaccl;
+	meas[3] = -imu_msg->yaccl;
 }
 
 void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
