@@ -33,14 +33,11 @@ ny = size(C,1);         % number of measured outputs
 
 % Cz is C matrix for performance output (Z) equation (Weightings)
 % For states
-Cz = [1 0 0;
-    0 0.5 0;
-    0 0 0.5];
+Cz = diag([1,0.5,1]);
 
 % Dz is D matrix for performance output (Z) equation (Weightings)
 % For inputs
-Dz = [0.001 0;
-    0 0.001];
+Dz = diag([0.01,0.01]);
 
 nz = ny + nu;
 nw = ny;    % number of output noise states
@@ -54,36 +51,40 @@ Bi = eye(ni);
 
 % C matrix for performance output (Z) equation (Weightings)
 % For integral states
-Ci = [1 0;
-    0 1];
+Czi = diag([1,1]);
 
-%% Disturbance Model
+%% Disturbances Model
 
-nd = nu;    % number of input disturbance states
+nwind = nu;    % number of input disturbance states
+nwave = nu;
+nd=nwind+nwave;
 
-Ad = -50*eye(nd);
-Bd = 50*eye(nd);
-
-% Matrix describing how disturbance forces affect states
+wind_freq=50;
+wave_freq=50;
+Awind = -wind_freq*eye(nwind);
+Bwind = wind_freq*eye(nwind);
+Awave = -wave_freq*eye(nwave);
+Bwave = wave_freq*eye(nwave);
+% Matrix describing how disturbance forces affect states (same for wind and
+% waves)
 Bdist=[0 0;
     1/Iz 0;
     0 1/m];
 
 % C matrix for performance output (Z) equation (Weightings)
 % For input disturbance states
-Cd = [1 0;
-    0 1];
+Czd = diag([1,1,1,1]);
 %% Noise Model
 
 nn = ny;    % number of output measurement noise states
-
-An = -200*eye(nn);
-Bn = 00*eye(nn);
-
+noise_freq=100;
+An = -noise_freq*eye(nn);
+Bn = eye(nn);
+Cn = -noise_freq*eye(nn);
+Dn = eye(nn);
 % C matrix for performance output (Z) equation (Weightings)
 % For output measurement noise states
-Cn = [1 0;
-    0 1];
+Czn = diag([1,1]);
 
 %% H infinity Model
 % x' = A1x + B1w  + B2u     - state equation
@@ -96,35 +97,52 @@ Cn = [1 0;
 % z = [x xi xd xn u]'       - weightings / performance outputs
 % y = [y r]                 - measured ouputs
 
-A1 = [A zeros(nx,ni+nd+nn);             % states
+% A1 = [A zeros(nx,ni+nd+nn);             % states
+%     -C Ai zeros(ni,nd+nn);              % integral states 'xi = -Cx+r'
+%     zeros(nd,nx+ni) Ad zeros(nd,nn);    % disturbance states
+%     zeros(nn,nx+ni+nd) An];             % noise states
+% Correct A matrix. This one considers the disturbance states, that is, the
+% filtered disturbance not just the disturbance
+A1 = [A zeros(nx,ni) Bdist Bdist zeros(nx,nn);             % states
     -C Ai zeros(ni,nd+nn);              % integral states 'xi = -Cx+r'
-    zeros(nd,nx+ni) Ad zeros(nd,nn);    % disturbance states
-    zeros(nn,nx+ni+nd) An];             % noise states
+    zeros(nwind,nx+ni) Awind zeros(nwind,nwave+nn);    % disturbance states
+    zeros(nwave,nx+ni+nwind) Awave zeros(nwave,nn);
+    zeros(nn,nx+ni+nwind+nwave) An];             % noise states
 
-B1 = [zeros(nx,ni) Bdist zeros(nx,nn);  % effect of uncont inputs on states
-    eye(ni,ni) zeros(ni,nd+nn);         % adding ref to int_states
-    zeros(nd,ni) Bd zeros(nd,nn);       % see disturbance model
-    zeros(nn,ni+nd) Bn];                % see noise model
+% B1 = [zeros(nx,ni) Bdist zeros(nx,nn);  % effect of uncont inputs on states
+%     eye(ni,ni) zeros(ni,nd+nn);         % adding ref to int_states
+%     zeros(nd,ni) Bd zeros(nd,nn);       % see disturbance model
+%     zeros(nn,ni+nd) Bn];                % see noise model
+%Correct B1 matrix, Bdist should not be there, it should be in the A1
+%matrix instead. We want to consider the filtered disturbance.
+B1 = [zeros(nx,ni) zeros(nx,nwind+nwave) zeros(nx,nn);% effect of uncont inputs on states
+    eye(ni,ni) zeros(ni,nwind+nwave+nn);         % adding ref to int_states
+    zeros(nwind,ni) Bwind zeros(nwind,nwave+nn); % see disturbance model
+    zeros(nwave,ni+nwind) Bwave zeros(nwind,nn);
+    zeros(nn,ni+nwind+nwave) Bn];                % see noise model
 
 B2 = [B;
-    zeros(ni+nd+nn,nu)];
+    zeros(ni+nwind+nwave+nn,nu)];
 
-C1 = [Cz zeros(nx,ni+nd+nn);
-    zeros(ni,nx) Ci zeros(ni,nd+nn);
-    zeros(nd,nx+ni) Cd zeros(nd,nn);
-    zeros(nn,nx+ni+nd) Cn;
-    zeros(nu,nx+ni+nd+nn)];
+C1 = [Cz zeros(nx,ni+nwind+nwave+nn);
+    zeros(ni,nx) Czi zeros(ni,nd+nn);
+    zeros(nd,nx+ni) Czd zeros(nd,nn);
+    zeros(nn,nx+ni+nwind+nwave) Czn;
+    zeros(nu,nx+ni+nwind+nwave+nn)];
 
 D11 = zeros(nx+ni+nd+nn+nu,ni+nd+nn);
 
 D12 = [zeros(nx+ni+nd+nn,nu);
-    Dz];
+        Dz];
 
-C2 = [C zeros(ny,ni+nd+nn);
-    zeros(ni,nx) eye(ni) zeros(ni,nd+nn)];
-
-D21 = [zeros(ny,ni+nd) eye(nn);
-    zeros(ni,ni+nd+nn)];
+% C2 = [C zeros(ny,ni) zeros(ny,nd) zeros(ny,nn); %This is wrong, we dont 
+%     zeros(ni,nx) eye(ni) zeros(ni,nd+nn)];      %consider the noise state
+                                                  %and we should
+C2 = [C zeros(ny,ni) zeros(ny,nd) Cn;
+    zeros(ni,nx) eye(ni) zeros(ni,nd) Cn];  
+% See noise model to understand Cn and Dn
+D21 = [zeros(ny,ni+nd) Dn;
+    zeros(ni,ni) zeros(ni,nd) Dn];
 
 D22 = zeros(ny+ni,nu);
 
@@ -145,10 +163,11 @@ Dh = [D11 D12;
     D21 D22];
 
 sysN = ss(Ah,Bh,Ch,Dh);
-[k,g,gfin, info] = hinfsyn(sysN,2*ny,nu,'GMIN',2,'GMAX',2,'DISPLAY','on','TOLGAM',0.01);
+[k,g,gfin, info] = hinfsyn(sysN,2*ny,nu,'GMIN',1.3,'GMAX',1.3,'DISPLAY','on','TOLGAM',0.01);
 %info.GAMFI
 
 F  = -info.KFI(1:2,1:3);
 FI = -info.KFI(1:2,4:5);
 Fd = -info.KFI(1:2,6:7);
 
+sim InnerController.slx
