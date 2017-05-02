@@ -70,8 +70,6 @@ void ref_callback(const aauship_control::Ref::ConstPtr& Ref)
 {
   r[0] = Ref->yaw;
   r[1] = Ref->speed;
-//   std::cout<<"SpeedRefLQR: "<<r[1]<<std::endl;
-//   std::cout<<"YawRefLQR: "<<r[0]<<std::endl;
 }
 
 //Other functions

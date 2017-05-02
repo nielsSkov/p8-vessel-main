@@ -8,46 +8,33 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 19th of April 2017}
+\section*{Supervisor Meeting\\ \small Friday, 28th of April 2017}
 
-\subsection{GPS Status}
+\subsection{Status}
 \begin{itemize}
-    \item We got the GPS base working and we walked on a line to test it. It follows $\pm$0.5 m.
-    \item The GPS has some delays, around 3 seconds. Where the delay comes from we do not exactly know.
-    \item If the data is at 5 Hz, the delay seems to be big. We think it is because we have done the forwarding in a quick way. 
-    \item We thought that the packages may arrive unordered, but the TCP orders the packages for you. Besides, different routes are unlikely because there are only few hops.
-    \item 3G connection may give around hundred miliseconds delay.
-    \item Maybe we should find a standard package that can forward information between a serial port and a TCP port.
-    \item We get a better signal using the antenna in the C1 building.
+    \item The boat was in the water
+    \item A fishing rod is a good idea
+    \item The gps gives a better result
+    \item 
 \end{itemize}
-\subsection{USB Modem}
+\subsection{Live Test}
 \begin{itemize}
-    \item We do not have one right now.
-    \item Jesper will look into it. 
+	\item We got some data that we are to process.
+\end{itemize}	
+\subsection{GPS status}
+\begin{itemize}
+    \item Works well
 \end{itemize}
-\subsection{Path following}
 \begin{itemize}
-	\item The boat can more or less follow a square.
-\end{itemize}
-\subsection{Robust Control Simulation}
-\begin{itemize}
-    \item The motors will not be able to do what they do in the simulations.
-    \item We should look into why the control actions are like that.
-\end{itemize}
-\subsection{Reading material}
-\begin{itemize}
-	\item How is the path generated. Explain it in the report.
-	\item Functional requirements Storing the data is not the focus of our project. We could say that we store our sensor data for post-processing.
-	\item Normally you verify the GPS by processing to find out what the actual position of the boat was. But we do not need to do it.
-	\item We should show graphs of the results of the Kalman filter.
-	\item The model for the magnetometer, we need to get either the model for the magnetic field of Aalborg or just project the components to get the direction.
-	\item In Aalborg the magnetic field strength is $[16.5,0.7,47.7]^\mathrm{T}$. We should look into this.
+	\item We could estimate how good the system by ignoring the GPS and comparting something with something.  
 \end{itemize}
 \subsection{Miscellaneous}
 \begin{itemize}
-    \item We should plan to sail now. 
+	\item We need a connector
+	\item We could try to send part of it
+	\item Available times are Thursday Wednesday and Friday at 13:00
 \end{itemize}
 
-\subsection{Next Supervisor Meeting}
-Wednesday, 26th of April at 13:00
+\subsection{Next Meeting}
+Friday, 26th of April at 13:00
 \end{document}
