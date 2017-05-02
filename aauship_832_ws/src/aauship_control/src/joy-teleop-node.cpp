@@ -113,11 +113,34 @@ public:
 			vel_right/=2;
 		if (msg->buttons[PS3_BUTTON_CROSS_LEFT])
 			vel_left/=2;
+
+		//If the square bottom is pressed, a high PWM is set to both motors
+		if (msg->buttons[PS3_BUTTON_ACTION_SQUARE])
+		{
+			vel_right = 200;
+			vel_left = 200;
+		}
+
+		//If the cross bottom is pressed, a high PWM is set to one motor and half to the other one
+		if (msg->buttons[PS3_BUTTON_ACTION_CROSS])
+		{
+			vel_right = 200;
+			vel_left = 0;
+		}
+
+		//Check for saturation
+		if (vel_left>SAT_UP) vel_left=SAT_UP;
+		if (vel_left<SAT_DOWN) vel_left=SAT_DOWN;
+		if (vel_right>SAT_UP) vel_right=SAT_UP;
+		if (vel_right<SAT_DOWN) vel_right=SAT_DOWN;
 	}
 	else{
 		//To start the boat, press the triangle
 		if (msg->buttons[PS3_BUTTON_ACTION_TRIANGLE])
+		{
 			state=ON_MODE;
+			vel_now=80;
+		}
 	}
 	
 	// Emergency Stop: Press the circle
@@ -129,11 +152,6 @@ public:
 		state=STOP_MODE;
 		count=0;
 	}
-	
-	if (vel_left>SAT_UP) vel_left=SAT_UP;
-	if (vel_left<SAT_DOWN) vel_left=SAT_DOWN;
-	if (vel_right>SAT_UP) vel_right=SAT_UP;
-	if (vel_right<SAT_DOWN) vel_right=SAT_DOWN;
 	
     ROS_INFO("[%f, %f, %f]", vel_left, vel_right, vel_now);
       

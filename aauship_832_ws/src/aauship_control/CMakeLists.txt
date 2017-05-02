@@ -61,15 +61,15 @@ add_message_files(
   ADIS16405.msg
   LLIinput.msg
   Attitude.msg
-  GPS.msg
-  BatteryMonitor.msg
-  KFStates.msg
   AttitudeStates.msg
   PositionStates.msg
+  RTKGPS.msg
 #  testSetpoints.msg
 #  PID.msg
 #  controlTest.msg
-  gps_msg.msg
+  GPS.msg
+  BatteryMonitor.msg
+  KFStates.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -165,10 +165,6 @@ add_executable(path_follower_node src/path-follower-node.cpp)
 add_dependencies(path_follower_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(path_follower_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
-# add_executable(gps_data_node src/gps_get_data.cpp)
-# add_dependencies(gps_data_node ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(gps_data_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
-
 add_executable(KF_attitude_node src/KF-att-node.cpp)
 add_dependencies(KF_attitude_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(KF_attitude_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
@@ -176,6 +172,10 @@ target_link_libraries(KF_attitude_node aauship_control ${gsl_LIBRARIES}  ${catki
 add_executable(KF_position_node src/KF-pos-node.cpp)
 add_dependencies(KF_position_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(KF_position_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+
+# add_executable(gps_data_node src/gps_get_data.cpp)
+# add_dependencies(gps_data_node ${catkin_EXPORTED_TARGETS})
+# target_link_libraries(gps_data_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
 
 #############
 ## Install ##

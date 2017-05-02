@@ -2,8 +2,10 @@
 #include <std_msgs/Float32.h>
 
 #include "aauship_control/LLIinput.h"
-#include "aauship_control/KFStates.h"
+// #include "aauship_control/KFStates.h"
 #include "aauship_control/Ref.h"
+#include "aauship_control/AttitudeStates.h"
+#include "aauship_control/PositionStates.h"
 
 #include <sstream>
 #include <stdint.h>
@@ -42,26 +44,37 @@ float r[Fn] = {0,0};
 float x[Fm] = {0,0,0};
 float y[Fn] = {0,0};
 
-void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
+
+// Callback functions
+// void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
+// {
+//   x[0] = KFStates->psi;
+//   x[1] = KFStates->r;
+//   x[2] = KFStates->u;
+//   y[0] = KFStates->psi;
+//   y[1] = KFStates->u;
+// }
+
+void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
 {
-  x[0] = KFStates->psi;
-  x[1] = KFStates->r;
-  x[2]=KFStates->u;
-  //std::cout<<"[LQR] X states: "<<x[0]<<" "<<x[1]<<" "<<x[2]<<"\n";
-  y[0] = KFStates->psi;
-  y[1] = KFStates->u;
-  // std::cout<<"Speed: "<<x[2]<<std::endl;
-  // std::cout<<"Yaw: "<<x[0]<<std::endl;
+  x[0] = att_msg->yaw;
+  x[1] = att_msg->yawd;
+}
+
+void pos_callback(const aauship_control::PositionStates::ConstPtr& pos_msg)
+{
+  x[2] = pos_msg->xbd;
 }
 
 void ref_callback(const aauship_control::Ref::ConstPtr& Ref)
 {
-  r[0] = Ref -> yaw;
-  r[1] = Ref-> speed;
+  r[0] = Ref->yaw;
+  r[1] = Ref->speed;
 //   std::cout<<"SpeedRefLQR: "<<r[1]<<std::endl;
 //   std::cout<<"YawRefLQR: "<<r[0]<<std::endl;
 }
 
+//Other functions
 void multiply_state_fb(float F[Fn][Fm], float x[Fm], float *u_state)
 {
   float u_tmp[Fn] = {0,0};
@@ -110,27 +123,29 @@ int16_t force2PWM(float u)
 {
   //std::cout<<"u: "<<u<<std::endl;
   int pwm = (u+c)/m;
-  return pwm;     //only for model-node
+  //return pwm;     //only for model-node
   //std::cout<<"PWM: "<<pwm<<std::endl;
 
   /////////// USED TO SEND PWM TO BOAT\\\\\\\\
   /////////// NOT FOR TESTING WITH MODEL NODE\\\\\\\\\\
 
-  // if (pwm < 100)
-  // {
-  //   return 0;
-  // }
-  // else
-  // {
-  //   return pwm;
-  // }
+  if (pwm < 70)
+  {
+    return 0;
+  }
+  else
+  {
+    return pwm;
+  }
 }
 
 int main(int argc, char **argv)
 {
   ros::init(argc,argv,"lqr_node");
   ros::NodeHandle n;
-  ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,KF_callback);
+  // ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,KF_callback);
+  ros::Subscriber att_update = n.subscribe("/kf_attitude",1000,att_callback);
+  ros::Subscriber pos_update = n.subscribe("/kf_position",1000,pos_callback);
   ros::Subscriber ref_update = n.subscribe("/control_reference",1000,ref_callback);
   ros::Publisher lli_pub = n.advertise<aauship_control::LLIinput>("/lli_input", 1);
   ros::Rate lqr_rate(CONTROLLER_RATE);
@@ -185,7 +200,7 @@ int main(int argc, char **argv)
     for (int i = 0; i < Fn; i++)
     {
       u[i] = -(u_state[i] + u_integral[i]);
-      if (u[i]<-0)
+      if (u[i]<0)
       {
         u[i] = 0;
       }

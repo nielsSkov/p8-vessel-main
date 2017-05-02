@@ -38,13 +38,13 @@ void pos_callback(const aauship_control::PositionStates::ConstPtr& pos_msg)
 	current_position.x = pos_msg->xn;
 	current_position.y = pos_msg->yn;
 }
-//Debug
-void kf_callback(const aauship_control::KFStates::ConstPtr& kf_msg)
-{
-	heading =  kf_msg->psi;
-	current_position.x = kf_msg->x;
-	current_position.y = kf_msg->y;
-}
+// //Debug
+// void kf_callback(const aauship_control::KFStates::ConstPtr& kf_msg)
+// {
+// 	heading =  kf_msg->psi;
+// 	current_position.x = kf_msg->x;
+// 	current_position.y = kf_msg->y;
+// }
 
 
 aauship_control::Ref computeRef(point curr_pos, point reference_point);
@@ -61,9 +61,9 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 	ros::Subscriber pos_update = n.subscribe("/kf_position",1000,pos_callback);
 	ros::Subscriber att_update = n.subscribe("/kf_attitude",1000,att_callback);
-	//Debug
-	ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,kf_callback);
-	//
+	// //Debug
+	// ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,kf_callback);
+	// //
 	ros::Publisher ref_pub = n.advertise<aauship_control::Ref>("/control_reference", 1);
 	ros::Rate path_follower_rate(PATH_FOLLOWING_RATE);
 	std::cout<<std::endl<<"######PATH FOLLOWING NODE RUNNING######"<<std::endl;

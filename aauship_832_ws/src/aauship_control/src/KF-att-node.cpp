@@ -70,6 +70,7 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
 	double magxh = 0;
 	double magyh = 0;
+	double tempyaw = 0;
 
 	//Calculate roll and pitch from the accelerometer measurements
 	//Roll = atan(yacc / sqrt(xacc^2 + zacc^2)) and pitch = atan(xacc / sqrt(yacc^2 + zacc^2))
@@ -79,7 +80,16 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 	//Calculate yaw using the megnetometer data
 	magxh = (imu_msg->xmagn) * cos(states[1]) + (imu_msg->ymagn) * sin(states[0]) * sin(states[1]) + (imu_msg->zmagn) * cos(states[0]) * sin(states[1]);
 	magyh = (imu_msg->ymagn) * cos(states[0]) + (imu_msg->zmagn) * sin(states[0]);
-	meas[2] = atan2(magyh,magxh);
+	tempyaw = atan2(magyh,magxh);
+
+	//Correct jumps from -PI to PI and viceversa
+	if (((meas[2] - tempyaw) < -M_PI) || ((meas[2] - tempyaw) > M_PI))
+	{
+		if (tempyaw < 0)
+	  		meas[2] = tempyaw + 2 * M_PI;
+	  	else
+	  	  	meas[2] = tempyaw - 2 * M_PI;
+	}
 
 	//Store the gyro measurements
 	meas[3] = imu_msg->xgyro + BIAS_GYROX;	//Negative bias

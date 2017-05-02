@@ -2,6 +2,7 @@
 #include "aauship_control/PositionStates.h"
 #include "aauship_control/AttitudeStates.h"
 #include "aauship_control/ADIS16405.h"
+#include "aauship_control/RTKGPS.h"
 #include "aauship_control/LLIinput.h"
 
 #include <cstdlib>
@@ -43,8 +44,8 @@
 //Measurements variances
 #define SIGMA2_GPSXN 1
 #define SIGMA2_GPSYN 1
-#define SIGMA2_ACCXBDDOT 1
-#define SIGMA2_ACCYBDDOT 1
+#define SIGMA2_ACCXBDDOT 0.00050346
+#define SIGMA2_ACCYBDDOT 0.00057036
 
 //Global variables
 float meas[N_MEAS] = {0,0,0,0};
@@ -53,13 +54,13 @@ float inputs[N_INPUTS] = {0,0};
 float att[3] = {0,0,0};
 
 
-// //Callback functions
-// void gps_callback(const aauship_control::ADIS16405::ConstPtr& gps_msg)
-// {
-// 	//Store GPS position
-// 	meas[0] = gps_msg->xn;
-// 	meas[1] = gps_msg->yn;
-// }
+//Callback functions
+void gps_callback(const aauship_control::RTKGPS::ConstPtr& gps_msg)
+{
+	//Store GPS position
+	meas[0] = gps_msg->delx;
+	meas[1] = gps_msg->dely;
+}
 
 void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
@@ -127,7 +128,7 @@ int main(int argc, char **argv)
 {
 	ros::init(argc,argv,"KF_position_node");
 	ros::NodeHandle n;
-	// ros::Subscriber gps_update = n.subscribe("/gps",1000,gps_callback);
+	ros::Subscriber gps_update = n.subscribe("/gps_pos",1000,gps_callback);
 	ros::Subscriber imu_update = n.subscribe("/imu",1000,imu_callback);
 	ros::Subscriber lli_update = n.subscribe("/lli_input",1000,lli_callback);
 	ros::Subscriber att_update = n.subscribe("/kf_attitude",1000,att_callback);
@@ -234,10 +235,10 @@ int main(int argc, char **argv)
 	{	
 		ros::spinOnce();
 
-		std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
-		std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
-		std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
-		std::cout<<"---------------------------------"<<std::endl;
+		// std::cout<<gsl_matrix_get(P,0,0)<<" "<<gsl_matrix_get(P,1,1)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,2,2)<<" "<<gsl_matrix_get(P,3,3)<<" "<<std::endl;
+		// std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
+		// std::cout<<"---------------------------------"<<std::endl;
 
 		//////Update step//////
 		//Calculate K as P*C'/(C*P*C'+R)
@@ -287,10 +288,10 @@ int main(int argc, char **argv)
 		aauship_control::PositionStates pos_msg;
 		pos_msg.xn = states[0];
 		pos_msg.yn = states[1];
-		pos_msg.xb_vel = states[2];
-		pos_msg.yb_vel = states[3];
-		pos_msg.xb_acc = states[4];
-		pos_msg.yb_acc = states[5];
+		pos_msg.xbd = states[2];
+		pos_msg.ybd = states[3];
+		pos_msg.xbdd = states[4];
+		pos_msg.ybdd = states[5];
 		pos_pub.publish(pos_msg);
 
 		//Ensures the timing of the loop
