@@ -33,11 +33,11 @@ ny = size(C,1);         % number of measured outputs
 
 % Cz is C matrix for performance output (Z) equation (Weightings)
 % For states
-Cz = diag([1,0.5,1]);
+Cz = diag([2,3,2]);
 
 % Dz is D matrix for performance output (Z) equation (Weightings)
 % For inputs
-Dz = diag([0.01,0.01]);
+Dz = diag([0.001,0.001]);
 
 nz = ny + nu;
 nw = ny;    % number of output noise states
@@ -46,12 +46,12 @@ nw = ny;    % number of output noise states
 
 ni = ny;                % number of reference (integral) signals to track
 
-Ai = -0.001*eye(ni);
+Ai = -eye(ni);
 Bi = eye(ni);
 
 % C matrix for performance output (Z) equation (Weightings)
 % For integral states
-Czi = diag([1,1]);
+Czi = diag([5,2]);
 
 %% Disturbances Model
 
@@ -59,8 +59,8 @@ nwind = nu;    % number of input disturbance states
 nwave = nu;
 nd=nwind+nwave;
 
-wind_freq=50;
-wave_freq=50;
+wind_freq=20;
+wave_freq=20;
 Awind = -wind_freq*eye(nwind);
 Bwind = wind_freq*eye(nwind);
 Awave = -wave_freq*eye(nwave);
@@ -84,7 +84,7 @@ Cn = -noise_freq*eye(nn);
 Dn = eye(nn);
 % C matrix for performance output (Z) equation (Weightings)
 % For output measurement noise states
-Czn = diag([1,1]);
+Czn = diag([5,5]);
 
 %% H infinity Model
 % x' = A1x + B1w  + B2u     - state equation
@@ -163,11 +163,11 @@ Dh = [D11 D12;
     D21 D22];
 
 sysN = ss(Ah,Bh,Ch,Dh);
-[k,g,gfin, info] = hinfsyn(sysN,2*ny,nu,'GMIN',1.3,'GMAX',1.3,'DISPLAY','on','TOLGAM',0.01);
+[k,g,gfin, info] = hinfsyn(sysN,2*ny,nu,'GMIN',0,'GMAX',5,'DISPLAY','on','TOLGAM',0.01);
 %info.GAMFI
 
 F  = -info.KFI(1:2,1:3);
 FI = -info.KFI(1:2,4:5);
 Fd = -info.KFI(1:2,6:7);
-
+sigma(g,ss(gfin))
 sim InnerController.slx
