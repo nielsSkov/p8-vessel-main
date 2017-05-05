@@ -62,7 +62,7 @@ maxYaw = 0.1;          %[rad]
 maxYawDot = 0.1;          %[rad/s]
 maxXDot = 0.1;            %[m/s]
 maxYawInt= 0.05;
-maxXdotInt= 0.02;
+maxXdotInt= 0.05;
 Q = diag([maxYaw maxYawDot maxXDot maxYawInt maxXdotInt]);
 Q = 1./(Q.^2);
 Q(Q==Inf)=0;
@@ -108,11 +108,11 @@ refXdot = 1;        % [m/s]
 %% Plot Outputs of Simulation
 
 sim InnerController.slx
-
-figure(10)
-hold on
-plot(xbdot.Time,xbdot.Data)
-
-figure(20)
-hold on
-plot(yaw.Time,yaw.Data)
+% 
+% figure(10)
+% hold on
+% plot(xbdot.Time,xbdot.Data)
+% 
+% figure(20)
+% hold on
+% plot(yaw.Time,yaw.Data)
