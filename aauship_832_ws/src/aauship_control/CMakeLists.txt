@@ -57,14 +57,18 @@ pkg_check_modules( gsl REQUIRED gsl )
 add_message_files(
   FILES
   Faps.msg
+  Ref.msg
   ADIS16405.msg
   LLIinput.msg
+  Attitude.msg
+  AttitudeStates.msg
+  PositionStates.msg
+  RTKGPS.msg
 #  testSetpoints.msg
 #  PID.msg
-  Attitude.msg
-  GPS.msg
 #  controlTest.msg
-#  BatteryMonitor.msg
+  GPS.msg
+  BatteryMonitor.msg
   KFStates.msg
 )
 
@@ -126,7 +130,7 @@ include_directories(
 # )
 add_library(aauship_control
   src/MahonyAHRS.cpp
-  src/LQR.cpp
+#  src/lqr-controller-node.cpp
 #  src/MadgwickAHRS.cpp
 # scripts/kalmanfilter-node.py
   src/KalmanFilter.cpp
@@ -145,17 +149,34 @@ add_library(aauship_control
 # )
 #catkin_install_python(PROGRAMS scripts/kalmanfilter-node.py
 #DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-add_executable(joy-teleop-node src/joy-teleop-node.cpp)
-add_dependencies(joy-teleop-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy-teleop-node ${catkin_LIBRARIES})
+add_executable(joy_teleop_node src/joy-teleop-node.cpp)
+add_dependencies(joy_teleop_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(joy_teleop_node ${catkin_LIBRARIES})
 
-add_executable(ahrs-mahony-node src/ahrs-mahony-node.cpp)
-add_dependencies(ahrs-mahony-node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(ahrs-mahony-node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+add_executable(ahrs_mahony_node src/ahrs-mahony-node.cpp)
+add_dependencies(ahrs_mahony_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ahrs_mahony_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
 
-add_executable(lqr_node src/LQR.cpp)
+add_executable(lqr_node src/lqr-controller-node.cpp)
 add_dependencies(lqr_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(lqr_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(path_follower_node src/path-follower-node.cpp)
+add_dependencies(path_follower_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(path_follower_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+
+add_executable(KF_attitude_node src/KF-att-node.cpp)
+add_dependencies(KF_attitude_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(KF_attitude_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+
+add_executable(KF_position_node src/KF-pos-node.cpp)
+add_dependencies(KF_position_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(KF_position_node aauship_control ${gsl_LIBRARIES}  ${catkin_LIBRARIES})
+
+# add_executable(gps_data_node src/gps_get_data.cpp)
+# add_dependencies(gps_data_node ${catkin_EXPORTED_TARGETS})
+# target_link_libraries(gps_data_node ${gsl_LIBRARIES} ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############

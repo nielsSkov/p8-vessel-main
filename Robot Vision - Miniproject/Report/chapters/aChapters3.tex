@@ -8,7 +8,7 @@ The algorithm followed to fulfill the required funcionality for the project is p
 \section{Identification of the Bricks}
 The goal of the brick identification algorithm is to obtain the position and orientation of the bricks so as to generate appropiate commands for the robot.
 
-The algorithm is illustrated with an example image taken in similar conditions as in the workstation, \autoref{fig:RealLego4}. It is based on the the information of value, saturation and color given by the representation on the image in HSV color space.
+The algorithm is illustrated with an example image taken in similar conditions as in the workstation, \autoref{fig:RealLego4}. It is based on the the information of hue, saturation and value given by the representation on the image in HSV color space.
 
 \begin{figure}[H]
 	\includegraphics[width=0.25\textwidth]{figures/original.png}
@@ -19,7 +19,7 @@ The algorithm is illustrated with an example image taken in similar conditions a
 The first step is to convert the image to HSV color space and split into the three different channels, as seen in \autoref{list:hsv}.
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to split the image in the three HSV channels.},
+caption  = {MATLAB code to split the image in the three HSV channels.},
 label    = list:hsv ]
 % Transform into HSV and separate in the different channels
 hsv=rgb2hsv(original);
@@ -71,7 +71,7 @@ The black bricks will not be detected using the saturation channel of the image.
 		\includegraphics[width=.25\textwidth]{black_mask.png}            
 	}                                                                             
 \end{figure}
-The masks for the colored bricks and for the black bricks are then combined resulting in \autoref{fig:final_mask}. As it is noticeable in the mask, there are holes in some of the blobs and, although noise does not appear in the image, it has a high probability of appearing in order images taken. For solving these two issues, an opening operation, followed by a closed operation removes both noise and holes, respectively. Both processes use a $5\times 5$ square kernel and the result after being applied on \autoref{fig:final_mask} can be seen in \autoref{fig:final_mask2}. 
+The masks for the colored bricks and for the black bricks are then combined resulting in \autoref{fig:final_mask}. As it is noticeable in the mask, there are holes in some of the blobs and, although noise does not appear in the image, it has a high probability of appearing in other images taken. For solving these two issues, an opening operation, followed by a closed operation removes both noise and holes, respectively. Both processes use a $5\times 5$ square kernel and the result after being applied on \autoref{fig:final_mask} can be seen in \autoref{fig:final_mask2}. 
 %
 \begin{figure}[H]
 	\captionbox  %<--use captionbox instead if no global caption is needed
@@ -96,7 +96,7 @@ The masks for the colored bricks and for the black bricks are then combined resu
 The code for getting the mask and processing it can be seen below.
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to get the mask that contains the blocks.},
+caption  = {MATLAB code to get the mask that contains the blocks.},
 label    = list:mask ]
 % Find the blocks in the image
 saturation=imgaussfilt(saturation,'FilterSize',9);  % First, find coloured blocks using the saturation channel
@@ -122,7 +122,7 @@ The position of each brick in the picture is then found using the centroid of th
 The object and it properties are identified using the following commands in MATLAB:
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to get the objects and their properties.},
+caption  = {MATLAB code to get the objects and their properties.},
 label    = list:centroid ]
 % Identifying objects and their properties
 objects = bwconncomp(final_mask);           % Label the objects
@@ -193,7 +193,7 @@ Once the edges are found, the Hough transform is used to find the lines with a m
 	\label{fig:object}
 \end{figure}
 
-Since the orientation need to be express in workspace coordinates, the two points that defines that line are transformed to scene coordinates using the transformation matrix defined in \autoref{sec:camera}. This is straightforward for the position as
+Since the orientation needs to be expressed in workspace coordinates, the two points that defines that line are transformed to scene coordinates using the transformation matrix defined in \autoref{sec:camera}. This is straightforward for the position as
 %
 \begin{flalign}
 	\begin{bmatrix}
@@ -212,7 +212,7 @@ Since the orientation need to be express in workspace coordinates, the two point
     Y_\mathrm{s}=\frac{V}{W}
 \end{flalign}
 
-The algorithm for getting the position and orientation can be seen in \autoref{lis:pos}.
+The algorithm for getting the position and orientation can be seen in \autoref{list:pos}.
 %
 \begin{lstlisting}[ language = Matlab,
 caption  = {MATLAB code to get the position and orientation.},
@@ -244,7 +244,7 @@ At this point, each brick is identified by its position in the image, its color 
 \section{Pick and Place Movement}
 The strategy for picking a piece and placing it in its final destination is composed by several movements. This operation is programed in the MATLAB function located in \lstinline[style=matlabinline]{PickPlace.m}
 
-Initially, the robot is placed on top of the brick that is to be picked. This also includes rotating the gripper to the appropiate orientation. Then, the gripper is moved down vertically until the height is correct and the brick can be grasped. Finally, the tool with the brick move up vertically finishing the pick operation. \autoref{list:pick} shows how these sequence looks like when programed in MATLAB.
+Initially, the robot is placed on top of the brick that is to be picked. This also includes rotating the gripper to the appropiate orientation. Then, the gripper is moved down vertically until the height is correct and the brick can be grabbed. Finally, the tool with the brick move up vertically finishing the pick operation. \autoref{list:pick} shows how this sequence looks like when programed in MATLAB.
 %
 \begin{lstlisting}[ language = Matlab,
 caption  = {MATLAB code to perform the pick instruction.},
@@ -257,10 +257,10 @@ closeGrapper(kuka)
 moveLinear(kuka,x,y,z+MyParameters.HEIGHT,a,b,c,vel)
 \end{lstlisting}
 
-After the brick is picked, it is placed in its final destination following similar movements. The tool moves to the final location with the right orientation, then moves down, releases the brick and moves up vertically, ready to start a new pick operation with another block. In MATLAB, this movements are programed as in \autoref{list:place}.
+After the brick is picked, it is placed in its final destination following similar movements. The tool moves to the final location with the right orientation, then moves down, releases the brick and moves up vertically, ready to start a new pick operation with another block. In MATLAB, these movements are programed as in \autoref{list:place}.
 %
 \begin{lstlisting}[ language = Matlab,
-caption  = {Matlab code to perform the place instruction.},
+caption  = {MATLAB code to perform the place instruction.},
 label    = list:place ]
 % Move to the pose with some heigth, go down, release the brick and go up
 % again

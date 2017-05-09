@@ -1,0 +1,4 @@
+<launch>
+  <node cwd="node" name="rosbag_node" pkg="rosbag" type="record"
+	output="screen" args="-o $(find aauship_control) /gps_pos"/>
+</launch>

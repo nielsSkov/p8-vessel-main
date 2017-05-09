@@ -1,26 +1,26 @@
 \chapter{System Description}\label{chap:systemDescription}
-The system is composed by a camera that captures the table that contains the bricks and a robot arm that is charge of picking and placing the brick to build the desired figures. The setup can be seen in \autoref{fig:setup}.
+The system is composed by a camera, that captures the table that contains the bricks, and a robot arm, that is in charge of picking and placing the brick to build the desired figures. The setup can be seen in \autoref{fig:setup}.
 \begin{figure}[H]
     \includegraphics[width=0.5\textwidth]{figures/setup_axes.pdf}
     \caption{Image of the setup, where the robot cell can be seen. It contains the robot arm, the security fence, the camera and the table that is the base workspace of the system. }
     \label{fig:setup}
 \end{figure}
 
-The coordinate frame of the base workspace can be seen in \autoref{setup} and it is aligned with the robot's frame, but it starts at position (411.69,-285.27,340.12) in the robot's world frame, with respect to whom the coordinates need to be sent to the robot. Since all the positions are calculated with respect to the base frame, the offset is added before sending the command to the robot controller.
+The coordinate frame of the base workspace can be seen in \autoref{fig:setup} and it is aligned with the robot's frame, but it starts at position (411.69,-285.27,340.12) in the robot's world frame, with respect to whom the coordinates need to be sent to the robot. Since all the positions are calculated with respect to the base frame, the offset is added before sending the command to the robot controller.
   
 In this chapter more details about the robot arm and the camera are described. 
 
 \section{Industrial Robot}
-The industrial robot is a KUKA KR6 R700 and it is composed by a manipulator, a robot controller and a smartPAD teach pendant. 
+The industrial robot is a KUKA KR6 R700 and it is composed of a manipulator, a robot controller and a smartPAD teach pendant \cite{kuka}. 
 
 The manipulator is a 6DOF robot arm that is made of six rotation joints. A diagram of the robot can be seen in \autoref{fig:kuka_axes}.
 \begin{figure}[H]
     \includegraphics[width=0.25\textwidth]{figures/kuka_axes.png}
-    \caption{.\cite{kuka} }
+    \caption{Diagram of the robot arm, including the positive direction of rotation of each joint. \cite{kuka} }
     \label{fig:kuka_axes}
 \end{figure}
 
-The interface with the robot controller is done through MATLAB. This provides an easier integration of the vision algorithms and the robot movement. A MATLAB class, \lstinline[style=matlabinline]{RobotConnectorKUKA.m}, connects to the robot controller and defines the functions needed to operate the manipulator. For this project the used functions can be seen in \autoref{MatlabFunctions}.
+The interface with the robot controller is done through MATLAB \cite{matlab}. This provides an easier integration of the vision algorithms and the robot movement. A MATLAB class, \lstinline[style=matlabinline]{RobotConnectorKUKA.m}, connects to the robot controller and defines the functions needed to operate the manipulator. For this project the used functions can be seen in \autoref{MatlabFunctions}.
 
 \begin{lstlisting}[ language = Matlab,
 caption  = {Matlab functions used to operate KUKA robot.},
@@ -69,7 +69,7 @@ The design of the gripper is done such that when it is open it has enough space 
 The position and orientation of the blocks are obtained from images taken with Logitech HD Pro Webcam C920. This device can be seen in \autoref{fig:camera}.
 \begin{figure}[H]
     \includegraphics[width=0.2\textwidth]{figures/camera.png}
-    \caption{Logitech HD Pro Webcam C920 used to locate the Lego bricks.\cite{camera} }
+    \caption{Logitech HD Pro Webcam C920 used to locate the Lego bricks. \cite{camera} }
     \label{fig:camera}
 \end{figure}
 The camera is placed in the robot cell as in \autoref{fig:setup}. In order to use the images, a projection matrix that translates the image points into scene points needs to be found. As all desired goals lay on the same plane, the projection matrix can be found using pairs of points that have correspondence in the scene and in the image.

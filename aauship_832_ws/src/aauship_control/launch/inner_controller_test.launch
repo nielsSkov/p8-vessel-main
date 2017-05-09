@@ -1,0 +1,10 @@
+<launch>
+  <!--node cwd="node" name="rosbag_node" pkg="rosbag" type="record"
+	output="screen" args="-o $(find aauship_control) /imu /gps /kf_attitude /kf_position /lli_input"/-->
+
+  <node cwd="node" name="KF_attitude_node" pkg="aauship_control" type="KF_attitude_node" output="screen"/>
+
+  <node cwd="node" name="KF_position_node" pkg="aauship_control" type="KF_position_node" output="screen"/>
+
+  <node cwd="node" name="lqr_node" pkg="aauship_control" type="lqr_node" output="screen"/>
+</launch>

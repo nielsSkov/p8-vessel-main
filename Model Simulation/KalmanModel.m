@@ -34,12 +34,18 @@ a2=0;
 a3=0;
 a4=1;
 
-A_pos=[1 0 Ts 0 0 0;
-    0 1 0 Ts 0 0;
-    0 0 1 0 Ts*a1 Ts*a2;
-    0 0 0 1 Ts*a3 Ts*a4;
-    0 0 -dx/mx*a1 -dx/mx*a3 -Ts*dx/mx 0;
-    0 0 -dy/my*a2 -dy/my*a4 0 -Ts*dy/my];
+% A_pos=[1 0 Ts 0 0 0;
+%     0 1 0 Ts 0 0;
+%     0 0 1 0 Ts*a1 Ts*a2;
+%     0 0 0 1 Ts*a3 Ts*a4;
+%     0 0 -dx/mx*a1 -dx/mx*a3 -Ts*dx/mx 0;
+%     0 0 -dy/my*a2 -dy/my*a4 0 -Ts*dy/my];
+A_pos=[1 0 Ts*a1 Ts*a2 0 0;
+     0 1 Ts*a3 Ts*a4 0 0;
+    0 0 1 0 Ts 0;
+    0 0 0 1 0 Ts;
+    0 0 -dx/mx 0 -dx/mx*Ts 0;
+    0 0 0 -dy/my 0 -dy/my*Ts];
 
 B_pos=[0 0;
     0 0;
@@ -125,13 +131,12 @@ att_noise=att_data+diag(sqrt([0,0,sigma2_mag_yaw]))*...
     randn(3,n_samples);
 attdot_noise=attdot_data+diag(sqrt([sigma2_gyro_roll,sigma2_gyro_pitch,...
     sigma2_gyro_yaw]))*randn(3,n_samples);
-x_noise=x_data+diag(sqrt([sigma2_gps_xn,sigma2_gps_yn]))*randn(2,n_samples);
+x_noise=x_data+diag(sqrt([sigma2_xn,sigma2_yn]))*randn(2,n_samples);
 xddot_noise=xddot_data+diag(sqrt([sigma2_acc_xbddot,sigma2_acc_ybddot]))*randn(2,n_samples);
 
-% Not a good way to get roll and pitch
-att_noise(1,:)=atan(xddot_noise(1,:)./sqrt(xddot_noise(2,:).^2+9.81.^2));
-att_noise(2,:)=atan(xddot_noise(2,:)./sqrt(xddot_noise(1,:).^2+9.81.^2));
-
+% Roll and pitch. Yaw is just yaw in this case.
+att_noise(1,:)=atan(xddot_noise(2,:)./sqrt(xddot_noise(2,:).^2+9.81.^2));
+att_noise(2,:)=atan(xddot_noise(1,:)./sqrt(xddot_noise(1,:).^2+9.81.^2));
 
 meas=[att_noise;
     attdot_noise;
@@ -168,20 +173,26 @@ for k=2:1:n_samples
     a2=sin(roll(k-1))*sin(pitch(k-1))*cos(yaw(k-1))-cos(roll(k-1))*sin(yaw(k-1));
     a3=cos(pitch(k-1))*sin(yaw(k-1));
     a4=sin(roll(k-1))*sin(pitch(k-1))*sin(yaw(k-1))+cos(roll(k-1))*cos(yaw(k-1));
-    A_pos=[1 0 Ts 0 0 0;
-        0 1 0 Ts 0 0;
-        0 0 1 0 Ts*a1 Ts*a2;
-        0 0 0 1 Ts*a3 Ts*a4;
-        0 0 -dx/mx*a1 -dx/mx*a3 -Ts*dx/mx 0;
-        0 0 -dy/my*a2 -dy/my*a4 0 -Ts*dy/my];
+%     A_pos=[1 0 Ts 0 0 0;
+%         0 1 0 Ts 0 0;
+%         0 0 1 0 Ts*a1 Ts*a2;
+%         0 0 0 1 Ts*a3 Ts*a4;
+%         0 0 -dx/mx*a1 -dx/mx*a3 -Ts*dx/mx 0;
+%         0 0 -dy/my*a2 -dy/my*a4 0 -Ts*dy/my];
+    A_pos=[1 0 Ts*a1 Ts*a2 0 0;
+        0 1 Ts*a3 Ts*a4 0 0;
+        0 0 1 0 Ts 0;
+        0 0 0 1 0 Ts;
+        0 0 -dx/mx 0 -dx/mx*Ts 0;
+        0 0 0 -dy/my 0 -dy/my*Ts];
     A_kal=[A_att zeros(size(A_att,1),size(A_pos,2));
         zeros(size(A_pos,1),size(A_att,2)) A_pos];
     
-    % First Prediction
+    % Prediction
     x_kal(:,k)=A_kal*x_kal(:,k-1)+B_kal*u(:,k-1);%+sqrt(Q)*randn(n,1);
     P=A_kal*P*A_kal'+Q;
     
-    % First Update
+    % Update
     K=P*C_kal'/(C_kal*P*C_kal'+R);
     x_kal(:,k)=x_kal(:,k)+K*(meas(:,k)-C_kal*x_kal(:,k));
     P=(eye(n)-K*C_kal)*P;
@@ -191,10 +202,10 @@ end
 % Yaw
 figure
 hold on
-plot(att.Time,meas(1,:))
-plot(att.Time,x_kal(1,:))
-plot(att.Time,att.Data(:,1))
-FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+plot(att.Time,meas(3,:))
+plot(att.Time,x_kal(3,:))
+plot(att.Time,att.Data(:,3))
+FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % Yaw velocity
 figure
@@ -202,14 +213,14 @@ hold on
 plot(att.Time,meas(6,:))
 plot(att.Time,x_kal(6,:))
 plot(att.Time,attdot.Data(:,3))
-FigureLatex('$\dot{\psi}$','Time [s]','Angular Velocity [rad $^{-1}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\dot{\psi}$','Time [s]','Angular Velocity [rad $^{-1}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % Yaw acceleration
 figure
 hold on
 plot(att.Time,x_kal(9,:))
 plot(att.Time,attddot.Data(:,3))
-FigureLatex('$\ddot{\psi}$','Time [s]','Angular Acceleration [rad s$^{-2}$]',1,{'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\ddot{\psi}$','Time [s]','Angular Acceleration [rad s$^{-2}$]',1,{'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % X position
 figure
@@ -217,14 +228,14 @@ hold on
 plot(x.Time,meas(7,:))
 plot(x.Time,x_kal(10,:))
 plot(x.Time,x.Data(:,1))
-FigureLatex('$x_\mathrm{n}$','Time [s]','Position [m]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$x_\mathrm{n}$','Time [s]','Position [m]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % X velocity
 figure
 hold on
 plot(x.Time,x_kal(12,:))
-plot(x.Time,xdot.Data(:,1))
-FigureLatex('$\dot{x_\mathrm{n}}$','Time [s]','Velocity [m s$^{-1}$]',1,{'Estimation', 'Real'},0,0,12,14,1.2)
+plot(x.Time,xbdot.Data(:,1))
+FigureLatex('$\dot{x_\mathrm{n}}$','Time [s]','Velocity [m s$^{-1}$]',1,{'Estimation', 'Real'},0,0,0,12,14,1.2)
 
 % X accleration
 figure
@@ -232,4 +243,65 @@ hold on
 plot(att.Time,meas(9,:))
 plot(att.Time,x_kal(14,:))
 plot(att.Time,xddot.Data(:,1))
-FigureLatex('$\ddot{x_\mathrm{b}}$','Time [s]','Acceleration [m s$^{-2}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,12,14,1.2)
+FigureLatex('$\ddot{x_\mathrm{b}}$','Time [s]','Acceleration [m s$^{-2}$]',1,{'Measurement', 'Estimation', 'Real'},0,0,0,12,14,1.2)
+%% Complementary filter for the attitude
+%run Parameters.m
+%sim('KalmanModelSim.slx')
+% Filter parameters
+filter_freq=10000; %Hz
+% Data
+att_data=att.Data';
+attdot_data=attdot.Data';
+attddot_data=attddot.Data';
+xddot_data=xddot.Data';
+n_samples=size(att_data,2);
+% Sensor variance
+sigma2_mag_roll=0.1;
+sigma2_mag_pitch=0.1;
+sigma2_mag_yaw=0.1;
+sigma2_gyro_roll=0.1;
+sigma2_gyro_pitch=0.1;
+sigma2_gyro_yaw=0.1;
+sigma2_gps_xn=3;
+sigma2_gps_yn=3;
+sigma2_acc_xbddot=0.003;
+sigma2_acc_ybddot=0.003;
+
+att_noise=att_data+diag(sqrt([0,0,sigma2_mag_yaw]))*...
+    randn(3,n_samples);
+attdot_noise=attdot_data+diag(sqrt([sigma2_gyro_roll,sigma2_gyro_pitch,...
+    sigma2_gyro_yaw]))*randn(3,n_samples);
+xddot_noise=xddot_data+diag(sqrt([sigma2_acc_xbddot,sigma2_acc_ybddot]))*randn(2,n_samples);
+
+% Roll and pitch. Yaw is just yaw in this case.
+att_noise(1,:)=atan(xddot_noise(2,:)./sqrt(xddot_noise(2,:).^2+9.81.^2));
+att_noise(2,:)=atan(xddot_noise(1,:)./sqrt(xddot_noise(1,:).^2+9.81.^2));
+
+s=tf('s');
+LPF=1/((1/filter_freq)*s+1);
+HPF_int=s/((s+filter_freq)*s);
+
+LPF=c2d(LPF,Ts,'Tustin');
+HPF_int=c2d(HPF_int,Ts,'Tustin');
+% Low pass filtering the attitude from acceleration and magnetometer
+att_noise_filtered=zeros(3,n_samples);
+for i=1:1:(n_samples-1)
+    att_noise_filtered(:,i+1)=0.6*att_noise_filtered(:,i)+0.2*att_noise(:,i+1)+0.2*att_noise(:,i);
+end
+% High pass filtering the attitude from gyro and integration
+att_gyro_filtered=zeros(3,n_samples);
+for i=1:1:(n_samples-2)
+    att_gyro_filtered(:,i+2)=1.6*att_gyro_filtered(:,i+1)-0.6*att_gyro_filtered(:,i)...
+        +0.02*attdot_noise(:,i+2)-0.02*attdot_noise(:,i);
+end
+
+final_att=att_gyro_filtered+att_noise_filtered;
+
+% Yaw
+figure
+hold on
+%plot(att.Time,att_data(3,:))
+plot(att.Time,final_att(3,:))
+plot(att.Time,x_kal(3,:))
+plot(att.Time,att_data(3,:))
+FigureLatex('$\psi$','Time [s]','Angular Position [rad]',1,{'Estimation', 'Real'},0,0,0,12,14,1.2)

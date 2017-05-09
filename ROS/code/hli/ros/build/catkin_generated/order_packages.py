@@ -1,5 +1,5 @@
 # generated from catkin/cmake/template/order_packages.context.py.in
-source_root_dir = "/home/aauship/aauship-formation/code/hli/ros/src"
+source_root_dir = "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src"
 whitelisted_packages = "".split(';') if "" != "" else []
 blacklisted_packages = "".split(';') if "" != "" else []
-underlay_workspaces = "/home/aauship/aauship-formation/code/hli/ros/devel;/opt/ros/indigo".split(';') if "/home/aauship/aauship-formation/code/hli/ros/devel;/opt/ros/indigo" != "" else []
+underlay_workspaces = "/opt/ros/indigo".split(';') if "/opt/ros/indigo" != "" else []

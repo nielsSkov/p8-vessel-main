@@ -6,7 +6,7 @@ import roslib; roslib.load_manifest('aauship_control')
 
 import rospy
 from std_msgs.msg import String
-from aauship.msg import *
+from aauship_control.msg import *
 
 import serial
 import struct
@@ -25,13 +25,13 @@ class LLI(object):
         # write data to serial
         tmp = []
         tmp = struct.pack('>h', data.Data )
-        print tmp
+        # print tmp
 
         #if data.DevID == 10: # Actuators Uncoment below if you want to record the data
             #self.ctllog.write(str(data.MsgID) + ',' + str(data.Data) + ',' + str(time.time()) + "\r\n")
 
         self.packet.lli_send(self.packet.package(tmp,data.DevID,data.MsgID))
-        print("packet sent")
+        # print("packet sent")
 
     def run(self):
         self.qu = Queue.Queue()
@@ -54,6 +54,7 @@ class LLI(object):
         pub = rospy.Publisher('samples', Faps, queue_size=10)
         sub = rospy.Subscriber('lli_input', LLIinput, self.callback)
         rospy.init_node('lli')
+        print ("######LLI NODE RUNNING######")
         r = rospy.Rate(100) # Rate in Hz, maybe try a faster rate than
         # 100 to fix the buffering issue
 

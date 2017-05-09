@@ -16,8 +16,8 @@ SET(CMAKE_TARGET_LINKED_INFO_FILES
 
 # The include file search paths:
 SET(CMAKE_C_TARGET_INCLUDE_PATH
-  "/home/aauship/aauship-formation/code/hli/ros/devel/include"
-  "/home/aauship/aauship-formation/code/hli/ros/src/aauship/include"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel/include"
+  "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/include"
   "/opt/ros/indigo/include"
   )
 SET(CMAKE_CXX_TARGET_INCLUDE_PATH ${CMAKE_C_TARGET_INCLUDE_PATH})

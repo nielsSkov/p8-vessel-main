@@ -62,7 +62,7 @@ class packetParser():
         self.accconst = 0.003333333333333
         self.gyroconst = 0.05*pi/180
 
-        #self.pub_bm = rospy.Publisher('bm', BatteryMonitor, queue_size=1)
+        self.pub_bm = rospy.Publisher('bm', BatteryMonitor, queue_size=1)
         self.pub_gps = rospy.Publisher('gps1', GPS, queue_size=1)
 
         self.gpsmsg = GPS()
@@ -101,22 +101,19 @@ class packetParser():
                     self.bank2[1] = self.bank2[1]+130.67
                     self.bank2[2] = self.bank2[2]+143.67
                     self.bank2[3] = self.bank2[3]+111.33
+					
+					# if min(self.bank1) < 3600.0:
+                        # self.bank1 = [3600.0, 3600.0, 3600.0, 3600.0]
 
+                    # if min(self.bank2) < 3600.0:
+                        # self.bank2 = [3600.0, 3600.0, 3600.0, 3600.0]
 
+                    # if max(self.bank1) > 4200.0:
+                        # self.bank1 = [4200.0, 4200.0, 4200.0, 4200.0]
 
-                    '''
-                    if min(self.bank1) < 3600.0:
-                        self.bank1 = [3600.0, 3600.0, 3600.0, 3600.0]
-
-                    if min(self.bank2) < 3600.0:
-                        self.bank2 = [3600.0, 3600.0, 3600.0, 3600.0]
-
-                    if max(self.bank1) > 4200.0:
-                        self.bank1 = [4200.0, 4200.0, 4200.0, 4200.0]
-
-                    if max(self.bank2) > 4200.0:
-                        self.bank2 = [4200.0, 4200.0, 4200.0, 4200.0]
-                    '''
+                    # if max(self.bank2) > 4200.0:
+                        # self.bank2 = [4200.0, 4200.0, 4200.0, 4200.0]
+                    
                     if not rospy.is_shutdown():
                         self.pub_bm.publish(self.bank1,self.bank2)
 
@@ -272,7 +269,7 @@ class packetParser():
 
                     #print str("".join(packet['Data']))
                     content = "".join(packet['Data']).split(',')
-                    print(content)
+                    # print(content)
 
                     if content[0] == "$GPGGA":
                         # The GPGGA packet contain the following information:
@@ -292,7 +289,7 @@ class packetParser():
                         # [13] DGPS stuff, ignore
                         # [14] DGPS stuff, ignore
                         # [15] Checksum
-                        print("GGA")
+                        # print("GGA")
                         if content[11] == '':
                             print('GGA parsing, no fix')
                         else:
@@ -305,7 +302,7 @@ class packetParser():
 
                     if content[0] == "$GPRMC" and content[2] == 'A':
                         #print ",".join("".join(packet['Data']).split(',')[1:8])
-                        print("RMC")
+                        # print("RMC")
                         # The GPRMC packet contain the following information:
                         # [0] Message type ($GPRMC)
                         # [1] Timestamp
@@ -321,7 +318,7 @@ class packetParser():
                         # [11] Magnetic variation direction [not existant on this cheap GPS]
 
                         if content[2] == 'A' :
-                            print("Wee, we have a valid $GPRMC fix")
+                            # print("Wee, we have a valid $GPRMC fix")
 							## Uncomment below if you log the data
                             #self.gpslog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
                             #self.fulllog.write(",".join(content) + ", " + str(time.time()) + "\r\n")
@@ -331,7 +328,7 @@ class packetParser():
                             
                             # Caculate decimal degrees
                             [latdec, londec] = (gpsfunctions.nmea2decimal(float(content[3]),content[4],float(content[5]),content[6]))
-                            print(latdec,londec)
+                            # print(latdec,londec)
                             latdec = latdec*pi/180
                             londec = londec*pi/180
 
@@ -376,6 +373,6 @@ class packetParser():
                 print "gfoo"
         except Exception as e:
             self.excount += 1
-            print " "+ str(self.excount)
-            print e
+            # print " "+ str(self.excount)
+            # print e
 

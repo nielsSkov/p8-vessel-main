@@ -6,33 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/aauship/aauship-formation/code/hli/ros/devel/include/aauship/ADIS16405.h
-string
--
-vector
--
-map
--
-ros/types.h
--
-ros/serialization.h
--
-ros/builtin_message_traits.h
--
-ros/message_operations.h
--
+/home/aauship/p8-vessel-main/ROS/code/hli/ros/devel/include/aauship/ADIS16405.h
 
-/home/aauship/aauship-formation/code/hli/ros/src/aauship/include/aauship/MadgwickAHRS.h
+/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/include/aauship/MadgwickAHRS.h
 
-/home/aauship/aauship-formation/code/hli/ros/src/aauship/include/aauship/MahonyAHRS.h
+/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/include/aauship/MahonyAHRS.h
 
-/home/aauship/aauship-formation/code/hli/ros/src/aauship/src/ahrs-madgwick-node.cpp
+/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/src/ahrs-madgwick-node.cpp
 ros/ros.h
-/home/aauship/aauship-formation/code/hli/ros/src/aauship/src/ros/ros.h
+/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/src/ros/ros.h
 aauship/ADIS16405.h
-/home/aauship/aauship-formation/code/hli/ros/src/aauship/src/aauship/ADIS16405.h
+/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/src/aauship/ADIS16405.h
 geometry_msgs/Quaternion.h
-/home/aauship/aauship-formation/code/hli/ros/src/aauship/src/geometry_msgs/Quaternion.h
+/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/aauship/src/geometry_msgs/Quaternion.h
 tf/transform_broadcaster.h
 -
 visualization_msgs/Marker.h
@@ -357,6 +343,8 @@ ros/macros.h
 -
 map
 -
+vector
+-
 log4cxx/level.h
 /opt/ros/indigo/include/ros/log4cxx/level.h
 rosconsole/macros_generated.h
@@ -412,6 +400,8 @@ set
 list
 -
 boost/shared_ptr.hpp
+-
+boost/make_shared.hpp
 -
 boost/weak_ptr.hpp
 -
@@ -485,6 +475,8 @@ boost/make_shared.hpp
 -
 
 /opt/ros/indigo/include/ros/message_forward.h
+cstddef
+-
 memory
 -
 
@@ -1129,10 +1121,14 @@ tf2/exceptions.h
 -
 geometry_msgs/TransformStamped.h
 -
+tf2/impl/convert.h
+-
 
 /opt/ros/indigo/include/tf2/exceptions.h
 stdexcept
 -
+
+/opt/ros/indigo/include/tf2/impl/convert.h
 
 /opt/ros/indigo/include/tf2/transform_datatypes.h
 string

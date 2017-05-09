@@ -1,8 +1,8 @@
-# Install script for directory: /home/aauship/aauship-formation/code/hli/ros/src/rqt_mypkg
+# Install script for directory: /home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_mypkg
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "/home/aauship/aauship-formation/code/hli/ros/install")
+  SET(CMAKE_INSTALL_PREFIX "/home/aauship/p8-vessel-main/ROS/code/hli/ros/install")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,29 +33,29 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/build/rqt_mypkg/catkin_generated/installspace/rqt_mypkg.pc")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_mypkg/catkin_generated/installspace/rqt_mypkg.pc")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_mypkg/cmake" TYPE FILE FILES
-    "/home/aauship/aauship-formation/code/hli/ros/build/rqt_mypkg/catkin_generated/installspace/rqt_mypkgConfig.cmake"
-    "/home/aauship/aauship-formation/code/hli/ros/build/rqt_mypkg/catkin_generated/installspace/rqt_mypkgConfig-version.cmake"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_mypkg/catkin_generated/installspace/rqt_mypkgConfig.cmake"
+    "/home/aauship/p8-vessel-main/ROS/code/hli/ros/build/rqt_mypkg/catkin_generated/installspace/rqt_mypkgConfig-version.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_mypkg" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_mypkg/package.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_mypkg" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_mypkg/package.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_mypkg" TYPE FILE FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_mypkg/plugin.xml")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_mypkg" TYPE FILE FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_mypkg/plugin.xml")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_mypkg" TYPE DIRECTORY FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_mypkg/resource")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rqt_mypkg" TYPE DIRECTORY FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_mypkg/resource")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rqt_mypkg" TYPE PROGRAM FILES "/home/aauship/aauship-formation/code/hli/ros/src/rqt_mypkg/scripts/rqt_mypkg")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rqt_mypkg" TYPE PROGRAM FILES "/home/aauship/p8-vessel-main/ROS/code/hli/ros/src/rqt_mypkg/scripts/rqt_mypkg")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

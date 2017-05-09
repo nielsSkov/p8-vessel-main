@@ -2,16 +2,16 @@
 clear
 close all
 clc
-robot = RobotStudioConnector('172.26.115.198',1024);  %This creates a 
+robot = RobotStudioConnector('172.26.51.49',1024);  %This creates a 
             % RobotStudioConnector object while connecting to the server
 robot.getPosition
 %%
 MoveHome(robot);
 
-final_poses=[170,600,50,0;
-    10,600,50,0;
-    60,600,50,0;
-    110,600,50,0;   
+final_poses=[30,600,50,0;
+    80,600,50,0;
+    130,600,50,0; 
+    180,600,50,0;
     230,600,50,0];
 
 Homer=1;

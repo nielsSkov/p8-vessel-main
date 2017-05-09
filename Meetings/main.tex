@@ -8,42 +8,33 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor meeting\\ \small Wednesday, 29th of March 2017}
+\section*{Supervisor Meeting\\ \small Friday, 05th of May 2017}
 
-\subsection{Use Case}
+\subsection{Status}
 \begin{itemize}
-    \item We could design to measure the effect of shifting sands between Aalborg and the sea. Then the measurements can be done more frequently.
-    \item Design for multibeam sonar (same as they use in Aalborg port). The one that is placed currently on the boat is not designed for mapping, just for helping in the navigation.
-    \item The aim is to show that with the navigation and the control it is possible to perform the operation successfully.
-    \item Trajectories will depend on the cone of the sonar and on the mean depth.
-    \item We could include one page about the sonar and which considerations we need to take into account in the design process.
+    \item Boat up and running again.
+    \item We can move the boat remotely through the internet.     
+\end{itemize}
+\subsection{Robust Section Comments}
+\begin{itemize}
+	\item Remember to put the references in the form of numbers.
+    \item Paragraph in page 28 is repeated.
+    \item Monte Carlo simulations with disturbances and parameters variations could be a good idea to test the controllers. Run several step responses and check the behavior.
+    \item Do the same simulations with the LQR and compare them.
+    \item Check the inputs in both because they are also in the performance function.
+    \item Maybe the LQR requires less energy and worse response but both fulfill their requirements.
+\end{itemize}	
+\subsection{Waypoint Section Comments}
+\begin{itemize}
+    \item The path is done by using straight lines between points, but we do not need to hit the points.
+    \item It is a mixture between waypoints and path following, so explain the whole approach better.
+    \item The path outside the area is not important.
+    \item Show that the algorithm will always converge to the path mathematically.
+    \item Prove or justify that the convergence of the distance to the path goes to 0.
+    \item We could also prove that with constant disturbance there will be a constant offset.
+    \item Plot of how much are we deviating from the line (the distance) and how it goes to 0.
 \end{itemize}
 
-\subsection{Requirements}
-\begin{itemize}
-    \item 10cm precision in position should be fine, that is what we aim for. 
-    \item With a mapping operation the minimum is 30cm, but if you have 10cm you can also monitor parameters in the water.
-\end{itemize}
-
-\subsection{Feedback on Reading Material}
-\begin{itemize}
-    \item Explain the meaning of $x_\mathrm{max}$ and $u_\mathrm{max}$, clarify particularly the values chosen.
-    \item Remember to include plots of the performance of the control design.    
-    \item In the outer loop we should also analyze stability, convergence and time characteristics.
-    \item We should explain what disturbances we consider in the design and which ones are put just to check the controller performance.
-    \item There is a range and a frequency span where the wind and wave disturbances are placed and we can use that to design a robust controller.
-    \item For simulation, we could do different simulations with forces coming from different directions and magnitudes and get a probability distribution of how well we follow the path.  
-\end{itemize}
-
-\subsection{Miscellaneous}
-\begin{itemize}
-    \item The controller code has been tested with a  node that simulates the behavior of the plant.
-    \item Check the base station for the RTK GPS, Mathias on 6th semester is working with that one. Jesper will find it out.
-    \item If we need some help with the hardware or implementation we can talk to Jesper and he will contact Nick.
-    \item Maybe prepare the system so we can ask the professor when we have the lectures about robust control.
-\end{itemize}
-
-\subsection{Next Supervisor Meeting}
-Wednesday, 5th of April at 13:00
-
+\subsection{Next Meeting}
+Friday, 11th of May at 13:00
 \end{document}
