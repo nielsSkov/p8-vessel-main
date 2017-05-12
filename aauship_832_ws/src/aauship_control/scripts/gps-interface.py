@@ -33,33 +33,33 @@ class SerialReader(Thread):
         global ser
         global NMEA_MSG
         while not rospy.is_shutdown(): 
-          NMEA_MSG = ser.readline()
-          # print NMEA_MSG
-          gpsfix = 0;
-          if len(NMEA_MSG)>0:
-              if NMEA_MSG.startswith('$GPGGA'):
-                  if gpsfix == 0:
-                    print "GPS FIX"
-                  gpsfix = 1
-                  self.pub_msg.timestamp= NMEA_MSG[7:16]
-                  lat_start = 17
-                  # Lattitude
-                  lat_deg = float(NMEA_MSG[lat_start:lat_start+2])
-                  lat_min = float(NMEA_MSG[lat_start+2:lat_start+12])
-                  lat_deg = lat_deg+(lat_min/60)
-                  # Longitude 
-                  log_start = 32
-                  log_deg = float(NMEA_MSG[log_start:log_start+3])
-                  log_min = float(NMEA_MSG[log_start+3:log_start+12])
-                  log_deg = log_deg+(log_min/60)
-                  [self.pub_msg.delx,self.pub_msg.dely] = self.compute_distance(lat_deg,log_deg)
-                  self.pub_msg.longitude = log_deg
-                  self.pub_msg.latitude = lat_deg
-                  self.gps_pub.publish(self.pub_msg)
-                else:
-                  if gpsfix == 1:
-                    print "No GPS"
-                  gpsfix = 0
+        	NMEA_MSG = ser.readline()
+          	# print NMEA_MSG
+          	gpsfix = 0;
+          	if len(NMEA_MSG)>0:
+              		if NMEA_MSG.startswith('$GPGGA'):
+                  		if gpsfix == 0:
+                    			print "GPS FIX"
+                    			gpsfix = 1
+	                    		self.pub_msg.timestamp= NMEA_MSG[7:16]
+	                    		lat_start = 17
+	                    		# Lattitude
+	                    		lat_deg = float(NMEA_MSG[lat_start:lat_start+2])
+	                    		lat_min = float(NMEA_MSG[lat_start+2:lat_start+12])
+	                    		lat_deg = lat_deg+(lat_min/60)
+	                    		# Longitude 
+	                    		log_start = 32
+	                    		log_deg = float(NMEA_MSG[log_start:log_start+3])
+	                    		log_min = float(NMEA_MSG[log_start+3:log_start+12])
+	                    		log_deg = log_deg+(log_min/60)
+	                    		[self.pub_msg.delx,self.pub_msg.dely] = self.compute_distance(lat_deg,log_deg)
+	                    		self.pub_msg.longitude = log_deg
+	                    		self.pub_msg.latitude = lat_deg
+	                    		self.gps_pub.publish(self.pub_msg)
+               			else:
+                  		    	if gpsfix == 1:
+                    				print "No GPS"
+                             			gpsfix = 0
               # else:
               #     self.pub_msg.timestamp = "0"
               #     self.pub_msg.delx = 0

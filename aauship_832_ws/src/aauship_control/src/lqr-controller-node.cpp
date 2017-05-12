@@ -20,25 +20,27 @@
 #define CONTROLLER_OUTPUT true        //For debugging
 
 //State Feedback values
-#define f11  5.1053*1e3
-#define f12  0.2773*1e3
-#define f13  0.2595*1e3
-#define f21  -5.1053*1e3
-#define f22  -0.2773*1e3
-#define f23  0.2595*1e3
+#define f11  0.01*2.2317*1e3
+#define f12  0.01*1.5105*1e3
+#define f13  0.01*1.0008*1e3
+#define f21  0.01*-2.2317*1e3
+#define f22  0.01*-1.5105*1e3
+#define f23  0.01*1.0008*1e3
 //Integral Feedback values
-#define fi11 -1.5833*1e3
-#define fi12 -0.1303*1e3
-#define fi21  1.5833*1e3
-#define fi22 -0.1303*1e3
+#define fi11 0.01*-1.1510*1e3
+#define fi12 0.01*-0.4223*1e3
+#define fi21 0.01*1.1510*1e3
+#define fi22 0.01*-0.4223*1e3
 //Define Dimensions
 #define Fn 2
 #define Fm 3
 
 //Define values for first order curve
 // to fit Force vs PWM
-#define m 0.26565
-#define c 24.835
+#define MPOS 6.6044//0.26565
+#define NPOS 70.0168//24.835
+#define MNEG 8.5706//0.26565
+#define NNEG 91.9358//24.835
 
 float r[Fn] = {0,0};
 float x[Fm] = {0,0,0};
@@ -63,13 +65,13 @@ void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
 
 void pos_callback(const aauship_control::PositionStates::ConstPtr& pos_msg)
 {
-  x[2] = pos_msg->xbd;
+  //x[2] = pos_msg->xbd;
 }
 
 void ref_callback(const aauship_control::Ref::ConstPtr& Ref)
 {
-  r[0] = Ref->yaw;
-  r[1] = Ref->speed;
+  //r[0] = Ref->yaw;
+  //r[1] = Ref->speed;
 }
 
 //Other functions
@@ -120,14 +122,21 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
 int16_t force2PWM(float u)
 {
   //std::cout<<"u: "<<u<<std::endl;
-  int pwm = (u+c)/m;
+	int pwm = 0;
+	if (u > 0)
+  		pwm = MPOS * u + NPOS;
+  	else
+  		pwm = MNEG * u - NNEG;
   //return pwm;     //only for model-node
   //std::cout<<"PWM: "<<pwm<<std::endl;
 
   /////////// USED TO SEND PWM TO BOAT\\\\\\\\
   /////////// NOT FOR TESTING WITH MODEL NODE\\\\\\\\\\
 
-  if (pwm < 70)
+
+  if (pwm > 150) pwm=150;
+  if (pwm < -150) pwm=-150;
+  if (pwm < 70 && pwm > -70)
   {
     return 0;
   }
@@ -198,15 +207,15 @@ int main(int argc, char **argv)
     for (int i = 0; i < Fn; i++)
     {
       u[i] = -(u_state[i] + u_integral[i]);
-      if (u[i]<0)
+      if (u[i]<-20)
       {
-        u[i] = 0;
+        u[i] = -20;
       }
       else if (u[i]>40)
       {
         u[i] = 40;
       }
-      //std::cout<<"F["<<i<<"]: "<<u[i]<<std::endl;
+      std::cout<<"F["<<i<<"]: "<<u[i]<<std::endl;
     }
     if(PRINT_DELTA_TIME && counter%100 == 0){
       //std::cout<<"Time Delta: "<<delta_t<<"\n";

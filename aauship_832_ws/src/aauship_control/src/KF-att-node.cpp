@@ -33,12 +33,12 @@
 #define L1 0.05
 #define L2 0.05
 //State variances
-#define SIGMA2_ROLL 0.0025
-#define SIGMA2_PITCH 0.0025
-#define SIGMA2_YAW 0.0025
-#define SIGMA2_ROLLD 0.005
-#define SIGMA2_PITCHD 0.005
-#define SIGMA2_YAWD 0.005
+#define SIGMA2_ROLL 0.1
+#define SIGMA2_PITCH 0.1
+#define SIGMA2_YAW 0.1
+#define SIGMA2_ROLLD 0.1
+#define SIGMA2_PITCHD 0.1
+#define SIGMA2_YAWD 0.1
 #define SIGMA2_ROLLDD 0.001
 #define SIGMA2_PITCHDD 0.001
 #define SIGMA2_YAWDD 0.001
@@ -46,17 +46,19 @@
 #define SIGMA2_ACCROLL 0.00001165
 #define SIGMA2_ACCPITCH 0.00002264
 #define SIGMA2_MAGYAW 0.00779021
-#define SIGMA2_GYROX 0.01033425
-#define SIGMA2_GYROY 3.98414543
-#define SIGMA2_GYROZ 0.03143791
+#define SIGMA2_GYROX 0.01033425*5
+#define SIGMA2_GYROY 3.98414543*5
+#define SIGMA2_GYROZ 0.03143791*5
 //Gyro biases
-#define BIAS_GYROX 0.03753197
-#define BIAS_GYROY 4.49556388
-#define BIAS_GYROZ 0.16183876
+#define BIAS_GYROX -5.55//0.03753197
+#define BIAS_GYROY 16.1114//4.49556388
+#define BIAS_GYROZ -4.9//0.16183876
 
 //Values for first order curve to fit Force vs PWM
-#define M 0.26565
-#define N 24.835
+#define MPOS 6.6044//0.26565
+#define NPOS 70.0168//24.835
+#define MNEG 8.5706//0.26565
+#define NNEG 91.9358//24.835
 
 
 //Global variables
@@ -74,7 +76,7 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 
 	//Calculate roll and pitch from the accelerometer measurements
 	//Roll = atan(yacc / sqrt(xacc^2 + zacc^2)) and pitch = atan(xacc / sqrt(yacc^2 + zacc^2))
-	meas[0] = atan2((imu_msg->yaccl),sqrt((imu_msg->xaccl)*(imu_msg->xaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));	 
+	meas[0] = -atan2((imu_msg->yaccl),sqrt((imu_msg->xaccl)*(imu_msg->xaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));	 
 	meas[1] = -atan2((imu_msg->xaccl),sqrt((imu_msg->yaccl)*(imu_msg->yaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));
 
 	//Calculate yaw using the megnetometer data
@@ -90,20 +92,30 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 	  	else
 	  	  	meas[2] = tempyaw - 2 * M_PI;
 	}
+	else
+		meas[2] = tempyaw;
 
 	//Store the gyro measurements
-	meas[3] = imu_msg->xgyro + BIAS_GYROX;	//Negative bias
-	meas[4] = -imu_msg->ygyro - BIAS_GYROY;	//Positive bias
-	meas[5] = -imu_msg->zgyro + BIAS_GYROZ;	//Negative bias
+	meas[3] = imu_msg->xgyro - BIAS_GYROX;
+	meas[4] = -(imu_msg->ygyro - BIAS_GYROY);
+	meas[5] = -(imu_msg->zgyro - BIAS_GYROZ);
 }
 
 void lli_callback(const aauship_control::LLIinput::ConstPtr& lli_msg)
 {
 	//Calculate forces as M * PWM - N
-	if (lli_msg->DevID == 10 && lli_msg->MsgID == 5)
-		inputs[0] = M * lli_msg->Data - N;
-	if (lli_msg->DevID == 10 && lli_msg->MsgID == 3)
-		inputs[1] = M * lli_msg->Data - N;
+	if (lli_msg->DevID == 10 && lli_msg->MsgID == 5){
+		if (lli_msg->Data >= 0)
+			inputs[0] = (lli_msg->Data - NPOS) / MPOS;
+		else
+			inputs[0] = (lli_msg->Data + NNEG) / MNEG;
+	}
+	if (lli_msg->DevID == 10 && lli_msg->MsgID == 3){
+		if (lli_msg->Data >= 0)
+			inputs[0] = (lli_msg->Data - NPOS) / MPOS;
+		else
+			inputs[0] = (lli_msg->Data + NNEG) / MNEG;
+	}
 }
 
 
