@@ -8,33 +8,33 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor Meeting\\ \small Friday, 28th of April 2017}
+\section*{Supervisor Meeting\\ \small Friday, 05th of May 2017}
 
 \subsection{Status}
 \begin{itemize}
-    \item The boat was in the water
-    \item A fishing rod is a good idea
-    \item The gps gives a better result
-    \item 
+    \item Boat up and running again.
+    \item We can move the boat remotely through the internet.     
 \end{itemize}
-\subsection{Live Test}
+\subsection{Robust Section Comments}
 \begin{itemize}
-	\item We got some data that we are to process.
+	\item Remember to put the references in the form of numbers.
+    \item Paragraph in page 28 is repeated.
+    \item Monte Carlo simulations with disturbances and parameters variations could be a good idea to test the controllers. Run several step responses and check the behavior.
+    \item Do the same simulations with the LQR and compare them.
+    \item Check the inputs in both because they are also in the performance function.
+    \item Maybe the LQR requires less energy and worse response but both fulfill their requirements.
 \end{itemize}	
-\subsection{GPS status}
+\subsection{Waypoint Section Comments}
 \begin{itemize}
-    \item Works well
-\end{itemize}
-\begin{itemize}
-	\item We could estimate how good the system by ignoring the GPS and comparting something with something.  
-\end{itemize}
-\subsection{Miscellaneous}
-\begin{itemize}
-	\item We need a connector
-	\item We could try to send part of it
-	\item Available times are Thursday Wednesday and Friday at 13:00
+    \item The path is done by using straight lines between points, but we do not need to hit the points.
+    \item It is a mixture between waypoints and path following, so explain the whole approach better.
+    \item The path outside the area is not important.
+    \item Show that the algorithm will always converge to the path mathematically.
+    \item Prove or justify that the convergence of the distance to the path goes to 0.
+    \item We could also prove that with constant disturbance there will be a constant offset.
+    \item Plot of how much are we deviating from the line (the distance) and how it goes to 0.
 \end{itemize}
 
 \subsection{Next Meeting}
-Friday, 26th of April at 13:00
+Friday, 11th of May at 13:00
 \end{document}

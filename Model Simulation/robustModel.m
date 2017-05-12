@@ -170,4 +170,4 @@ F  = -info.KFI(1:2,1:3);
 FI = -info.KFI(1:2,4:5);
 Fd = -info.KFI(1:2,6:7);
 sigma(g,ss(gfin))
-sim InnerController.slx
+%sim InnerController.slx
