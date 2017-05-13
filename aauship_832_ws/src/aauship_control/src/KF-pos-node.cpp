@@ -23,9 +23,12 @@
 #define N_INPUTS 2
 #define N_MEAS 4
 #define TS 0.05
+#define G 9.81
 //Values for first order curve to fit Force vs PWM
-#define M 0.26565
-#define N 24.835
+#define MPOS 6.6044//0.26565
+#define NPOS 70.0168//24.835
+#define MNEG 8.5706//0.26565
+#define NNEG 91.9358//24.835
 //System constants
 #define MX 13
 #define MY 13
@@ -35,17 +38,17 @@
 #define IY 2.3
 
 //State variances
-#define SIGMA2_XN 1
-#define SIGMA2_YN 1
-#define SIGMA2_XBDOT 1
-#define SIGMA2_YBDOT 1
-#define SIGMA2_XBDDOT 1
-#define SIGMA2_YBDDOT 1
+#define SIGMA2_XN 0.1
+#define SIGMA2_YN 0.1
+#define SIGMA2_XBDOT 0.1
+#define SIGMA2_YBDOT 0.1
+#define SIGMA2_XBDDOT 0.1
+#define SIGMA2_YBDDOT 0.1
 //Measurements variances
-#define SIGMA2_GPSXN 1
-#define SIGMA2_GPSYN 1
-#define SIGMA2_ACCXBDDOT 0.00050346
-#define SIGMA2_ACCYBDDOT 0.00057036
+#define SIGMA2_GPSXN 0.01
+#define SIGMA2_GPSYN 0.01
+#define SIGMA2_ACCXBDDOT 0.050346
+#define SIGMA2_ACCYBDDOT 0.057036
 
 //Global variables
 float meas[N_MEAS] = {0,0,0,0};
@@ -64,9 +67,11 @@ void gps_callback(const aauship_control::RTKGPS::ConstPtr& gps_msg)
 
 void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
-	//Store the accelerometr data in xb and yb
-	meas[2] = -imu_msg->xaccl;
-	meas[3] = -imu_msg->yaccl;
+	//Store the accelerometr data in xb and yb, correct the gravity component
+	meas[2] = -(imu_msg->xaccl - G * (-sin(att[1])));
+	meas[3] = -(-imu_msg->yaccl - G * (sin(att[0]) * cos(att[1])));
+	//std::cout<<"Raw"<<imu_msg->xaccl<<","<<-imu_msg->yaccl<<std::endl;
+	//std::cout<<"Corrected"<<meas[2]<<","<<meas[3]<<std::endl;
 }
 
 void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
@@ -80,10 +85,18 @@ void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
 void lli_callback(const aauship_control::LLIinput::ConstPtr& lli_msg)
 {
 	//Calculate forces as M * PWM - N
-	if (lli_msg->DevID == 10 && lli_msg->MsgID == 5)
-		inputs[0] = M * lli_msg->Data - N;
-	if (lli_msg->DevID == 10 && lli_msg->MsgID == 3)
-		inputs[1] = M * lli_msg->Data - N;
+	if (lli_msg->DevID == 10 && lli_msg->MsgID == 5){
+		if (lli_msg->Data >= 0)
+			inputs[0] = (lli_msg->Data - NPOS) / MPOS;
+		else
+			inputs[0] = (lli_msg->Data + NNEG) / MNEG;
+	}
+	if (lli_msg->DevID == 10 && lli_msg->MsgID == 3){
+		if (lli_msg->Data >= 0)
+			inputs[0] = (lli_msg->Data - NPOS) / MPOS;
+		else
+			inputs[0] = (lli_msg->Data + NNEG) / MNEG;
+	}
 }
 
 
@@ -142,6 +155,7 @@ int main(int argc, char **argv)
 	gsl_matrix * TEMP_4x6 = gsl_matrix_alloc(N_MEAS,N_STATES);
 	gsl_matrix * TEMP_6x4 = gsl_matrix_alloc(N_STATES,N_MEAS);
 	gsl_matrix * TEMP_4x4 = gsl_matrix_alloc(N_MEAS,N_MEAS);
+	gsl_matrix * TEMP2_4x4 = gsl_matrix_alloc(N_MEAS,N_MEAS);
 	//Identity matrix
 	gsl_matrix * I_6x6 = gsl_matrix_alloc(N_STATES,N_STATES);
 	gsl_matrix_set_identity(I_6x6);  
@@ -244,9 +258,15 @@ int main(int argc, char **argv)
 		//Calculate K as P*C'/(C*P*C'+R)
 		matrix_multiplication(C,P,TEMP_4x6);
 		matrix_multiplication(TEMP_4x6,Ctrans,TEMP_4x4);
-		gsl_matrix_add (TEMP_4x4,R);
+		gsl_matrix_add (TEMP_4x4,R);	
+		// std::cout<<gsl_matrix_get(TEMP_4x4,0,0)<<" "<<gsl_matrix_get(TEMP_4x4,0,1)<<" "<<gsl_matrix_get(TEMP_4x4,0,2)<<" "<<gsl_matrix_get(TEMP_4x4,0,3)<<std::endl;
+		// std::cout<<gsl_matrix_get(TEMP_4x4,1,0)<<" "<<gsl_matrix_get(TEMP_4x4,1,1)<<" "<<gsl_matrix_get(TEMP_4x4,1,2)<<" "<<gsl_matrix_get(TEMP_4x4,1,3)<<std::endl;
+		// std::cout<<gsl_matrix_get(TEMP_4x4,2,0)<<" "<<gsl_matrix_get(TEMP_4x4,2,1)<<" "<<gsl_matrix_get(TEMP_4x4,2,2)<<" "<<gsl_matrix_get(TEMP_4x4,2,3)<<std::endl;
+		// std::cout<<gsl_matrix_get(TEMP_4x4,3,0)<<" "<<gsl_matrix_get(TEMP_4x4,3,1)<<" "<<gsl_matrix_get(TEMP_4x4,3,2)<<" "<<gsl_matrix_get(TEMP_4x4,3,3)<<std::endl;
+		// std::cout<<"---------------------------------"<<std::endl;
 		gsl_linalg_cholesky_decomp(TEMP_4x4);
 		gsl_linalg_cholesky_invert (TEMP_4x4);	
+		gsl_matrix_memcpy(TEMP2_4x4,TEMP_4x4);
 		matrix_multiplication(Ctrans,TEMP_4x4,TEMP_6x4);
 		matrix_multiplication(P,TEMP_6x4,K);
 		//Correct the states as states = states + K * (meas - C * states)
@@ -313,6 +333,7 @@ int main(int argc, char **argv)
 	gsl_matrix_free (TEMP_6x4);
 	gsl_matrix_free (TEMP_4x6);
 	gsl_matrix_free (TEMP_4x4);
+	gsl_matrix_free (TEMP2_4x4);
 	gsl_matrix_free (I_6x6);
 	return 0;
 }
