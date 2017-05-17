@@ -25,10 +25,10 @@
 #define TS 0.05
 #define G 9.81
 //Values for first order curve to fit Force vs PWM
-#define MPOS 6.6044//0.26565
-#define NPOS 70.0168//24.835
-#define MNEG 8.5706//0.26565
-#define NNEG 91.9358//24.835
+#define MPOS 6.6044  //0.26565
+#define NPOS 70.0168 //24.835
+#define MNEG 8.5706  //0.26565
+#define NNEG 91.9358 //24.835
 //System constants
 #define MX 13
 #define MY 13
@@ -47,8 +47,8 @@
 //Measurements variances
 #define SIGMA2_GPSXN 0.01
 #define SIGMA2_GPSYN 0.01
-#define SIGMA2_ACCXBDDOT 0.050346
-#define SIGMA2_ACCYBDDOT 0.057036
+#define SIGMA2_ACCXBDDOT 0.0003//0.050346
+#define SIGMA2_ACCYBDDOT 0.0003//0.057036
 
 //Global variables
 float meas[N_MEAS] = {0,0,0,0};
@@ -69,7 +69,7 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 {
 	//Store the accelerometr data in xb and yb, correct the gravity component
 	meas[2] = -(imu_msg->xaccl - G * (-sin(att[1])));
-	meas[3] = -(-imu_msg->yaccl - G * (sin(att[0]) * cos(att[1])));
+	meas[3] = -(-(imu_msg->yaccl) - G * (sin(att[0]) * cos(att[1])));
 	//std::cout<<"Raw"<<imu_msg->xaccl<<","<<-imu_msg->yaccl<<std::endl;
 	//std::cout<<"Corrected"<<meas[2]<<","<<meas[3]<<std::endl;
 }
@@ -93,9 +93,9 @@ void lli_callback(const aauship_control::LLIinput::ConstPtr& lli_msg)
 	}
 	if (lli_msg->DevID == 10 && lli_msg->MsgID == 3){
 		if (lli_msg->Data >= 0)
-			inputs[0] = (lli_msg->Data - NPOS) / MPOS;
+			inputs[1] = (lli_msg->Data - NPOS) / MPOS;
 		else
-			inputs[0] = (lli_msg->Data + NNEG) / MNEG;
+			inputs[1] = (lli_msg->Data + NNEG) / MNEG;
 	}
 }
 

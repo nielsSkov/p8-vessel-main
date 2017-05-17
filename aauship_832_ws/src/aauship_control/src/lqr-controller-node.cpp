@@ -20,17 +20,17 @@
 #define CONTROLLER_OUTPUT true        //For debugging
 
 //State Feedback values
-#define f11  0.01*2.2317*1e3
-#define f12  0.01*1.5105*1e3
-#define f13  0.01*1.0008*1e3
-#define f21  0.01*-2.2317*1e3
-#define f22  0.01*-1.5105*1e3
-#define f23  0.01*1.0008*1e3
+#define f11  2231.7//5105.3//1872.4//
+#define f12  1510.5//277.3//1511.5//
+#define f13  1000.8//259.5//1001.2//
+#define f21  -2231.7//-5105.3//-1872.4//
+#define f22  -1510.5//-277.3//-1511.5//
+#define f23  1000.8//259.5//1001.2//
 //Integral Feedback values
-#define fi11 0.01*-1.1510*1e3
-#define fi12 0.01*-0.4223*1e3
-#define fi21 0.01*1.1510*1e3
-#define fi22 0.01*-0.4223*1e3
+#define fi11 -1151.0//-1583.3//-821.4415//
+#define fi12 -422.3//-130.3//-411.5664//
+#define fi21 1151.0//1583.3//821.4415//
+#define fi22 -422.3//-130.3//-411.5664//
 //Define Dimensions
 #define Fn 2
 #define Fm 3
@@ -42,10 +42,10 @@
 #define MNEG 8.5706//0.26565
 #define NNEG 91.9358//24.835
 
-float r[Fn] = {0,0};
+float r[Fn] = {0.5,0};
 float x[Fm] = {0,0,0};
 float y[Fn] = {0,0};
-
+int sat = 0;
 
 // Callback functions
 // void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
@@ -65,7 +65,7 @@ void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
 
 void pos_callback(const aauship_control::PositionStates::ConstPtr& pos_msg)
 {
-  //x[2] = pos_msg->xbd;
+  x[2] = pos_msg->xbd;
 }
 
 void ref_callback(const aauship_control::Ref::ConstPtr& Ref)
@@ -79,10 +79,10 @@ void multiply_state_fb(float F[Fn][Fm], float x[Fm], float *u_state)
 {
   float u_tmp[Fn] = {0,0};
   //std::cout<<u_state[0]<<std::endl;
-  for(int i=0;i<Fn;i++)
+  for(int i = 0; i < Fn; i++)
   {
     u_state[i] = 0;
-    for(int j=0;j<Fm;j++)
+    for(int j = 0; j < Fm; j++)
       u_state[i] = F[i][j] * x[j] + u_state[i];
     // std::cout<<"F["<<i<<"]: "<<u_state[i]<<std::endl;
   }
@@ -99,14 +99,21 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
   for(int i=0;i<Fn;i++)
   {
     e = r[i]-y[i];
-    if (i==0)       //Correct jumps between -PI and PI
+    if (i == 0)       //Correct jumps between -PI and PI
     {
       if (e < -M_PI)
         e += 2 * M_PI;
-      if (e > M_PI)
+      else if (e > M_PI)
         e -= 2 * M_PI;
     }
-    x_int[i] = (1/CONTROLLER_RATE)*e+x_int[i];
+
+    // Anti wind up
+    if (sat)
+    {
+    	e = 0;
+    }
+
+    x_int[i] = (1/CONTROLLER_RATE)*e + x_int[i];
   }
 
   for(int i=0;i<Fn;i++)
@@ -127,23 +134,26 @@ int16_t force2PWM(float u)
   		pwm = MPOS * u + NPOS;
   	else
   		pwm = MNEG * u - NNEG;
-  //return pwm;     //only for model-node
-  //std::cout<<"PWM: "<<pwm<<std::endl;
 
-  /////////// USED TO SEND PWM TO BOAT\\\\\\\\
-  /////////// NOT FOR TESTING WITH MODEL NODE\\\\\\\\\\
-
-
-  if (pwm > 150) pwm=150;
-  if (pwm < -150) pwm=-150;
-  if (pwm < 70 && pwm > -70)
-  {
-    return 0;
-  }
-  else
-  {
-    return pwm;
-  }
+  	sat = 0;
+  	if (pwm > 200)
+  	{
+  		sat = 1;
+  		pwm = 200;
+  	} 
+  	if (pwm < -200) 
+  	{
+  		sat = 1;
+  		pwm = -200;
+  	}
+  	if (pwm < 70 && pwm > -70)
+  	{
+  	  return 0;
+  	}
+  	else
+  	{
+  	  return pwm;
+  	}
 }
 
 int main(int argc, char **argv)
@@ -207,14 +217,14 @@ int main(int argc, char **argv)
     for (int i = 0; i < Fn; i++)
     {
       u[i] = -(u_state[i] + u_integral[i]);
-      if (u[i]<-20)
-      {
-        u[i] = -20;
-      }
-      else if (u[i]>40)
-      {
-        u[i] = 40;
-      }
+      // if (u[i]<-20)
+      // {
+      //   u[i] = -20;
+      // }
+      // else if (u[i]>40)
+      // {
+      //   u[i] = 40;
+      // }
       std::cout<<"F["<<i<<"]: "<<u[i]<<std::endl;
     }
     if(PRINT_DELTA_TIME && counter%100 == 0){
@@ -245,8 +255,3 @@ int main(int argc, char **argv)
   }
   return 0;
 }
-
-
-
-
-

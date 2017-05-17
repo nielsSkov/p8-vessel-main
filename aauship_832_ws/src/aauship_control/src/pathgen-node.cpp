@@ -198,7 +198,6 @@ void writeWPS(float wps[][2], int num_wps)
 	fs.open("waypoints.txt", std::fstream::out);
 	for(int i = 0; i< num_wps; i++)
 	{
-		//fs<<"Fuck this shit\n";
 		fs<<wps[i][0]<<","<<wps[i][1]<<std::endl;
 		//printf("%f\t%f\n", wps[i][0],wps[i][1]);
 	}

@@ -40,12 +40,19 @@ class modelSim(object):
         self.a = np.zeros([2])
         # 
         self.sub = rospy.Subscriber('lli_input', LLIinput, self.llicb,queue_size=1000)
-        self.pub = rospy.Publisher('kf_statesnew', KFStates, queue_size=1000)
-        self.pubmsg = KFStates()
+        self.pubatt = rospy.Publisher('kf_attitude', AttitudeStates, queue_size=1000)
+        self.pubpos = rospy.Publisher('kf_position', PositionStates, queue_size=1000)
+        self.pubattmsg = AttitudeStates()
+        self.pubposmsg = PositionStates()
 
         # variables to convert PWM2force
-        self.m = 0.26565
-        self.c = 24.835
+        # self.m = 0.26565
+        # self.c = 24.835
+
+        self.mpos = 6.6044 #0.26565
+        self.npos = 70.0168 #24.835
+        self.mneg = 8.5706 #0.26565
+        self.nneg = 91.9358 #24.835
 
         # Variables for the thrusters
         self.leftthruster = 0.0
@@ -75,12 +82,13 @@ class modelSim(object):
             for i in range(0,2):
             	self.pos[i] = self.Ts / 2 * self.a[i] * (self.x_old[2] + self.x[2]) + self.pos_old[i]
             # Publish
-            self.pubmsg.psi = self.x[0]
-            self.pubmsg.p = self.x[1]
-            self.pubmsg.u = self.x[2]
-            self.pubmsg.x = self.pos[0]
-            self.pubmsg.y = self.pos[1]
-            self.pub.publish(self.pubmsg)
+            self.pubattmsg.yaw = self.x[0]
+            self.pubattmsg.yawd = self.x[1]
+            self.pubposmsg.xbd = self.x[2]
+            self.pubposmsg.xn = self.pos[0]
+            self.pubposmsg.yn = self.pos[1]
+            self.pubatt.publish(self.pubattmsg)
+            self.pubpos.publish(self.pubposmsg)
             # print "XnModel", self.pos[0]
             # print "YnModel", self.pos[1]
             rate.sleep()
@@ -89,16 +97,21 @@ class modelSim(object):
     def llicb(self, data):
         # Get inputs from controller
         if data.MsgID == 3:
-            if self.rightthruster<100:
+            if float(data.Data) > 70:
+                self.rightthruster = (float(data.Data)-self.npos)/self.mpos
+            elif float(data.Data) < -70:
+                self.rightthruster = (float(data.Data)+self.nneg)/self.mneg
+            else:
                 self.rightthruster = 0
-            self.rightthruster = (float(data.Data)*self.m)-self.c
+
             # print "F2Model", self.rightthruster
-
-
         if data.MsgID == 5:
-            if self.leftthruster<100:
+            if float(data.Data) > 70:
+                self.leftthruster = (float(data.Data)-self.npos)/self.mpos
+            elif float(data.Data) < -70:
+                self.leftthruster = (float(data.Data)+self.nneg)/self.mneg
+            else:
                 self.leftthruster = 0
-            self.leftthruster = (float(data.Data)*self.m)-self.c
             # print "F1Model", self.leftthruster
         #print "Data: ", float(data.Data)
         #print "Left Thruster: ", self.leftthruster, " Right Thruster: ", self.rightthruster

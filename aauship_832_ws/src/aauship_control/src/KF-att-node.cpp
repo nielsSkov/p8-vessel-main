@@ -23,6 +23,7 @@
 #define N_INPUTS 2
 #define N_MEAS 6
 #define TS 0.05
+#define PI 3.1415926535897
 //System constants
 #define DROLL 0.1094 
 #define DPITCH 7.0203
@@ -33,26 +34,26 @@
 #define L1 0.05
 #define L2 0.05
 //State variances
-#define SIGMA2_ROLL 0.1
-#define SIGMA2_PITCH 0.1
-#define SIGMA2_YAW 0.1
-#define SIGMA2_ROLLD 0.1
-#define SIGMA2_PITCHD 0.1
-#define SIGMA2_YAWD 0.1
-#define SIGMA2_ROLLDD 0.001
-#define SIGMA2_PITCHDD 0.001
-#define SIGMA2_YAWDD 0.001
+#define SIGMA2_ROLL 10//0.1
+#define SIGMA2_PITCH 10//0.1
+#define SIGMA2_YAW 10//0.1
+#define SIGMA2_ROLLD 1//0.1
+#define SIGMA2_PITCHD 1//0.1
+#define SIGMA2_YAWD 1//0.1
+#define SIGMA2_ROLLDD 0.01//0.001
+#define SIGMA2_PITCHDD 0.01//0.001
+#define SIGMA2_YAWDD 0.01//0.001
 //Sensor variances
 #define SIGMA2_ACCROLL 0.00001165
 #define SIGMA2_ACCPITCH 0.00002264
 #define SIGMA2_MAGYAW 0.00779021
-#define SIGMA2_GYROX 0.01033425*5
-#define SIGMA2_GYROY 3.98414543*5
-#define SIGMA2_GYROZ 0.03143791*5
+#define SIGMA2_GYROX 1//0.01033425 //*5
+#define SIGMA2_GYROY 3.98414543 //*5
+#define SIGMA2_GYROZ 1//0.03143791 //*5
 //Gyro biases
-#define BIAS_GYROX -5.55//0.03753197
-#define BIAS_GYROY 16.1114//4.49556388
-#define BIAS_GYROZ -4.9//0.16183876
+#define BIAS_GYROX 0.00056//0.0322//-0.1539//-5.55//0.03753197
+#define BIAS_GYROY -0.0421//-2.4133//-10.6703//16.1114//4.49556388
+#define BIAS_GYROZ 0.0056//0.3209//-1.4551//-4.9//0.16183876
 
 //Values for first order curve to fit Force vs PWM
 #define MPOS 6.6044//0.26565
@@ -76,15 +77,15 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 
 	//Calculate roll and pitch from the accelerometer measurements
 	//Roll = atan(yacc / sqrt(xacc^2 + zacc^2)) and pitch = atan(xacc / sqrt(yacc^2 + zacc^2))
-	meas[0] = -atan2((imu_msg->yaccl),sqrt((imu_msg->xaccl)*(imu_msg->xaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));	 
-	meas[1] = -atan2((imu_msg->xaccl),sqrt((imu_msg->yaccl)*(imu_msg->yaccl)+(imu_msg->zaccl)*(imu_msg->zaccl)));
+	meas[0] = -atan2(-(imu_msg->yaccl),sqrt(((imu_msg->xaccl)*(imu_msg->xaccl))+((imu_msg->zaccl)*(imu_msg->zaccl))));	 
+	meas[1] = -atan2((imu_msg->xaccl),sqrt(((imu_msg->yaccl)*(imu_msg->yaccl))+((imu_msg->zaccl)*(imu_msg->zaccl))));
 
 	//Calculate yaw using the megnetometer data
-	magxh = (imu_msg->xmagn) * cos(states[1]) + (imu_msg->ymagn) * sin(states[0]) * sin(states[1]) + (imu_msg->zmagn) * cos(states[0]) * sin(states[1]);
-	magyh = (imu_msg->ymagn) * cos(states[0]) + (imu_msg->zmagn) * sin(states[0]);
+	magxh = ((imu_msg->xmagn) * cos(states[1])) + ((imu_msg->ymagn) * sin(states[0]) * sin(states[1])) + ((imu_msg->zmagn) * cos(states[0]) * sin(states[1]));
+	magyh = ((imu_msg->ymagn) * cos(states[0])) + ((imu_msg->zmagn) * sin(states[0]));
 	tempyaw = atan2(magyh,magxh);
 
-	//Correct jumps from -PI to PI and viceversa
+/*	//Correct jumps from -PI to PI and viceversa
 	if (((meas[2] - tempyaw) < -M_PI) || ((meas[2] - tempyaw) > M_PI))
 	{
 		if (tempyaw < 0)
@@ -92,8 +93,8 @@ void imu_callback(const aauship_control::ADIS16405::ConstPtr& imu_msg)
 	  	else
 	  	  	meas[2] = tempyaw - 2 * M_PI;
 	}
-	else
-		meas[2] = tempyaw;
+	else*/
+	meas[2] = tempyaw;
 
 	//Store the gyro measurements
 	meas[3] = imu_msg->xgyro - BIAS_GYROX;
@@ -112,9 +113,9 @@ void lli_callback(const aauship_control::LLIinput::ConstPtr& lli_msg)
 	}
 	if (lli_msg->DevID == 10 && lli_msg->MsgID == 3){
 		if (lli_msg->Data >= 0)
-			inputs[0] = (lli_msg->Data - NPOS) / MPOS;
+			inputs[1] = (lli_msg->Data - NPOS) / MPOS;
 		else
-			inputs[0] = (lli_msg->Data + NNEG) / MNEG;
+			inputs[1] = (lli_msg->Data + NNEG) / MNEG;
 	}
 }
 
@@ -266,7 +267,9 @@ int main(int argc, char **argv)
 		// std::cout<<gsl_matrix_get(P,4,4)<<" "<<gsl_matrix_get(P,5,5)<<" "<<std::endl;
 		// std::cout<<gsl_matrix_get(P,6,6)<<" "<<gsl_matrix_get(P,7,7)<<" "<<std::endl;
 		// std::cout<<gsl_matrix_get(P,8,8)<<std::endl;
-		// std::cout<<"---------------------------------"<<std::endl;
+		std::cout<<meas[0]<<" __ "<<states[0]<<std::endl;
+		std::cout<<meas[1]<<" __ "<<states[1]<<std::endl;
+		std::cout<<meas[2]<<" __ "<<states[2]<<std::endl;
 
 		//////Update step//////
 		//Calculate K as P*C'/(C*P*C'+R)
