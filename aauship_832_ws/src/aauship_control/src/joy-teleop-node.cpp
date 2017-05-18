@@ -64,7 +64,7 @@
 
 #define ON_MODE 1
 #define STOP_MODE 0
-#define SAT_UP 250
+#define SAT_UP 200
 #define SAT_DOWN 80
 #define DEBOUNCE_COUNT 20
 /**
@@ -117,14 +117,14 @@ public:
 		//If the square bottom is pressed, a high PWM is set to both motors
 		if (msg->buttons[PS3_BUTTON_ACTION_SQUARE])
 		{
-			vel_right = 200;
-			vel_left = 200;
+			vel_right = 180;
+			vel_left = 180;
 		}
 
 		//If the cross bottom is pressed, a high PWM is set to one motor and half to the other one
 		if (msg->buttons[PS3_BUTTON_ACTION_CROSS])
 		{
-			vel_right = 200;
+			vel_right = 180;
 			vel_left = 0;
 		}
 

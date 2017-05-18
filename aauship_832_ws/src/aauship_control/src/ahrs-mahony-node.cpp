@@ -39,7 +39,7 @@ public:
     /* Debug output */
     u.calculateEulerAngles();
     ROS_INFO("Euler angles: [%.3f, %.3f, %.3f]", u.getEulerAngles(0), u.getEulerAngles(1), u.getEulerAngles(2));
-
+    //std::cout<<u.getEulerAngles(2)<<" __ "<<std::endl;
     // It seems like the filter computes the attitude in ENU not in NED, so we rotate.
     tf::Quaternion v(0,0,0,1);
     v = tf::createQuaternionFromRPY(3.1514, 0, -3.1415/2);

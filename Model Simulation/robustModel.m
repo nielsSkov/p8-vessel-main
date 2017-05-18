@@ -163,7 +163,7 @@ Dh = [D11 D12;
     D21 D22];
 
 sysN = ss(Ah,Bh,Ch,Dh);
-[k,g,gfin, info] = hinfsyn(sysN,2*ny,nu,'GMIN',0,'GMAX',5,'DISPLAY','on','TOLGAM',0.01);
+[k,g,gfin, info] = hinfsyn(sysN,2*ny,nu,'GMIN',5,'GMAX',5,'DISPLAY','on','TOLGAM',0.01);
 %info.GAMFI
 
 F  = -info.KFI(1:2,1:3);

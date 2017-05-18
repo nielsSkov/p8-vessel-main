@@ -12,7 +12,8 @@ import os
 
 import fapsParse
 import numpy
-from math import atan2,sqrt,cos,sin
+from math import atan2,sqrt,cos,sin,pi
+
 
 ## This is the estimator and sensor node
 #
@@ -73,9 +74,9 @@ class Estimator(object):
         tmp = {'DevID':str(data.DevID), 'MsgID':str(data.MsgID),'Data': (data.Data)}
         self.parser.parse(tmp)
         self.imu['supply'] = numpy.asscalar(self.samples[0,0])*0.002418
-        self.imu['xgyro'] = numpy.asscalar(self.samples[1,0])*0.05
-        self.imu['ygyro'] = numpy.asscalar(self.samples[2,0])*0.05
-        self.imu['zgyro'] = numpy.asscalar(self.samples[3,0])*0.05
+        self.imu['xgyro'] = numpy.asscalar(self.samples[1,0])*0.05*pi/180.0
+        self.imu['ygyro'] = numpy.asscalar(self.samples[2,0])*0.05*pi/180.0
+        self.imu['zgyro'] = numpy.asscalar(self.samples[3,0])*0.05*pi/180.0
         self.imu['xaccl'] = numpy.asscalar(self.samples[4,0])*9.82*0.00333
         self.imu['yaccl'] = numpy.asscalar(self.samples[5,0])*9.82*0.00333
         self.imu['zaccl'] = numpy.asscalar(self.samples[6,0])*9.82*0.00333
