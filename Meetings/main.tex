@@ -8,37 +8,28 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor Meeting\\ \small Thursday, 11th of May 2017}
+\section*{Supervisor Meeting\\ \small Thursday, 18th of May 2017}
 
-\subsection{Status}
+\subsection{Part I Comments}
 \begin{itemize}
-    \item Test force.
-    \item Model verification.
-    \item Planning to hand in the 26th of May.
-\end{itemize}
-\subsection{Monte Carlo Simulations}
-\begin{itemize}
-	\item Take one sample in time and calculate the sigma value.
-    \item Plot nominal response $\pm$ sigma at each time.
-    \item Maybe a zoom on the robust plot could help to see it more clear.
-    \item A zoom on the distance could help to see the error better.
+	\item To abbreviate "for example" use "i.e.".
+    \item Diagram of system description should have processing units written, no control/computation.
+    \item Both base and rover use the same satellites in RTK mode.
+    \item The error in the verification test corresponds to the quantization in time of the measurements. If the speed was a tenth, the error will be less.
+    \item Maybe include a tail on Part I at the end of the modeling chapter.
 \end{itemize} 
-\subsection{Writing Plan}
+\subsection{Testing}
 \begin{itemize}
-    \item Part I should be done this week and Part II the next one.
-\end{itemize}
-\subsection{Requirements}
-\begin{itemize}
-    \item The position is not that important for surveillance, as long as we know where we are to process the data afterwards.
-    \item The argument could be to do it as precise as possible, just analyze the performance.
-    \item Another argument could be that the more precise the control is, the less overlap in the measurements.
-    \item For helicopter landing or streams you need to be precise in position but that is another control problem.
+    \item The tests are in process, we are trying to find and correct the errors in the implementation.
 \end{itemize}
 \subsection{Misc}
 \begin{itemize}
-    \item Just leave the RTK base there for now.
+    \item Maybe include an error plot of the step responses below each step response, with the 1-$sigma$ region as well.
+    \item Mark when the turn starts and finish in the distance plots in the outer controller.
+    \item Why the robust seems worse in the green area and with an overshoot in the outer controller? Maybe the outer needs a faster inner controller than the robust one
+    \item Bandwidth of inner and outer controllers could be a good question.
 \end{itemize}
 
 \subsection{Next Meeting}
-Thursday, 18th of May at 14:00
+Wednesday, 25th of May around 12
 \end{document}
