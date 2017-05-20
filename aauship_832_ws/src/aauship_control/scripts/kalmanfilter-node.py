@@ -183,7 +183,7 @@ class KF(object):
         self.R[1,1] = self.R_i[1,1]
         self.R[3,3] = self.R_i[3,3]
         self.R[4,4] = self.R_i[4,4]
-   
+
     # GPS2 callback
     def gps2cb(self, data):
         print('GPS2 is not implemented yet')

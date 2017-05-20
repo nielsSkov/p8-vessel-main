@@ -356,7 +356,7 @@ class packetParser():
                             self.gpsmsg.date = int(content[9])
                             self.gpsmsg.SOG = speed
 
-                            self.pub_gps.publish(self.gpsmsg)
+                            #self.pub_gps.publish(self.gpsmsg)
                             
                         
                 elif(ord(packet['MsgID']) == 31):

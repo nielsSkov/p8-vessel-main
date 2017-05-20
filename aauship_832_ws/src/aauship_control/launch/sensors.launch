@@ -3,9 +3,11 @@
 
   <node cwd="node" name="sensor_node" pkg="aauship_control" type="sensor-node.py" output="screen"/>
 
-  <node cwd="node" name="gps_node" pkg="aauship_control" type="gps-interface.py" output="screen"/>
+  <!--node cwd="node" name="gps_node" pkg="aauship_control" type="gps-interface.py" output="screen"/-->
 
   <node cwd="node" name="keyboard_teleop_node" pkg="aauship_control" type="keyboard-teleop-node.py" output="screen"/>
+
+  <node cwd="node" name="gps_node" pkg="aauship_control" type="gps1-node.py" output="screen"/>
 
   <!--node cwd="node" name="ctrl_input_serv" pkg="aauship_control" type="ctrl_input_serv.py" output="screen"/-->
   

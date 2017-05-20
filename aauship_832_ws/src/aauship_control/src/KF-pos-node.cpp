@@ -32,10 +32,10 @@
 //System constants
 #define MX 13
 #define MY 13
-#define DX 0.5
-#define DY 7
-#define IX 3.6
-#define IY 2.3
+#define DX 2.86
+#define DY 32.5
+#define IX 0.065
+#define IY 1.0821
 
 //State variances
 #define SIGMA2_XN 0.1
@@ -288,10 +288,10 @@ int main(int argc, char **argv)
 		a2 = sin(att[0]) * sin(att[1]) * cos(att[2]) - cos(att[0]) * sin(att[2]);
 		a3 = cos(att[1]) * sin(att[2]);
 		a4 = sin(att[0]) * sin(att[1]) * sin(att[2]) + cos(att[0]) * cos(att[2]);
-		gsl_matrix_set(A,2,0,TS*a1);
-		gsl_matrix_set(A,3,0,TS*a2);
-		gsl_matrix_set(A,2,1,TS*a3);
-		gsl_matrix_set(A,3,1,TS*a4);
+		gsl_matrix_set(A,0,2,TS*a1);
+		gsl_matrix_set(A,0,3,TS*a2);
+		gsl_matrix_set(A,1,2,TS*a3);
+		gsl_matrix_set(A,1,3,TS*a4);
 
 		//////Prediction step//////
 		//Predict states as states = A * states + B * inputs

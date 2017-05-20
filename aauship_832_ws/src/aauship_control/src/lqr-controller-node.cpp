@@ -2,7 +2,7 @@
 #include <std_msgs/Float32.h>
 
 #include "aauship_control/LLIinput.h"
-// #include "aauship_control/KFStates.h"
+#include "aauship_control/KFStates.h"
 #include "aauship_control/Ref.h"
 #include "aauship_control/AttitudeStates.h"
 #include "aauship_control/PositionStates.h"
@@ -20,52 +20,73 @@
 #define CONTROLLER_OUTPUT true        //For debugging
 
 //State Feedback values
-#define f11  2231.7//5105.3//1872.4//
-#define f12  1510.5//277.3//1511.5//
-#define f13  1000.8//259.5//1001.2//
-#define f21  -2231.7//-5105.3//-1872.4//
-#define f22  -1510.5//-277.3//-1511.5//
-#define f23  1000.8//259.5//1001.2//
+#define f11  2231.7/150//5105.3//1872.4//
+#define f12  1510.5/150//277.3//1511.5//
+#define f13  1000.8/150//259.5//1001.2//
+#define f21  -2231.7/150//-5105.3//-1872.4//
+#define f22  -1510.5/150//-277.3//-1511.5//
+#define f23  1000.8/150//259.5//1001.2//
 //Integral Feedback values
-#define fi11 -1151.0//-1583.3//-821.4415//
-#define fi12 -422.3//-130.3//-411.5664//
-#define fi21 1151.0//1583.3//821.4415//
-#define fi22 -422.3//-130.3//-411.5664//
+#define fi11 -1151.0/150//-1583.3//-821.4415//
+#define fi12 -422.3/150//-130.3//-411.5664//
+#define fi21 1151.0/150//1583.3//821.4415//
+#define fi22 -422.3/150//-130.3//-411.5664//
 //Define Dimensions
 #define Fn 2
 #define Fm 3
 
 //Define values for first order curve
 // to fit Force vs PWM
-#define MPOS 6.6044//0.26565
-#define NPOS 70.0168//24.835
-#define MNEG 8.5706//0.26565
-#define NNEG 91.9358//24.835
+#define MPOS 6.6044//3.8955//0.26565
+#define NPOS 70.0168//88.9365//24.835
+#define MNEG 8.5706//8.6806//0.26565
+#define NNEG 91.9358//63.52//24.835
 
-float r[Fn] = {0.5,0};
+//reference
+float r[Fn] = {0,0};
+//States
 float x[Fm] = {0,0,0};
+//Output
 float y[Fn] = {0,0};
+// Moving Average
+float xb_sum = 0.0f;
+float xb_old[30];
 int sat = 0;
 
 // Callback functions
-// void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
-// {
-//   x[0] = KFStates->psi;
-//   x[1] = KFStates->r;
-//   x[2] = KFStates->u;
-//   y[0] = KFStates->psi;
-//   y[1] = KFStates->u;
-// }
+void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
+{
+  //x[0] = (KFStates->psi) - M_PI; // We receive it from the 
+  //x[1] = KFStates->r;
+  //x[2] = KFStates->u;
+  //y[0] = (KFStates->psi) - M_PI;
+  //y[1] = KFStates->u;
+}
 
 void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
 {
   x[0] = att_msg->yaw;
-  x[1] = att_msg->yawd;
+  //x[1] = att_msg->yawd;
+  y[0] = x[0];
 }
 
 void pos_callback(const aauship_control::PositionStates::ConstPtr& pos_msg)
 {
-  x[2] = pos_msg->xbd;
+  // Current
+  //x[2] = pos_msg->xbd;
+  //y[1] = x[2];
+  // //////For Moving Average
+  // for(int i = 29; i > 0; i--)
+  // {
+  //   xb_old[i] = xb_old[i-1];
+  // }
+  // xb_old[0] = pos_msg->xbd;
+  // for(int i = 0; i < 30; i++)
+  // {
+  //   xb_sum = xb_sum + xb_old[i];
+  // }
+  // x[2] = xb_sum/30.0f;
+  // y[1] = x[2];
 }
 
 void ref_callback(const aauship_control::Ref::ConstPtr& Ref)
@@ -77,14 +98,18 @@ void ref_callback(const aauship_control::Ref::ConstPtr& Ref)
 //Other functions
 void multiply_state_fb(float F[Fn][Fm], float x[Fm], float *u_state)
 {
-  float u_tmp[Fn] = {0,0};
+  //float u_tmp[Fn] = {0,0};
   //std::cout<<u_state[0]<<std::endl;
   for(int i = 0; i < Fn; i++)
   {
     u_state[i] = 0;
     for(int j = 0; j < Fm; j++)
+    {
       u_state[i] = F[i][j] * x[j] + u_state[i];
-    // std::cout<<"F["<<i<<"]: "<<u_state[i]<<std::endl;
+      //std::cout<<std::endl;
+      //std::cout<<"u["<<i<<"] at "<<j<<": "<<u_state[i]<<std::endl;
+      //std::cout<<std::endl;
+    }
   }
   //std::cout<<"u_state[0]: "<<u_state[0]<<"\n u_state[1]: "<<u_state[1]<<std::endl;
 }
@@ -99,6 +124,7 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
   for(int i=0;i<Fn;i++)
   {
     e = r[i]-y[i];
+    
     if (i == 0)       //Correct jumps between -PI and PI
     {
       if (e < -M_PI)
@@ -106,6 +132,7 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
       else if (e > M_PI)
         e -= 2 * M_PI;
     }
+    std::cout<<"error "<<i<<": "<<e<<std::endl;
 
     // Anti wind up
     if (sat)
@@ -120,9 +147,10 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
   {
     u_integral[i] = 0;
     for(int j=0;j<Fn;j++)
+    {
       u_integral[i] = F_int[i][j] * x_int[j] + u_integral[i];
+    }
     // std::cout<<"Fint["<<i<<"]: "<<u_integral[i]<<std::endl;
-
   }
 }
 
@@ -131,36 +159,34 @@ int16_t force2PWM(float u)
   //std::cout<<"u: "<<u<<std::endl;
 	int pwm = 0;
 	if (u > 0)
+  {
   		pwm = MPOS * u + NPOS;
-  	else
-  		pwm = MNEG * u - NNEG;
-
-  	sat = 0;
-  	if (pwm > 200)
-  	{
-  		sat = 1;
-  		pwm = 200;
-  	} 
-  	if (pwm < -200) 
-  	{
-  		sat = 1;
-  		pwm = -200;
-  	}
-  	if (pwm < 70 && pwm > -70)
-  	{
-  	  return 0;
-  	}
-  	else
-  	{
-  	  return pwm;
-  	}
+  }
+	else
+  {
+  		pwm = MPOS * u + NPOS;//pwm = MNEG * u - NNEG;
+  }
+  return pwm;
+	// sat = 0;
+	// if (pwm > 200)
+	// {
+	// 	sat = 1;
+ //    std::cout<<"Saturated Up"<<std::endl;
+	// 	pwm = 200;
+	// } 
+	// if (pwm < -200) 
+	// {
+	// 	sat = 1;
+ //    std::cout<<"Saturated Down"<<std::endl;
+	// 	pwm = -200;
+	// }
 }
 
 int main(int argc, char **argv)
 {
   ros::init(argc,argv,"lqr_node");
   ros::NodeHandle n;
-  // ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,KF_callback);
+  ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,KF_callback);
   ros::Subscriber att_update = n.subscribe("/kf_attitude",1000,att_callback);
   ros::Subscriber pos_update = n.subscribe("/kf_position",1000,pos_callback);
   ros::Subscriber ref_update = n.subscribe("/control_reference",1000,ref_callback);
@@ -170,9 +196,7 @@ int main(int argc, char **argv)
   //Used for measuring loop time
   aauship_control::LLIinput lli_msg;
   double current_time = ros::Time::now().toSec();
-  double old_time= current_time;
-  double delta_t,delta_t_mean;
-  int counter = 0;
+  double start_time =current_time;
   //****TEST VALUE*******
   // float x_TEST [Fm]={1,1,1};
 
@@ -192,6 +216,12 @@ int main(int argc, char **argv)
     {fi21,fi22}
   };
 
+  // init MA
+  for(int i = 0; i < 30; i++)
+  {
+    xb_old[i] = 0.0f;
+  }
+
   ////////Extended Feedback Variables\\\\\\\\\\\\
 
   // float u[Fn] = {0,0};
@@ -205,31 +235,26 @@ int main(int argc, char **argv)
     float u_integral[Fn]={0,0};
     float u[Fn] = {0,0};
 
-    old_time = current_time;
     current_time = ros::Time::now().toSec();
-    delta_t = current_time - old_time;
-    delta_t_mean = delta_t_mean+delta_t;
-    counter ++;
     multiply_state_fb(F,x,u_state);
     integrator(F_int,y,r,x_int,u_integral);
-    //std::cout<<"u_state[0]: "<<u_state[0]<<"\n u_state[1]: "<<u_state[1]<<std::endl;
-    //std::cout<<"u_integral[0]: "<<u_integral[0]<<"\n u_integral[1]: "<<u_integral[1]<<std::endl;
+    //std::cout<<"time "<<current_time-start_time<<std::endl;
+    std::cout<<"u_state[0]: "<<u_state[0]<<"\n u_state[1]: "<<u_state[1]<<std::endl;
+    std::cout<<"u_integral[0]: "<<u_integral[0]<<"\n u_integral[1]: "<<u_integral[1]<<std::endl;
     for (int i = 0; i < Fn; i++)
     {
       u[i] = -(u_state[i] + u_integral[i]);
-      // if (u[i]<-20)
-      // {
-      //   u[i] = -20;
-      // }
-      // else if (u[i]>40)
-      // {
-      //   u[i] = 40;
-      // }
-      std::cout<<"F["<<i<<"]: "<<u[i]<<std::endl;
-    }
-    if(PRINT_DELTA_TIME && counter%100 == 0){
-      //std::cout<<"Time Delta: "<<delta_t<<"\n";
-      //std::cout<<"Time Delta Mean: "<<delta_t_mean/counter<<"\n";
+      if (u[i]<0)
+      {
+        sat = 1;
+        u[i] = 0;
+      }
+      else if (u[i]>10)
+      {
+        sat = 1;
+        u[i] = 10;
+      }
+      std::cout<<"F["<<i<<"] in PWM: "<<force2PWM(u[i])<<std::endl;
     }
     if(CONTROLLER_OUTPUT)
     {
