@@ -1,6 +1,6 @@
 <launch>
   <node cwd="node" name="rosbag_node" pkg="rosbag" type="record"
-	output="screen" args="-o $(find aauship_control) /imu /gps1 /kf_statesnew /lli_input"/>
+	output="screen" args="-o $(find aauship_control) /imu /gps1 /kf_statesnew /lli_input /kf_attitude"/>
 
   <node cwd="node" name="ahrs_mahony_node" pkg="aauship_control" type="ahrs-mahony-node" output="screen"/>
 

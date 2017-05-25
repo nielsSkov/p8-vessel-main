@@ -97,18 +97,18 @@ class modelSim(object):
     def llicb(self, data):
         # Get inputs from controller
         if data.MsgID == 3:
-            if float(data.Data) > 70:
+            if float(data.Data) > 0:
                 self.rightthruster = (float(data.Data)-self.npos)/self.mpos
-            elif float(data.Data) < -70:
+            elif float(data.Data) < 0:
                 self.rightthruster = (float(data.Data)+self.nneg)/self.mneg
             else:
                 self.rightthruster = 0
 
             # print "F2Model", self.rightthruster
         if data.MsgID == 5:
-            if float(data.Data) > 70:
+            if float(data.Data) > 0:
                 self.leftthruster = (float(data.Data)-self.npos)/self.mpos
-            elif float(data.Data) < -70:
+            elif float(data.Data) < 0:
                 self.leftthruster = (float(data.Data)+self.nneg)/self.mneg
             else:
                 self.leftthruster = 0
