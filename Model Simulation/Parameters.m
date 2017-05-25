@@ -1,6 +1,6 @@
-close all
-clear
-clc
+%close all
+%clear
+%clc
 
 % Parameters
 m=13;     % [kg] mass
