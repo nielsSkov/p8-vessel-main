@@ -6,15 +6,25 @@ clc
 
 
 %%
-kf_att = csvread('/Users/himalkooverjee/Dropbox/CA8/Test_2017_05_23/2017-05-23_yaw-3_test1_att.txt',1);
-kf_pos = csvread('/Users/himalkooverjee/Dropbox/CA8/Test_2017_05_23/2017-05-23_yaw-3_test1_pos.txt',1);
-lli_in = csvread('/Users/himalkooverjee/Dropbox/CA8/Test_2017_05_23/2017-05-23_yaw-3_test1_input.txt',1);
+kf_att = csvread('~/Desktop/linetest_2605_att.txt',1);
+kf_pos = csvread('~/Desktop/linetest_2605_statesnew.txt',1);%'/Users/himalkooverjee/Dropbox/CA8/Test_2017_05_23/2017-05-23_yaw-3_test1_pos.txt',1);
+lli_in = csvread('~/Desktop/linetest_2605_lli.txt',1);%csvread('/Users/himalkooverjee/Dropbox/CA8/Test_2017_05_23/2017-05-23_yaw-3_test1_input.txt',1);
 %lli = csvread('/Users/himalkooverjee/Dropbox/CA8/Project/Tests/test20052017/controller_yaw_neg_2005_lli.txt',1);
+ref_in = csvread('~/Desktop/linetest_2605_ref.txt',1);
+
 
 yaw_in = kf_att(1,4);
 yawd_in = kf_att(1,7);
 xb_in = kf_pos(1,10);
+x = kf_pos(:,5);
+y = kf_pos(:,6);
 
+figure
+plot(x,y)
+
+ref_yaw = ref_in(:,3);
+ref_xbd = ref_in(:,2);
+time_ref = (ref_in(:,1)-ref_in(1,1))*1e-9;
 yaw_att = kf_att(:,4);
 time_yaw = (kf_att(:,1)-kf_att(1,1))*1e-9;
 xb_dot = kf_pos(:,10);
@@ -42,7 +52,20 @@ for i = 1:1:length(lli_in(:,4))
         num2 = num2 + 1;
     end
 end
-
+figure
+plot(time_yaw,yaw_att)
+hold on
+plot(time_ref, ref_yaw)
+grid on
+figure
+plot(time_xb,xb_dot)
+hold on
+plot(time_ref, ref_xbd)
+grid on
+figure
+plot(time_left,left)
+hold on
+plot(time_right,right)
 
 %%
 
