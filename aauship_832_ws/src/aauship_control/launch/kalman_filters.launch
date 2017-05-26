@@ -1,0 +1,7 @@
+<launch>
+  <node cwd="node" name="ahrs_mahony_node" pkg="aauship_control" type="ahrs-mahony-node" output="screen"/>
+
+  <node cwd="node" name="kalmanfilter_node" pkg="aauship_control" type="kalmanfilter-node.py" output="screen"/>
+
+  <node cwd="node" name="KF_attitude_node" pkg="aauship_control" type="KF_attitude_node" output="screen"/>
+</launch>

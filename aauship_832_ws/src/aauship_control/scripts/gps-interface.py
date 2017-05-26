@@ -25,88 +25,41 @@ class SerialReader(Thread):
         Thread.__init__(self)
         self.Start_lat_rads = self.deg_to_radians(57.0147061)
         self.Start_log_rads = self.deg_to_radians(9.9859129)
-        #self.gps_pub= rospy.Publisher('gps_pos',RTKGPS,queue_size=1)
-        self.gps1_pub = rospy.Publisher('gps1', GPS, queue_size = 1)
-        #self.pub_msg = RTKGPS()
-        self.pub_msg = GPS()
+        self.gps_pub= rospy.Publisher('gps_pos',RTKGPS,queue_size=1)
+        self.pub_msg = RTKGPS()
+         
 
     def run(self):#Run this when start() is called
         global ser
         global NMEA_MSG
         while not rospy.is_shutdown(): 
-        	NMEA_MSG = ser.readline()
-          	# print NMEA_MSG
-          	gpsfix = 0;
-          	if len(NMEA_MSG)>0:
-              		if NMEA_MSG.startswith('$GPGGA'):
-                  		if gpsfix == 0:
-                    			#print "GPS FIX"
-                    			gpsfix = 1
-                      print "GPGGA"
-                  		#self.pub_msg.timestamp= NMEA_MSG[7:16]
-                  		self.pub_msg.time = NMEA_MSG[7:15]
-                      #lat_start = 17
-                  		# Lattitude
-                  		#lat_deg = float(NMEA_MSG[lat_start:lat_start+2])
-                  		#lat_min = float(NMEA_MSG[lat_start+2:lat_start+12])
-                  		#lat_deg = lat_deg+(lat_min/60)
-                  		# Longitude 
-                  		#log_start = 32
-                  		#log_deg = float(NMEA_MSG[log_start:log_start+3])
-                  		#log_min = float(NMEA_MSG[log_start+3:log_start+12])
-                  		#log_deg = log_deg+(log_min/60)
-                  		#[self.pub_msg.delx,self.pub_msg.dely] = self.compute_distance(lat_deg,log_deg)
-                  		#self.pub_msg.longitude = log_deg
-                  		#self.pub_msg.latitude = lat_deg
-                      self.pub_msg.fix = int8(NMEA_MSG[48])
-                      self.pub_msg.sats = int8(NMEA_MSG[50:51])
-                      self.pub_msg.HDOP = float32(NMEA_MSG[53:54])
-                      self.pub_msg.altitude = float32(NMEA_MSG[57:62])
-                      self.pub_msg.height = float32(NMEA_MSG[66:71])
-                  		self.gps_pub.publish(self.pub_msg)
-
-                    elif NMEA_MSG.startswith('$GPRMC'):
-                      if gpsfix == 0:
-                          #print "GPS FIX"
-                          gpsfix = 1
-                      print "GPRMC"
-                      #self.pub_msg.timestamp= NMEA_MSG[7:16]
-                      self.pub_msg.time = NMEA_MSG[7:15]
-                      if NMEA_MSG[17] == 'A':
-                            speed = float(NMEA_MSG[50:53]) * 0.514444444 #* 0 + 100
-                            #print str(speed) + " m/s"
-                            
-                            # Caculate decimal degrees
-                            [latdec, londec] = (gpsfunctions.nmea2decimal(float(NMEA_MSG[19:30]),NMEA_MSG[32],float(NMEA_MSG[34:46]),NMEA_MSG[48]))
-                            # print(latdec,londec)
-                            latdec = latdec*pi/180
-                            londec = londec*pi/180
-
-                            # Old code for rotating the position into the local NED frame
-                            if self.centerlat == 0 and self.centerlon == 0:
-                                self.rot=gpsfunctions.get_rot_matrix(float(latdec),float(londec))
-                                self.centerlat = float(latdec)
-                                self.centerlon = float(londec)
-                            pos = self.rot * (gpsfunctions.wgs842ecef(float(latdec),float(londec))-gpsfunctions.wgs842ecef(float(self.centerlat),float(self.centerlon)))
-                            #print pos
-                            
-                            # Legacy stuff
-                            self.state[0] = [float(pos[0,0]), 1]
-                            #self.state[0] = [10,1]
-                            self.state[1] = [speed, 1]
-                            self.state[3] = [float(pos[1,0]), 1]
-                            #self.state[3] = [5,1]
-
-                            # With [0:6] we ignore ".000" in the NMEA string.
-                            # It is always zero for GPS1 anyways.
-                            self.gpsmsg.time = int(content[1][0:6]) 
-                            self.gpsmsg.latitude = latdec
-                            self.gpsmsg.longitude = londec
-                            self.gpsmsg.track_angle = float(content[8])
-                            self.gpsmsg.date = int(content[9])
-                            self.gpsmsg.SOG = speed
-
-                            self.pub_gps.publish(self.gpsmsg)
+          NMEA_MSG = ser.readline()
+          # print NMEA_MSG
+          gpsfix = 0;
+          if len(NMEA_MSG)>0:
+              if NMEA_MSG.startswith('$GPGGA'):
+                  if gpsfix == 0:
+                    print "GPS FIX"
+                  gpsfix = 1
+                  self.pub_msg.timestamp= NMEA_MSG[7:16]
+                  lat_start = 17
+                  # Lattitude
+                  lat_deg = float(NMEA_MSG[lat_start:lat_start+2])
+                  lat_min = float(NMEA_MSG[lat_start+2:lat_start+12])
+                  lat_deg = lat_deg+(lat_min/60)
+                  # Longitude 
+                  log_start = 32
+                  log_deg = float(NMEA_MSG[log_start:log_start+3])
+                  log_min = float(NMEA_MSG[log_start+3:log_start+12])
+                  log_deg = log_deg+(log_min/60)
+                  [self.pub_msg.delx,self.pub_msg.dely] = self.compute_distance(lat_deg,log_deg)
+                  self.pub_msg.longitude = log_deg
+                  self.pub_msg.latitude = lat_deg
+                  self.gps_pub.publish(self.pub_msg)
+                else:
+                  if gpsfix == 1:
+                    print "No GPS"
+                  gpsfix = 0
               # else:
               #     self.pub_msg.timestamp = "0"
               #     self.pub_msg.delx = 0
@@ -163,9 +116,9 @@ class SerialReader(Thread):
 
         #Put the correct sign
         if del_lat < 0:
-       	  dx = -dx
+          dx = -dx
         if del_log < 0:
-       	  dy = -dy
+          dy = -dy
 
         #Return calculated values
         return [dx,dy]
@@ -205,7 +158,6 @@ class CorrectionDataClient(Thread):
             # print "#####################################"
 
             if len(RTCM3Data)>0:
-                print "Base Correction"
                 ser.write(str(RTCM3Data))
                 RTCM3Data = []
                 

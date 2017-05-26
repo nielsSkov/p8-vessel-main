@@ -11,21 +11,21 @@
 #include "aauship_control/PositionStates.h"
 #include "aauship_control/KFStates.h"
 #include "aauship_control/Ref.h"
+#include "aauship_control/KFStates.h"
 
 #define _USE_MATH_DEFINES //Ensures compatibility with math library
-#define WAYPOINT_RADIUS 5 //[m]
-#define BOAT_RADIUS 8 //[m]
+#define WAYPOINT_RADIUS 1 //[m]
+#define BOAT_RADIUS 2 //[m]
 #define PATH_FOLLOWING_RATE 2 //[Hz]
-#define SPEED 1 //[m/s]
+#define SPEED 0.4 //[m/s]
 #define TOL 0.001 //[m] Minimum value to consider a number == 0
 
 struct point{
 	float x;
 	float y;
-}prev_wpt,next_wpt;
+}prev_wpt, next_wpt, current_position, velocity;
 
 float heading = 1;
-point current_position;
 
 
 //Callback functions
@@ -35,9 +35,19 @@ void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
 }
 void pos_callback(const aauship_control::PositionStates::ConstPtr& pos_msg)
 {
-	current_position.x = pos_msg->xn;
-	current_position.y = pos_msg->yn;
+	// current_position.x = pos_msg->xn;
+	// current_position.y = pos_msg->yn;
+	// velocity.x = pos_msg->xbd;
+	// velocity.y = pos_msg->ybd;
 }
+void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
+{
+	current_position.x = KFStates->x;
+  	current_position.y = KFStates->y;
+  	velocity.x = KFStates->u;
+  	velocity.y = KFStates->v;
+}
+
 // //Debug
 // void kf_callback(const aauship_control::KFStates::ConstPtr& kf_msg)
 // {
@@ -61,6 +71,7 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 	ros::Subscriber pos_update = n.subscribe("/kf_position",1000,pos_callback);
 	ros::Subscriber att_update = n.subscribe("/kf_attitude",1000,att_callback);
+	ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,KF_callback);
 	// //Debug
 	// ros::Subscriber kf_update = n.subscribe("/kf_statesnew",1000,kf_callback);
 	// //
@@ -89,7 +100,7 @@ int main(int argc, char **argv)
 	while(ros::ok())
 	{
 		// std::cout<<"Prev: "<<prev_wpt.x<<","<<prev_wpt.y<<std::endl;
-		// std::cout<<"Next: "<<next_wpt.x<<","<<next_wpt.y<<std::endl;
+		 std::cout<<"Next: "<<next_wpt.x<<","<<next_wpt.y<<std::endl;
 		ros::spinOnce();
 		//Check if we need to change waypoint
 		if (dist2wpt(current_position, prev_wpt, next_wpt)<WAYPOINT_RADIUS)
@@ -206,9 +217,11 @@ aauship_control::Ref computeRef(point curr_pos, point reference_point)
 {
 	aauship_control::Ref reference;
 	point delta_point;
+
 	delta_point.x = reference_point.x-curr_pos.x;
 	delta_point.y = reference_point.y-curr_pos.y;
-	reference.yaw = atan2(delta_point.y,delta_point.x);
+
+	reference.yaw = atan2(delta_point.y, delta_point.x) - atan2(velocity.y, velocity.x);
 	reference.speed = SPEED;
 	return reference;
 }

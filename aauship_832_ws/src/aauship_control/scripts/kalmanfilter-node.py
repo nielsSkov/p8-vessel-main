@@ -255,8 +255,8 @@ class KF(object):
 
         self.pubmsg.phi = self.x_hat[4]
         self.pubmsg.theta = self.x_hat[5]
-        self.pubmsg.u = self.x_hat[7]
-        self.pubmsg.v = self.x_hat[8]
+        self.pubmsg.u = self.x_hat[7] # Use self.z[3] to bypass the Kalman filter.
+        self.pubmsg.v = self.x_hat[8] # Use self.z[4]
         self.pubmsg.p = self.x_hat[9]
         self.pubmsg.q = self.x_hat[10]
         self.pubmsg.r = self.x_hat[11]
