@@ -66,6 +66,7 @@
 double meas[N_MEAS] = {0,0,0,0,0,0};
 double states[N_STATES] = {0,0,0,0,0,0,0,0,0};
 double inputs[N_INPUTS] = {0,0};
+float yaw_old = 0;
 
 
 //Callback functions
