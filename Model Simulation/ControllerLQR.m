@@ -68,7 +68,7 @@ Q = 1./(Q.^2);
 Q(Q==Inf)=0;
 
 % For R Matrix
-maxF1 = 200;        %[N]
+maxF1 = 5;        %[N]
 maxF2 = maxF1;       %[N]
 
 R = diag([maxF1 maxF2]);
@@ -109,10 +109,10 @@ refXdot = 1;        % [m/s]
 
 sim InnerController.slx
 % 
-% figure(10)
-% hold on
-% plot(xbdot.Time,xbdot.Data)
-% 
-% figure(20)
-% hold on
-% plot(yaw.Time,yaw.Data)
+figure(10)
+hold on
+plot(xbdot.Time,xbdot.Data)
+
+figure(20)
+hold on
+plot(yaw.Time,yaw.Data)

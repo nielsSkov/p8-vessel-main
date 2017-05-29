@@ -8,28 +8,37 @@
 %\renewcommand\figurename{Figur}
 %\renewcommand\tablename{Tabel}
 
-\section*{Supervisor Meeting\\ \small Thursday, 18th of May 2017}
+\section*{Supervisor Meeting\\ \small Wednesday, 24th of May 2017}
 
-\subsection{Part I Comments}
+\subsection{Status}
 \begin{itemize}
-	\item To abbreviate "for example" use "i.e.".
-    \item Diagram of system description should have processing units written, no control/computation.
-    \item Both base and rover use the same satellites in RTK mode.
-    \item The error in the verification test corresponds to the quantization in time of the measurements. If the speed was a tenth, the error will be less.
-    \item Maybe include a tail on Part I at the end of the modeling chapter.
-\end{itemize} 
+    \item 
+    \item 
+    \item 
+\end{itemize}
+
 \subsection{Testing}
 \begin{itemize}
-    \item The tests are in process, we are trying to find and correct the errors in the implementation.
-\end{itemize}
-\subsection{Misc}
-\begin{itemize}
-    \item Maybe include an error plot of the step responses below each step response, with the 1-$sigma$ region as well.
-    \item Mark when the turn starts and finish in the distance plots in the outer controller.
-    \item Why the robust seems worse in the green area and with an overshoot in the outer controller? Maybe the outer needs a faster inner controller than the robust one
-    \item Bandwidth of inner and outer controllers could be a good question.
+    \item We can sail forward.
+    \item When putting F and -F in the motor it should turn on the spot, but with high forces it goes backwards.
+    \item Maybe the motor dynamics are the problem, but we are not sure which test to try.
+    \item The speed and yaw controllers don't work together.
+    \item We should have the test in an appendix even though the result are not good and explain why they do not work.
+    \item We can look at the test with /150 and see why it works compared to our gains.
+    \item Explain the test in the result chapter and discuss them.
 \end{itemize}
 
-\subsection{Next Meeting}
-Wednesday, 25th of May around 12
+\subsection{Part II Comments}
+\begin{itemize}
+    \item How have we tuned the filters? 
+    \item Start by making the gyro look nice, the position.
+    \item Write about the tunning of the filter.
+\end{itemize} 
+
+\subsection{Misc}
+\begin{itemize}
+    \item The boat has sailed before.
+    \item No need for correction sheet, we just need to know the errors and the corrections. Maybe present the solution in the presentation if there is any big mistake.
+\end{itemize}
+
 \end{document}
