@@ -1,0 +1,44 @@
+
+Be in p8-vessel-main/aauship_832_ws
+
+Source always in every terminal
+
+////// To do step tests
+
+	Modify lqr_controller_node.cpp 
+
+			Comment out the callback in where the reference is received
+			Initialize the reference to the desired step values
+
+	Catkin_make
+
+	Run sensors.launch
+	Run kalman_filters.launch
+	Run inner_controller_final.launch or something like that.
+
+////// To do a path test
+	
+	Modify wps.txt to have the desired waypoints
+    To extract the Waypoints: 
+          rostopic echo /kf_statesnew
+
+	Modify lqr_controller_node.cpp
+
+		Uncomment the reference callback so the reference updates
+		Initialize the references to zero in both outputs
+
+	Catkin_make 
+
+	Run sensors.launch
+	Run kalman_filters.launch -> This should also include the path_follower_node
+	Run path_controller_model_test.launch -> Runs the inner controller and records the important topics
+		
+////// How to extract the data
+
+	Remember the nice bag files by changing its name when a good test has finished.
+
+	To know which topics are in the file
+		rosbag info bagfile.bag
+
+	To extract topics
+		rostopic echo -b bagfile.bag -p -topic > testname_topic.txt //The name for the txt file is recommended

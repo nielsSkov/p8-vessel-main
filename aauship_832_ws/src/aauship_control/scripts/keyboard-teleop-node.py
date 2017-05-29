@@ -56,9 +56,9 @@ if __name__=="__main__":
 	
 			# To turn keep pressing cross left/right button.
 			if (key == 'd'):
-				vel_right/=2
+				vel_right = -100
 			if (key == 'a'):
-				vel_left/=2
+				vel_left = -100
 
 			# If the square bottom is pressed, a high PWM is set to both motors
 			if (key == 'h'):

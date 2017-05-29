@@ -2,10 +2,10 @@
 #include <std_msgs/Float32.h>
 
 #include "aauship_control/LLIinput.h"
-s
 #include "aauship_control/Ref.h"
 #include "aauship_control/AttitudeStates.h"
 #include "aauship_control/PositionStates.h"
+#include "aauship_control/KFStates.h"
 
 #include <sstream>
 #include <stdint.h>
@@ -62,11 +62,11 @@ s
 #define NNEG 91.9358//63.52//24.835
 
 //Filter coefficient for exponential smoothing filter
-#define ALPHA 0.01f
-
+#define ALPHA_SPEED 0.01f
+#define ALPHA_YAW 0.05f
 
 //Reference
-float r[Fn] = {0,0};
+float r[Fn] = {-0,0};
 //States
 float x[Fm] = {0,0,0};
 //Output
@@ -76,6 +76,7 @@ float xb_sum = 0.0f;
 float xb_old[30];
 int sat = 0;
 float yaw_old = 0;
+float yaw_corrected_old=0;
 int piCount = 0;
 
 
@@ -85,17 +86,13 @@ float yb_old = 0.0f;
 // Callback functions
 void KF_callback(const aauship_control::KFStates::ConstPtr& KFStates)
 {
-  // x[0] = (KFStates->psi) - M_PI; // We receive it from the 
-  // x[1] = KFStates->r;
-
+   x[0] = (KFStates->psi) - M_PI; // We receive it from the 
+   //x[1] = KFStates->r;
   //////////Exponential Smoothing Filter///////
-  y[1] = ALPHA * KFStates->u + (1-ALPHA) * yb_old;
+  y[1] = ALPHA_SPEED * KFStates->u + (1-ALPHA_SPEED) * yb_old;
   yb_old = y[1];
-
   //y[1] = KFStates->u;
-
   x[2] = y[1];
-
 }
 
 void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
@@ -105,12 +102,17 @@ void att_callback(const aauship_control::AttitudeStates::ConstPtr& att_msg)
      y[0] = x[0];
 
      //Corrects jumps between -PI and PI
-     if ((y[0] - yaw_old) > M_PI)
+     if ((y[0] - yaw_old) > M_PI){
         piCount++;
-     else if ((y[0] - yaw_old) < -M_PI)
+     }
+     else if ((y[0] - yaw_old) < -M_PI){
         piCount--;
+     }
      yaw_old = y[0]; 
      y[0] = y[0] - 2*M_PI*piCount;
+     y[0] = ALPHA_YAW * y[0] + (1-ALPHA_YAW) *yaw_corrected_old;
+     std::cout<<"Sanity check y is:"<<y[0]<<std::endl;
+     yaw_corrected_old=y[0];
      x[0] = y[0];
 }
 
@@ -167,25 +169,25 @@ void integrator(float F_int[Fn][Fn],float y[Fn], float r[Fn],float* x_int,float 
     std::cout<<"reference "<<i<<": "<<r[i]<<std::endl;
     
     //Chooses shortest path
-    // if (i == 0)       
-    // {
-    //   if (e < -M_PI)
-    //   {
-    //     e += 2 * M_PI;
-    //   }
-    //   else if (e > M_PI)
-    //   {
-    //     e -= 2 * M_PI;
-    //   }
-    // }
+     if (i == 0)       
+     {
+       if (e < -M_PI)
+       {
+         e += 2 * M_PI;
+       }
+       else if (e > M_PI)
+       {
+         e -= 2 * M_PI;
+       }
+     }
 
     std::cout<<"error "<<i<<": "<<e<<std::endl;
 
     // Anti wind up
-    // if (sat)
-    // {
-    // 	e = 0;
-    // }
+    //if (sat)
+    //{
+    //	e = 0;
+    //}
 
     x_int[i] = (1/CONTROLLER_RATE)*e + x_int[i];
   }
@@ -282,22 +284,23 @@ int main(int argc, char **argv)
     multiply_state_fb(F,x,u_state);
     integrator(F_int,y,r,x_int,u_integral);
     //std::cout<<"time "<<current_time-start_time<<std::endl;
-    std::cout<<"xbdot: "<<x[2]<<"ref: "<<r[1]<<std::endl;
-    std::cout<<"u_state[0]: "<<u_state[0]<<"\n u_state[1]: "<<u_state[1]<<std::endl;
-    std::cout<<"u_integral[0]: "<<u_integral[0]<<"\n u_integral[1]: "<<u_integral[1]<<std::endl;
+    //std::cout<<"xbdot: "<<x[2]<<"ref: "<<r[1]<<std::endl;
+    //std::cout<<"u_state[0]: "<<u_state[0]<<"\n u_state[1]: "<<u_state[1]<<std::endl;
+    //std::cout<<"u_integral[0]: "<<u_integral[0]<<"\n u_integral[1]: "<<u_integral[1]<<std::endl;
+    std::cout<<"States: "<<x[0]<<" "<<x[1]<<" "<<x[2]<<std::endl;
     for (int i = 0; i < Fn; i++)
     {
       u[i] = -(u_state[i] + u_integral[i]);
-      // if (u[i]<-10)
-      // {
-      //   sat = 1;
-      //   u[i] = -10;
-      // }
-      // else if (u[i]>10)
-      // {
-      //   sat = 1;
-      //   u[i] = 10;
-      // }
+      if (u[i]<-30)
+      {
+        sat = 1;
+        u[i] = -30;
+      }
+      else if (u[i]>30)
+      {
+        sat = 1;
+        u[i] = 30;
+      }
       std::cout<<"F["<<i<<"] in PWM: "<<force2PWM(u[i])<<std::endl;
     }
     if(CONTROLLER_OUTPUT)

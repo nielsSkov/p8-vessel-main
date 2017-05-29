@@ -14,10 +14,10 @@
 #include "aauship_control/KFStates.h"
 
 #define _USE_MATH_DEFINES //Ensures compatibility with math library
-#define WAYPOINT_RADIUS 1 //[m]
-#define BOAT_RADIUS 2 //[m]
+#define WAYPOINT_RADIUS 3 //[m]
+#define BOAT_RADIUS 3 //[m]
 #define PATH_FOLLOWING_RATE 2 //[Hz]
-#define SPEED 0.4 //[m/s]
+#define SPEED 1 //[m/s]
 #define TOL 0.001 //[m] Minimum value to consider a number == 0
 
 struct point{
@@ -221,7 +221,8 @@ aauship_control::Ref computeRef(point curr_pos, point reference_point)
 	delta_point.x = reference_point.x-curr_pos.x;
 	delta_point.y = reference_point.y-curr_pos.y;
 
-	reference.yaw = atan2(delta_point.y, delta_point.x) - atan2(velocity.y, velocity.x);
+	reference.yaw = atan2(delta_point.y, delta_point.x);// - atan2(velocity.y, velocity.x);
+	//reference.yaw -= M_PI;
 	reference.speed = SPEED;
 	return reference;
 }
@@ -248,6 +249,7 @@ float dist2wpt(point curr_pos, point old_waypoint, point next_waypoint)
 	distx = intersection.x - next_waypoint.x;
 	disty = intersection.y - next_waypoint.y;
 	dist = sqrt(distx * distx + disty * disty);
+	std::cout<<"Distance to waypoint"<<dist<<std::endl;
 	return dist;
 }
 
